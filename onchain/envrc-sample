@@ -1,0 +1,9 @@
+layout node
+
+export AWS_REGION=""
+export AWS_PROFILE=""
+export KMS_KEY_ID=""
+export INFURA_KEY=""
+export PRIV_KEY=""
+
+

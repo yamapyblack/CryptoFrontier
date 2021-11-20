@@ -1,0 +1,7 @@
+onchain/.envrc
+onchain/node_modules
+.DS_Store
+
+onchain/cache
+onchain/artifacts
+onchain/typechain
