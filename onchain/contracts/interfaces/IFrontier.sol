@@ -3,6 +3,15 @@
 pragma solidity ^0.8.0;
 
 interface IFrontier  {
-    function frontiers(uint256 tokenId) external view returns (uint);
-    function setFrontier(uint frontierId, uint tokenId) external;
+    struct Frontier {
+        uint tokenId;
+        address staker;
+        uint blockNumber;
+    }
+
+    function getFrontier(uint256 tokenId) external view returns (IFrontier.Frontier memory);
+
+    function stake(uint256 tokenId, uint256 frontierId) external;
+    function unStake(uint256 frontierId) external;
+    function revive(uint256 tokenId) external;
 }
