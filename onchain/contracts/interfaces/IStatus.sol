@@ -6,8 +6,8 @@ interface IStatus {
     struct Status {
         uint hp;
         uint at;
-        uint mg;
         uint df;
+        uint it;
         uint sp;
     }
 

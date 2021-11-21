@@ -2,16 +2,13 @@
 
 pragma solidity ^0.8.6;
 
+import "../lib/FROAddressProxy.sol";
 import "../interfaces/IStatus.sol";
 import "../interfaces/IAddressRegistry.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CRPGStatus is IStatus, Ownable {
-    IAddressRegistry public registry;
-
-    constructor(address registry_) {
-        registry = IAddressRegistry(registry_);
-    }
+contract FROStatus is IStatus, Ownable, FROAddressProxy {
+    constructor(address registry_) FROAddressProxy(registry_) {}
 
     // mapping(tokenId => Status)
     mapping(uint256 => IStatus.Status) private status;
@@ -28,8 +25,14 @@ contract CRPGStatus is IStatus, Ownable {
     function setStatus(uint256 tokenId, IStatus.Status calldata status_)
         external
         override
+        onlyOwner
     {
-        registry.checkRegistory("CRPGCharacter", msg.sender);
+        _setStatus(tokenId, status_);
+    }
+
+    function _setStatus(uint256 tokenId, IStatus.Status calldata status_)
+        private
+    {
         status[tokenId] = status_;
     }
 }

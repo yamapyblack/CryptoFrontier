@@ -11,7 +11,7 @@ import "../interfaces/IResultRegistory.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract CRPGBattle is IBattle, ReentrancyGuard, Ownable {
+contract FROBattle is IBattle, ReentrancyGuard, Ownable {
     IAddressRegistry public registry;
 
     constructor(address registry_) {
@@ -25,7 +25,7 @@ contract CRPGBattle is IBattle, ReentrancyGuard, Ownable {
         returns (uint256)
     {
         require(
-            ICharacter(registry.getRegistry("CRPGCharacter")).ownerOf(
+            ICharacter(registry.getRegistry("FROCharacter")).ownerOf(
                 playerTokenId
             ) == msg.sender,
             "sender is not owner of playerTokenId"
@@ -33,25 +33,25 @@ contract CRPGBattle is IBattle, ReentrancyGuard, Ownable {
 
         //TODO check enemyTokenId
 
-        uint256 playerHp = IHpRegistory(registry.getRegistry("CRPGHpRegistory"))
+        uint256 playerHp = IHpRegistory(registry.getRegistry("FROHpRegistory"))
             .getHp(playerTokenId)
             .hp;
-        uint256 enemyHp = IHpRegistory(registry.getRegistry("CRPGHpRegistory"))
+        uint256 enemyHp = IHpRegistory(registry.getRegistry("FROHpRegistory"))
             .getHp(enemyTokenId)
             .hp;
 
         IStatus.Status memory playerSt = IStatus(
-            registry.getRegistry("CRPGStatus")
+            registry.getRegistry("FROStatus")
         ).getStatus(playerTokenId);
         IStatus.Status memory enemySt = IStatus(
-            registry.getRegistry("CRPGStatus")
+            registry.getRegistry("FROStatus")
         ).getStatus(enemyTokenId);
 
         //TODO speed判定
 
         for (uint8 i = 0; i < 2; i++) {
             // player attack
-            enemyHp = IHpRegistory(registry.getRegistry("CRPGHpRegistory"))
+            enemyHp = IHpRegistory(registry.getRegistry("FROHpRegistory"))
                 .reduceBattleHp(enemyTokenId, _calcDamage(playerSt, enemySt));
             // player win
             if (enemyHp == 0) {
@@ -59,7 +59,7 @@ contract CRPGBattle is IBattle, ReentrancyGuard, Ownable {
             }
 
             // enemy attack
-            playerHp = IHpRegistory(registry.getRegistry("CRPGHpRegistory"))
+            playerHp = IHpRegistory(registry.getRegistry("FROHpRegistory"))
                 .reduceBattleHp(playerTokenId, _calcDamage(enemySt, playerSt));
             // enemy win
             if (playerHp == 0) {
@@ -82,10 +82,10 @@ contract CRPGBattle is IBattle, ReentrancyGuard, Ownable {
         returns (uint256)
     {
         IResultRegistory.Result memory result = IResultRegistory.Result(
-            ICharacter(registry.getRegistry("CRPGCharacter")).ownerOf(
+            ICharacter(registry.getRegistry("FROCharacter")).ownerOf(
                 winnerTokenId
             ),
-            ICharacter(registry.getRegistry("CRPGCharacter")).ownerOf(
+            ICharacter(registry.getRegistry("FROCharacter")).ownerOf(
                 loserTokenId
             ),
             winnerTokenId,
@@ -93,7 +93,7 @@ contract CRPGBattle is IBattle, ReentrancyGuard, Ownable {
             block.timestamp
         );
         return
-            IResultRegistory(registry.getRegistry("CRPGResultRegistory"))
+            IResultRegistory(registry.getRegistry("FROResultRegistory"))
                 .setResult(result);
     }
 }

@@ -6,7 +6,7 @@ import "../interfaces/IAddressRegistry.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../lib/EnumerableMapEx.sol";
 
-contract AddressRegistry is IAddressRegistry, Ownable {
+contract FROAddressRegistry is IAddressRegistry, Ownable {
     using EnumerableMapEx for EnumerableMapEx.Bytes32ToAddressMap;
 
     // mapping(bytes32 => EnumerableMap.AddressSet) private registries;

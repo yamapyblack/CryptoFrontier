@@ -6,7 +6,7 @@ import "../interfaces/IHpRegistory.sol";
 import "../interfaces/IAddressRegistry.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CRPGHpRegistory is IHpRegistory, Ownable {
+contract FROHpRegistory is IHpRegistory, Ownable {
     IAddressRegistry public registry;
 
     constructor(address registry_) {
@@ -27,7 +27,7 @@ contract CRPGHpRegistory is IHpRegistory, Ownable {
 
     function setBattleHp(uint256 tokenId, uint256 hp) external override {
         //TODO onlyBattleContract
-        registry.checkRegistory("CRPGCharacter", msg.sender);
+        registry.checkRegistory("FROCharacter", msg.sender);
 
         battleHp[tokenId] = IHpRegistory.Hp(hp, block.timestamp);
     }
@@ -51,7 +51,7 @@ contract CRPGHpRegistory is IHpRegistory, Ownable {
         override
         returns (uint256)
     {
-        registry.checkRegistory("CRPGBattle", msg.sender);
+        registry.checkRegistory("FROBattle", msg.sender);
         return _reduceBattleHp(tokenId, hpDiff, block.timestamp);
     }
 }

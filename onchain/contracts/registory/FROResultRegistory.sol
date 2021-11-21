@@ -6,7 +6,7 @@ import "../interfaces/IResultRegistory.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract CRPGResultRegistory is IResultRegistory, Ownable {
+contract FROResultRegistory is IResultRegistory, Ownable {
 
     uint public battleId;
 
