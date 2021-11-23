@@ -64,11 +64,12 @@ describe("testing for CKCastle", async () => {
 
             const balance = await c2.balanceOf(addr1.address)
             console.log(balance.toString())
-        });        
+        });
 
-        // it("fail not a owner", async () => {
-        //     await expect(contract.revive(tokenId)).revertedWith("sender is not owner of tokenId")
-        // });        
+        it("fail not a owner", async () => {
+            await expect(contract.revive(tokenId)).revertedWith("sender is not owner of tokenId")
+        });
+
         // it("fail hp not 0", async () => {
         //     await expect(contract.connect(addr1).revive(tokenId)).revertedWith("hp is not 0")
         // });        

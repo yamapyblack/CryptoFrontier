@@ -4,7 +4,16 @@ pragma solidity ^0.8.0;
 
 interface IFrontier  {
     struct Frontier {
-        uint tokenId;
+        uint tokenIdA;
+        uint tokenIdAHp;
+        uint tokenIdB;
+        uint tokenIdBHp;
+        uint blockNumber;
+        // bool isBattle;
+    }
+
+    struct Stake {
+        uint frontierId;
         address staker;
         uint blockNumber;
     }
