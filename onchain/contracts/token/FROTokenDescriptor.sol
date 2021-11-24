@@ -2,24 +2,17 @@
 
 pragma solidity ^0.8.6;
 
+import "../lib/FROAddressProxy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "base64-sol/base64.sol";
 import "../interfaces/ITokenDescriptor.sol";
 import "../interfaces/IStatus.sol";
 
-contract CRPGTokenDescriptor is ITokenDescriptor, Ownable {
+contract FROTokenDescriptor is ITokenDescriptor, FROAddressProxy {
     using Strings for uint256;
 
-    address public status;
-
-    constructor(address status_) {
-        setStatus(status_);
-    }
-
-    function setStatus(address status_) public onlyOwner() {
-        status = status_;
-    }
+    constructor(address registry_) FROAddressProxy(registry_) {}
 
     function generateName(uint256 tokenId)
         private
@@ -28,7 +21,10 @@ contract CRPGTokenDescriptor is ITokenDescriptor, Ownable {
     {
         return
             string(
-                abi.encodePacked("CryptoRPG Character #", tokenId.toString())
+                abi.encodePacked(
+                    "CryptoFrontier Character #",
+                    tokenId.toString()
+                )
             );
     }
 
@@ -45,22 +41,30 @@ contract CRPGTokenDescriptor is ITokenDescriptor, Ownable {
         view
         returns (string memory)
     {
-        //TODO
-        uint256 power = 9;
+        IStatus.Status memory status = IStatus(
+            registry.getRegistry("FROStatus")
+        ).getStatus(tokenId);
 
-        IStatus.Status memory status = IStatus(status).getStatus(tokenId);
-
-        string[5] memory trait_types = ['hp','at','mg','df','sp'];
-        uint[5] memory values = [status.hp,status.at,status.mg,status.df,status.sp];
+        string[5] memory trait_types = ["hp", "at", "df", "it", "sp"];
+        uint256[5] memory values = [
+            status.hp,
+            status.at,
+            status.df,
+            status.it,
+            status.sp
+        ];
 
         return buildAttributes(trait_types, values);
     }
-    
-    function buildAttributes(string[5] memory trait_types, uint[5] memory values) private view returns(string memory) {
+
+    function buildAttributes(
+        string[5] memory trait_types,
+        uint256[5] memory values
+    ) private view returns (string memory) {
         require(trait_types.length == values.length, "length must be same");
 
-        string memory ret = '[';
-        for(uint8 i = 0; i < values.length; i++){
+        string memory ret = "[";
+        for (uint8 i = 0; i < values.length; i++) {
             ret = string(
                 abi.encodePacked(
                     ret,
@@ -73,12 +77,7 @@ contract CRPGTokenDescriptor is ITokenDescriptor, Ownable {
             );
         }
 
-        ret = string(
-            abi.encodePacked(
-                ret,
-                ']'
-            )
-        );
+        ret = string(abi.encodePacked(ret, "]"));
         return ret;
     }
 

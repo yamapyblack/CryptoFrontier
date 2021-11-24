@@ -8,7 +8,7 @@ import "../interfaces/IRevive.sol";
 import "../interfaces/ICharacter.sol";
 import "../interfaces/IStatus.sol";
 
-contract CRPGRevive is IRevive {
+contract FRORevive is IRevive {
     IAddressRegistry public registry;
 
     constructor(address registry_) {
@@ -17,14 +17,14 @@ contract CRPGRevive is IRevive {
 
     function revive(uint256 tokenId) external override {
         require(
-            ICharacter(registry.getRegistry("CRPGCharacter")).ownerOf(
+            ICharacter(registry.getRegistry("FROCharacter")).ownerOf(
                 tokenId
             ) == msg.sender,
             "sender is not owner of tokenId"
         );
 
         IHpRegistory.Hp memory hp = IHpRegistory(
-            registry.getRegistry("CRPGHpRegistory")
+            registry.getRegistry("FROHpRegistory")
         ).getHp(tokenId);
 
         require(hp.hp == 0, "hp is not 0");
@@ -35,10 +35,10 @@ contract CRPGRevive is IRevive {
         );
 
         // TODO max hp from status
-        uint256 maxHp = IStatus(registry.getRegistry("CRPGStatus"))
+        uint256 maxHp = IStatus(registry.getRegistry("FROStatus"))
             .getStatus(tokenId)
             .hp;
-        IHpRegistory(registry.getRegistry("CRPGHpRegistory")).setBattleHp(
+        IHpRegistory(registry.getRegistry("FROHpRegistory")).setBattleHp(
             tokenId,
             maxHp
         );
