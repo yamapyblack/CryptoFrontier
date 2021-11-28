@@ -2,7 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-interface IERC721Mintable {
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+
+interface IERC721Mintable is IERC721{
     function exists(uint256 _tokenId) external view returns (bool);
     function mint(address _to, uint256 _tokenId) external;
     function totalSupply() external returns (uint256);

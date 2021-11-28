@@ -45,7 +45,7 @@ abstract contract ERC721Mintable is IERC721Mintable, ERC721, AccessControlEnumer
         public
         view
         virtual
-        override(AccessControlEnumerable, ERC721)
+        override(AccessControlEnumerable, ERC721, IERC165)
         returns (bool)
     {
         return

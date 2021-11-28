@@ -2,14 +2,12 @@
 
 pragma solidity ^0.8.6;
 
-import "../interfaces/IAddressRegistry.sol";
+import "../interfaces/IAddresses.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../lib/EnumerableMapEx.sol";
 
-contract FROAddressRegistry is IAddressRegistry, Ownable {
+contract FROAddresses is IAddresses, Ownable {
     using EnumerableMapEx for EnumerableMapEx.Bytes32ToAddressMap;
-
-    // mapping(bytes32 => EnumerableMap.AddressSet) private registries;
 
     EnumerableMapEx.Bytes32ToAddressMap private registries;
 
@@ -40,6 +38,6 @@ contract FROAddressRegistry is IAddressRegistry, Ownable {
         if (registries.get(key) == _sender) {
             return;
         }
-        revert("AddressRegistry: onlyRegister error");
+        revert(string(abi.encodePacked("Addresses: onlyRegister error ", _sender, " is not", _key)));
     }
 }

@@ -3,17 +3,17 @@
 pragma solidity ^0.8.6;
 
 import "../lib/ERC721Mintable.sol";
-import "../lib/FROAddressProxy.sol";
+import "../address/FROAddressesProxy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/ITokenDescriptor.sol";
 import "../interfaces/ICharacter.sol";
 // import "../interfaces/IStatus.sol";
 // import "../interfaces/IHpRegistory.sol";
 
-contract FROCharacter is ERC721Mintable, Ownable, FROAddressProxy {
+contract FROCharacter is ERC721Mintable, Ownable, FROAddressesProxy {
     constructor(address registry_)
         ERC721Mintable("FROCharacter", "FROC")
-        FROAddressProxy(registry_)
+        FROAddressesProxy(registry_)
     {}
 
     function tokenURI(uint256 tokenId)
