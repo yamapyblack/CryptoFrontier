@@ -4,12 +4,12 @@ pragma solidity ^0.8.6;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../lib/FROAddressProxy.sol";
+import "../address/FROAddressesProxy.sol";
 import "../interfaces/IToken.sol";
 
-contract FROToken is ERC20, Ownable, FROAddressProxy, IToken {
+contract FROToken is ERC20, Ownable, FROAddressesProxy, IToken {
     constructor(address registry_)
-        FROAddressProxy(registry_)
+        FROAddressesProxy(registry_)
         ERC20("FrontierToken", "FRO")
     {}
 
@@ -17,7 +17,7 @@ contract FROToken is ERC20, Ownable, FROAddressProxy, IToken {
         _mint(account, amount);
     }
 
-    function mint(address account, uint256 amount) override external onlyAddress("FROFrontier") {
+    function mint(address account, uint256 amount) override external onlyAddress("FROReward") {
         _mint(account, amount);
     }
 

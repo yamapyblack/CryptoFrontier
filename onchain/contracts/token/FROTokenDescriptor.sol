@@ -2,17 +2,17 @@
 
 pragma solidity ^0.8.6;
 
-import "../lib/FROAddressProxy.sol";
+import "../address/FROAddressesProxy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "base64-sol/base64.sol";
 import "../interfaces/ITokenDescriptor.sol";
 import "../interfaces/IStatus.sol";
 
-contract FROTokenDescriptor is ITokenDescriptor, FROAddressProxy {
+contract FROTokenDescriptor is ITokenDescriptor, FROAddressesProxy {
     using Strings for uint256;
 
-    constructor(address registry_) FROAddressProxy(registry_) {}
+    constructor(address registry_) FROAddressesProxy(registry_) {}
 
     function generateName(uint256 tokenId)
         private

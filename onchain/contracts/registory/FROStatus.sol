@@ -2,13 +2,12 @@
 
 pragma solidity ^0.8.6;
 
-import "../lib/FROAddressProxy.sol";
+import "../address/FROAddressesProxy.sol";
 import "../interfaces/IStatus.sol";
-import "../interfaces/IAddressRegistry.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract FROStatus is IStatus, Ownable, FROAddressProxy {
-    constructor(address registry_) FROAddressProxy(registry_) {}
+contract FROStatus is IStatus, Ownable, FROAddressesProxy {
+    constructor(address registry_) FROAddressesProxy(registry_) {}
 
     // mapping(tokenId => Status)
     mapping(uint256 => IStatus.Status) private status;
@@ -25,8 +24,8 @@ contract FROStatus is IStatus, Ownable, FROAddressProxy {
     function setStatus(uint256 tokenId, IStatus.Status calldata status_)
         external
         override
-        onlyOwner
     {
+        //TODO from check
         _setStatus(tokenId, status_);
     }
 

@@ -2,13 +2,13 @@
 
 pragma solidity ^0.8.6;
 
-import "../interfaces/IAddressRegistry.sol";
+import "../interfaces/IAddresses.sol";
 
-contract FROAddressProxy {
-    IAddressRegistry public registry;
+contract FROAddressesProxy {
+    IAddresses public registry;
 
     constructor(address registry_){
-        registry = IAddressRegistry(registry_);
+        registry = IAddresses(registry_);
     }
 
     modifier onlyAddress(string memory _key) {
