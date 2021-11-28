@@ -1,5 +1,7 @@
 # CryptoFrontier
 
+![CryptoFrontier](https://user-images.githubusercontent.com/7692282/143732237-3a3584f8-4d26-4874-99b9-282b89c6b064.png)
+
 CryptoFrontier is the Full On-chained Game by FrontierDAO.
 
 ## Intdoruction
@@ -20,7 +22,7 @@ The aim of the Full On-chained Game is to uproot that part of the game and make 
 
 ## What is CryptoFrontier?
 
-画像
+![CryptoFrontierField](https://user-images.githubusercontent.com/7692282/143732287-5b282105-2a8a-401c-b353-b9264e267ca7.png)
 
 CryptoFrontier is the Full On-chained Game where you explore new frontiers and fight for supremacy.
 
