@@ -9,5 +9,6 @@ interface IHp {
     }
     function getHp(uint256 _tokenId) external view returns(Hp memory);
     function setHp(uint256 _tokenId, uint _hp) external;
+    function setHpByMint(uint256 _tokenId, uint _hp) external;
     function reduceHp(uint256 _tokenId, uint _hpDiff) external returns(uint);
 }

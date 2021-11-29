@@ -28,6 +28,11 @@ contract FROHp is IHp, FROAddressesProxy, Ownable {
         _setHp(_tokenId, _hp);
     }
 
+    function setHpByMint(uint256 _tokenId, uint256 _hp) external override {
+        registry.checkRegistory("FROMintLogic", msg.sender);
+        _setHp(_tokenId, _hp);
+    }
+
     function _setHp(uint256 _tokenId, uint256 _hp) internal {
         tokenHp[_tokenId] = IHp.Hp(_hp, block.number);
     }

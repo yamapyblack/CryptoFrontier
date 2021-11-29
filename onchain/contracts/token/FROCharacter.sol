@@ -10,7 +10,7 @@ import "../interfaces/ICharacter.sol";
 // import "../interfaces/IStatus.sol";
 // import "../interfaces/IHpRegistory.sol";
 
-contract FROCharacter is ERC721Mintable, Ownable, FROAddressesProxy {
+contract FROCharacter is ICharacter, ERC721Mintable, Ownable, FROAddressesProxy {
     constructor(address registry_)
         ERC721Mintable("FROCharacter", "FROC")
         FROAddressesProxy(registry_)
@@ -19,13 +19,18 @@ contract FROCharacter is ERC721Mintable, Ownable, FROAddressesProxy {
     function tokenURI(uint256 tokenId)
         public
         view
-        override
+        override(ERC721, ICharacter)
         returns (string memory)
     {
         require(_exists(tokenId), "nonexistent token");
         return
             ITokenDescriptor(registry.getRegistry("FROTokenDescriptor"))
                 .tokenURI(this, tokenId);
+    }
+
+    function mintByLogic(address to, uint256 tokenId) external override {
+        registry.checkRegistory("FROMintLogic", msg.sender);
+        _mint(to, tokenId);
     }
 
     // function mintSetStatus(

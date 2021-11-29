@@ -11,11 +11,12 @@ import "../interfaces/ICharacter.sol";
 
 contract FROMintLogic is Ownable, FROAddressesProxy, IMintLogic {
 
-    uint public maxTokenId = 100;
+    uint public maxTokenId = 10;
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
 
     function setMaxRange(uint _maxTokenId) external onlyOwner{
+        require(maxTokenId < _maxTokenId, "must be over maxTokenId");
         maxTokenId = _maxTokenId;
     }
 
@@ -24,10 +25,10 @@ contract FROMintLogic is Ownable, FROAddressesProxy, IMintLogic {
         require(_tokenId > 0 && _tokenId < maxTokenId, "tokdnId is out of range");
 
         ICharacter c = ICharacter(registry.getRegistry("FROCharacter"));
-        c.mint(msg.sender, _tokenId);
+        c.mintByLogic(msg.sender, _tokenId);
         
         uint hp = IStatus(registry.getRegistry("FROStatus")).getStatus(_tokenId).hp;
-        IHp(registry.getRegistry("FROHp")).setHp(_tokenId, hp);
+        IHp(registry.getRegistry("FROHp")).setHpByMint(_tokenId, hp);
     }
 
 }
