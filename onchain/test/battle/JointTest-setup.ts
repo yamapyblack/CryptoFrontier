@@ -1,8 +1,10 @@
 import "@nomiclabs/hardhat-waffle"
-import { ethers } from 'hardhat'
-import { BigNumberish } from 'ethers'
+import { ethers, network } from 'hardhat'
+import { BigNumberish, BigNumber } from 'ethers'
 import { expect, use } from 'chai'
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address"
+import { evmMine, getBlockNumber } from '../helper/Mine'
+import { calcHp } from '../helper/Battle'
 
 let owner:SignerWithAddress
 let addr1:SignerWithAddress
@@ -53,6 +55,21 @@ describe("testing for JointTest", async () => {
     const tokenId = 1;
     const tokenId2 = 2;
     const frontierId = 1;
+
+    const status1: Status = {
+        hp: 200,
+        at: 100,
+        df: 100,
+        it: 80,
+        sp: 70
+    }
+    const status2: Status = {
+        hp: 180,
+        at: 120,
+        df: 120,
+        it: 80,
+        sp: 70
+    }
 
     beforeEach(async () => {
         [owner, addr1, addr2, addr3,] = await ethers.getSigners()
@@ -113,40 +130,32 @@ describe("testing for JointTest", async () => {
         addresses.setRegistry("FROMintLogic", mintLogic.address)
 
         //setup
-        const status1: Status = {
-            hp: 200,
-            at: 100,
-            df: 100,
-            it: 80,
-            sp: 70
-        }
-        status.setStatus(1,status1)
+        status.setStatus(tokenId,status1)
+        status.setStatus(tokenId2,status2)
         const MINTER_ROLE = await character.MINTER_ROLE()
         character.grantRole(MINTER_ROLE, mintLogic.address)
         mintLogic.setMaxRange(100)
-        const frontierNil: Frontier = {
-            tokenIdA: 0,
-            tokenIdB: 0,
-            blockNumber: 0,
-        }
         await frontier.setMaxFrontier(10)
+        await logic.setEpoch(100) // test
 
     })
 
-    describe("claim", async () => {
+    describe("staking", async () => {
         it("staking 1", async () => {
+            console.log("js block", (await getBlockNumber()).toString())       
+
             //claim
             await mintLogic.connect(addr1).claim(tokenId);
             //approve
             await character.connect(addr1).setApprovalForAll(staking.address, true)
 
             await logic.connect(addr1).stake(tokenId, frontierId)
-            // const fro1 = await frontier.getFrontier(frontierId)
-            // console.log(fro1)
-
+            expect((await frontier.getFrontier(frontierId)).tokenIdA).equals(tokenId)
         });
 
         it("staking 2", async () => {
+            console.log("js block", (await getBlockNumber()).toString())       
+
             //claim
             await mintLogic.connect(addr1).claim(tokenId);
             await mintLogic.connect(addr2).claim(tokenId2);
@@ -156,16 +165,141 @@ describe("testing for JointTest", async () => {
 
             await logic.connect(addr1).stake(tokenId, frontierId)
             await logic.connect(addr2).stake(tokenId2, frontierId)
-            const fro1 = await frontier.getFrontier(frontierId)
-            console.log(fro1)
+            expect((await frontier.getFrontier(frontierId)).tokenIdA).equals(tokenId)
+            expect((await frontier.getFrontier(frontierId)).tokenIdB).equals(tokenId2)
         });
 
+        it("staking 2 battle", async () => {
+            console.log("js block", (await getBlockNumber()).toString())       
+
+            //claim
+            await mintLogic.connect(addr1).claim(tokenId);
+            await mintLogic.connect(addr2).claim(tokenId2);
+            //approve
+            await character.connect(addr1).setApprovalForAll(staking.address, true)
+            await character.connect(addr2).setApprovalForAll(staking.address, true)
+
+            await logic.connect(addr1).stake(tokenId, frontierId)
+            await logic.connect(addr2).stake(tokenId2, frontierId)
+
+            let hps = await logic.getBattleHp(frontierId)
+            console.log("hp", hps.hpA.toString(), hps.hpB.toString())
+
+            await evmMine(100)
+
+            hps = await logic.getBattleHp(frontierId)
+            console.log("hp", hps.hpA.toString(), hps.hpB.toString())
+            expect(hps.hpA).equals(calcHp(status1.hp, status2.at, status1.df))
+            expect(hps.hpB).equals(calcHp(status2.hp, status1.at, status2.df))
+        });
+
+        it("staking 2, A is dead", async () => {
+            console.log("js block", (await getBlockNumber()).toString())       
+
+            //claim
+            await mintLogic.connect(addr1).claim(tokenId);
+            await mintLogic.connect(addr2).claim(tokenId2);
+            //approve
+            await character.connect(addr1).setApprovalForAll(staking.address, true)
+            await character.connect(addr2).setApprovalForAll(staking.address, true)
+
+            await logic.connect(addr1).stake(tokenId, frontierId)
+            await logic.connect(addr2).stake(tokenId2, frontierId)
+
+            let hps = await logic.getBattleHp(frontierId)
+            console.log("hp", hps.hpA.toString(), hps.hpB.toString())
+
+            await evmMine(300)
+
+            hps = await logic.getBattleHp(frontierId)
+            console.log("hp", hps.hpA.toString(), hps.hpB.toString())
+            expect(hps.hpA).equals(0)
+            expect(hps.hpB).equals(calcHp(status2.hp, status1.at, status2.df, 3))
+        });
+
+        it("staking 2, both dead", async () => {
+            console.log("js block", (await getBlockNumber()).toString())       
+
+            //claim
+            await mintLogic.connect(addr1).claim(tokenId);
+            await mintLogic.connect(addr2).claim(tokenId2);
+            //approve
+            await character.connect(addr1).setApprovalForAll(staking.address, true)
+            await character.connect(addr2).setApprovalForAll(staking.address, true)
+
+            await logic.connect(addr1).stake(tokenId, frontierId)
+            await logic.connect(addr2).stake(tokenId2, frontierId)
+
+            let hps = await logic.getBattleHp(frontierId)
+            console.log("hp", hps.hpA.toString(), hps.hpB.toString())
+
+            await evmMine(500)
+
+            hps = await logic.getBattleHp(frontierId)
+            console.log("hp", hps.hpA.toString(), hps.hpB.toString())
+            expect(hps.hpA).equals(0)
+
+            // TODO hpB
+            // expect(hps.hpB).equals(0))
+        });
+
+        it("unStake only A", async () => {
+            //claim
+            await mintLogic.connect(addr1).claim(tokenId);
+            //approve
+            await character.connect(addr1).setApprovalForAll(staking.address, true)
+
+            await logic.connect(addr1).stake(tokenId, frontierId)
+            await logic.connect(addr1).unStake(tokenId)
+
+            expect(await character.connect(addr1).ownerOf(tokenId)).equals(addr1.address)
+            const f = await frontier.getFrontier(frontierId)
+            expect(f.tokenIdA).equals(0)
+            expect(f.tokenIdB).equals(0)
+            expect(f.blockNumber).equals(0)
+        })
+
+        it("unStake fail while battle", async () => {
+            //claim
+            await mintLogic.connect(addr1).claim(tokenId);
+            await mintLogic.connect(addr2).claim(tokenId2);
+            //approve
+            await character.connect(addr1).setApprovalForAll(staking.address, true)
+            await character.connect(addr2).setApprovalForAll(staking.address, true)
+
+            await logic.connect(addr1).stake(tokenId, frontierId)
+            await logic.connect(addr2).stake(tokenId2, frontierId)
+
+            await expect(logic.connect(addr1).unStake(tokenId)).revertedWith("cannnot unstake while battle")
+        })
+
+        it("unStake A is Dead", async () => {
+            //claim
+            await mintLogic.connect(addr1).claim(tokenId);
+            await mintLogic.connect(addr2).claim(tokenId2);
+            //approve
+            await character.connect(addr1).setApprovalForAll(staking.address, true)
+            await character.connect(addr2).setApprovalForAll(staking.address, true)
+
+            await logic.connect(addr1).stake(tokenId, frontierId)
+            await logic.connect(addr2).stake(tokenId2, frontierId)
+
+            await evmMine(300)
+
+            await logic.connect(addr1).unStake(tokenId)
+            const f = await frontier.getFrontier(frontierId)
+            expect(f.tokenIdA).equals(0)
+            expect(f.tokenIdB).equals(tokenId2)
+            // expect(f.blockNumber).equals(0)
+        })
+
+
 
         // it("fail hp not 0", async () => {
-        //     await expect(contract.connect(addr1).revive(tokenId)).revertedWith("hp is not 0")
+        //     await expect(contract.connect(addr1).unStake(tokenId)).revertedWith("hp is not 0")
         // });        
         // it("fail hp not 0", async () => {
-        //     await expect(contract.revive(tokenId)).revertedWith("hp is not 0")
+        //     await expect(contract.unStake(tokenId)).revertedWith("hp is not 0")
         // });        
     });
 });
