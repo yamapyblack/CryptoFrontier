@@ -22,42 +22,68 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
 
-    function _reward(uint256 tokenId, uint256 blockNumbers) internal {
-        uint256 reward = blockNumbers * rewardPerBlock;
+    function _reward(uint tokenId, uint blockNumbers) internal {
+        uint reward = blockNumbers * rewardPerBlock;
         IReward(registry.getRegistry("FROReward")).addReward(tokenId, reward);
     }
 
-    function _clearFrontier(uint256 _frontierId) internal {
+    function _clearFrontier(uint _frontierId) internal {
         IFrontier(registry.getRegistry("FROFrontier")).setFrontier(
             _frontierId,
             IFrontier.Frontier(0, 0, 0)
         );
     }
 
+    function setEpoch(uint _epoch) external onlyOwner {
+        epoch = _epoch;
+    }
+
+    function setRewardPerBlock(uint _rewardPerBlock) external onlyOwner {
+        rewardPerBlock = _rewardPerBlock;
+    }
+
+    function setReviveEpoch(uint _reviveEpoch) external onlyOwner {
+        reviveEpoch = _reviveEpoch;
+    }
+
     function _calcDeadBlock(
-        uint256 hp,
-        uint256 at,
-        uint256 df
-    ) internal view returns (uint256) {
+        uint hp,
+        uint at,
+        uint df
+    ) internal view returns (uint) {
         return (hp * epoch) / (at - (df / 2));
     }
 
     function _calcDamage(
-        uint256 blockNumbers,
-        uint256 at,
-        uint256 df
-    ) internal view returns (uint256) {
-        //TODO per EPOCH calc
+        uint blockNumbers,
+        uint at,
+        uint df
+    ) internal view returns (uint) {
         return ((at - (df / 2)) * blockNumbers) / epoch;
     }
 
-    function getBattleHp(uint256 frontierId)
+    function _getBattleHp(
+        uint blockNumbers,
+        uint playerHp,
+        uint enemyAt,
+        uint playerDf
+    ) private view returns(uint hp, uint deadBlockNums){        
+        if(playerHp > _calcDamage(blockNumbers, enemyAt, playerDf)){
+            hp = playerHp - _calcDamage(blockNumbers, enemyAt, playerDf);
+            deadBlockNums = 0;
+        }else{
+            hp = 0;
+            deadBlockNums = _calcDeadBlock(playerHp, enemyAt, playerDf);
+        }
+    }
+
+    function getBattleHp(uint frontierId)
         public
         view
         returns (
-            uint256 hpA,
-            uint256 hpB,
-            uint256 deadBlock
+            uint hpA,
+            uint hpB,
+            uint deadBlock
         )
     {
         IFrontier.Frontier memory f = IFrontier(
@@ -88,7 +114,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
             // both A and B
         } else {
             console.log("FROLogic: both A and B");
-            uint256 blockNumbers = block.number - f.blockNumber;
+            uint blockNumbers = block.number - f.blockNumber;
 
             IStatus.Status memory statusA = IStatus(
                 registry.getRegistry("FROStatus")
@@ -97,103 +123,68 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
                 registry.getRegistry("FROStatus")
             ).getStatus(f.tokenIdB);
 
-            uint256 damegeA = _calcDamage(blockNumbers, statusB.at, statusA.df);
-            uint256 damegeB = _calcDamage(blockNumbers, statusA.at, statusB.df);
-            console.log("FROLogic: damage", damegeA, damegeB);
-
-            uint256 tokenAHp = IHp(registry.getRegistry("FROHp"))
+            uint tokenAHp = IHp(registry.getRegistry("FROHp"))
                 .getHp(f.tokenIdA)
                 .hp;
-            uint256 tokenBHp = IHp(registry.getRegistry("FROHp"))
+            uint tokenBHp = IHp(registry.getRegistry("FROHp"))
                 .getHp(f.tokenIdB)
                 .hp;
 
-            bool isADead = (tokenAHp < damegeA);
-            bool isBDead = (tokenBHp < damegeB);
+            (uint battleHpA, uint deadBlockNumsA) = _getBattleHp(blockNumbers, tokenAHp, statusB.at, statusA.df);
+            (uint battleHpB, uint deadBlockNumsB) = _getBattleHp(blockNumbers, tokenBHp, statusA.at, statusB.df);
+
+            bool isADead = (battleHpA == 0);
+            bool isBDead = (battleHpB == 0);
 
             // both live
             if (!isADead && !isBDead) {
                 console.log("FROLogic: both live");
-                hpA = tokenAHp - damegeA;
-                hpB = tokenBHp - damegeB;
+                hpA = battleHpA;
+                hpB = battleHpB;
                 deadBlock = 0;
 
                 // A is dead
             } else if (isADead && !isBDead) {
                 console.log("FROLogic: A is dead");
                 hpA = 0;
-                hpB = tokenBHp - damegeB;
-                deadBlock =
-                    _calcDeadBlock(tokenAHp, statusB.at, statusA.df) +
-                    f.blockNumber;
+                (hpB,) = _getBattleHp(deadBlockNumsA, tokenBHp, statusA.at, statusB.df);
+                deadBlock = deadBlockNumsA + f.blockNumber;
 
                 // B is dead
             } else if (!isADead && isBDead) {
                 console.log("FROLogic: B is dead");
-                hpA = tokenAHp - damegeA;
+                (hpA,) = _getBattleHp(deadBlockNumsB, tokenAHp, statusB.at, statusA.df);
                 hpB = 0;
-                deadBlock =
-                    _calcDeadBlock(tokenBHp, statusA.at, statusB.df) +
-                    f.blockNumber;
+                deadBlock = deadBlockNumsB + f.blockNumber;
 
                 // both dead
             } else {
                 console.log("FROLogic: both dead");
-                uint256 deadABlock = _calcDeadBlock(
-                    tokenAHp,
-                    statusB.at,
-                    statusA.df
-                ) + f.blockNumber;
-                uint256 deadBBlock = _calcDeadBlock(
-                    tokenBHp,
-                    statusA.at,
-                    statusB.df
-                ) + f.blockNumber;
-
-                console.log(
-                    "FROLogic: deadBlock",
-                    deadABlock,
-                    deadBBlock,
-                    f.blockNumber
-                );
 
                 //A is dead
-                if (deadABlock < deadBBlock) {
-                    blockNumbers = deadABlock - f.blockNumber;
+                if (deadBlockNumsA < deadBlockNumsB) {
+                    console.log("FROlogic: blockNumbers", blockNumbers);
                     hpA = 0;
-                    hpB =
-                        tokenBHp -
-                        _calcDamage(blockNumbers, statusA.at, statusB.df);
-                    deadBlock = deadABlock;
+                    (hpB,) = _getBattleHp(deadBlockNumsA, tokenBHp, statusA.at, statusB.df);
+                    deadBlock = deadBlockNumsA + f.blockNumber;
 
                     //B is dead
-                } else if (deadABlock > deadBBlock) {
-                    blockNumbers = deadBBlock - f.blockNumber;
-                    hpA =
-                        tokenAHp -
-                        _calcDamage(blockNumbers, statusB.at, statusA.df);
+                } else if (deadBlockNumsA > deadBlockNumsB) {
+                    (hpA,) = _getBattleHp(deadBlockNumsB, tokenAHp, statusB.at, statusA.df);
                     hpB = 0;
-                    deadBlock = deadBBlock;
+                    deadBlock = deadBlockNumsB + f.blockNumber;
 
                     //draw
                 } else {
                     hpA = 0;
                     hpB = 0;
-                    deadBlock = deadABlock;
+                    deadBlock = deadBlockNumsA + f.blockNumber;
                 }
             }
         }
     }
 
-    function setEpoch(uint256 _epoch) external onlyOwner {
-        epoch = _epoch;
-    }
-
-    function setRewardPerBlock(uint256 _rewardPerBlock) external onlyOwner {
-        rewardPerBlock = _rewardPerBlock;
-    }
-
-    function stake(uint256 tokenId, uint256 frontierId) external override {
+    function stake(uint tokenId, uint frontierId) external override {
         require(
             ICharacter(registry.getRegistry("FROCharacter")).ownerOf(tokenId) ==
                 msg.sender,
@@ -227,7 +218,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
 
             // both A and B
         } else {
-            (uint256 hpA, uint256 hpB, uint256 deadBlock) = getBattleHp(
+            (uint hpA, uint hpB, uint deadBlock) = getBattleHp(
                 frontierId
             );
 
@@ -267,7 +258,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
         );
     }
 
-    function unStake(uint256 tokenId) external override {
+    function unStake(uint tokenId) external override {
         IStaking.Stake memory s = IStaking(registry.getRegistry("FROStaking"))
             .getStake(tokenId);
         IStaking(registry.getRegistry("FROStaking")).withdraw(
@@ -298,7 +289,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
 
             // both A and B
         } else {
-            (uint256 hpA, uint256 hpB, uint256 deadBlock) = getBattleHp(
+            (uint hpA, uint hpB, uint deadBlock) = getBattleHp(
                 s.frontierId
             );
 
@@ -311,11 +302,11 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
                 _reward(f.tokenIdA, deadBlock - f.blockNumber);
                 _reward(f.tokenIdB, block.number - f.blockNumber);
 
-                // your is token A
+                // your token is A
                 if (f.tokenIdA == tokenId) {
                     IFrontier(registry.getRegistry("FROFrontier")).setFrontier(
                         s.frontierId,
-                        IFrontier.Frontier(0, f.tokenIdB, block.timestamp)
+                        IFrontier.Frontier(0, f.tokenIdB, block.number)
                     );
                 } else {
                     _clearFrontier(s.frontierId);
@@ -326,13 +317,13 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
                 _reward(f.tokenIdA, block.number - f.blockNumber);
                 _reward(f.tokenIdB, deadBlock - f.blockNumber);
 
-                // your is token A
+                // your token is A
                 if (f.tokenIdA == tokenId) {
                     _clearFrontier(s.frontierId);
                 } else {
                     IFrontier(registry.getRegistry("FROFrontier")).setFrontier(
                         s.frontierId,
-                        IFrontier.Frontier(f.tokenIdA, 0, block.timestamp)
+                        IFrontier.Frontier(f.tokenIdA, 0, block.number)
                     );
                 }
 

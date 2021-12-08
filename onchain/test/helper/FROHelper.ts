@@ -1,5 +1,6 @@
 import { ethers } from 'hardhat'
-import { BigNumberish } from 'ethers'
+import { BigNumberish, BigNumber } from 'ethers'
+import { expect, use } from "chai";
 
 import { FROAddresses } from "typechain/FROAddresses"
 // import { FROAddressesProxy } from "typechain/FROAddressesProxy"
@@ -13,6 +14,8 @@ import { FROStaking } from "typechain/FROStaking"
 import { FROToken } from "typechain/FROToken"
 import { FROLogic } from "typechain/FROLogic"
 import { FROMintLogic } from "typechain/FROMintLogic"
+
+export const NilAddress = "0x0000000000000000000000000000000000000000"
 
 export type ContractType = {
   addresses: FROAddresses
@@ -40,6 +43,17 @@ export type Status = {
 export type Frontier = {
   tokenIdA: BigNumberish
   tokenIdB: BigNumberish
+  blockNumber: BigNumberish
+}
+
+export type Hp = {
+  hp: BigNumberish
+  blockNumber: BigNumberish
+}
+
+export type Stake = {
+  frontierId: BigNumberish
+  staker: string
   blockNumber: BigNumberish
 }
 
@@ -142,15 +156,43 @@ export const setup = async (c: ContractType, tokenIds: number[], status: Status[
 
   const MINTER_ROLE = await c.character.MINTER_ROLE()
   await c.character.grantRole(MINTER_ROLE, c.mintLogic.address)
-  await c.mintLogic.setMaxRange(100)
-  await c.frontier.setMaxFrontier(10)
-  await c.logic.setEpoch(100) // test
+  await c.mintLogic.setMaxRange(initConst.mintRange)
+  await c.frontier.setMaxFrontier(initConst.maxFrontier)
+  await c.logic.setEpoch(initConst.epoch)
+  await c.logic.setReviveEpoch(initConst.reviveEpoch)
+  await c.logic.setRewardPerBlock(initConst.rewardPerBlock)
+}
+
+export class Expect {
+  static frontier = (_expect: [BigNumber,BigNumber,BigNumber], _actual: Frontier) => {
+    expect(_expect[0]).equals(_actual.tokenIdA);
+    expect(_expect[1]).equals(_actual.tokenIdB);
+    expect(_expect[2]).equals(_actual.blockNumber);
+  }
+  
+  static hp = (_expect: [BigNumber,BigNumber], _actual: Hp) => {
+      expect(_expect[0]).equals(_actual.hp);
+      expect(_expect[1]).equals(_actual.blockNumber);
+  };
+  
+  static stake = (_expect: [BigNumber,string,BigNumber], _actual: Stake) => {
+      expect(_expect[0]).equals(_actual.frontierId);
+      expect(_expect[1]).equals(_actual.staker);
+      expect(_expect[2]).equals(_actual.blockNumber);
+  };
+  
 }
 
 export class Util {
   static calcHp = (initHp: BigNumberish, enemyAt: BigNumberish, df: BigNumberish, epoch: number = 1): BigNumberish => {
     return Number(initHp) - ((Number(enemyAt) - Number(df)/2) * epoch)
-  }
-  
+  }  
 }
 
+export const initConst = {
+  epoch: 100,
+  mintRange: 100,
+  maxFrontier: 10,
+  reviveEpoch: 100,
+  rewardPerBlock: 10000,
+}
