@@ -28,14 +28,14 @@ describe("testing for JointTest", async () => {
 
   const tokenId1 = 1;
   const tokenId2 = 2;
-  const status1: Status = {
+  let status1: Status = {
     hp: 200,
     at: 100,
     df: 100,
     it: 80,
     sp: 70,
   };
-  const status2: Status = {
+  let status2: Status = {
     hp: 180,
     at: 120,
     df: 120,
@@ -177,8 +177,8 @@ describe("testing for JointTest", async () => {
       // expect battleHp
       let hps = await c.logic.getBattleHp(frontierId);
       console.log("hp", hps.hpA.toString(), hps.hpB.toString());
-      expect(hps.hpA).equals(Util.calcHp(status1.hp, status2.at, status1.df));
-      expect(hps.hpB).equals(Util.calcHp(status2.hp, status1.at, status2.df));
+      expect(hps.hpA).equals(Util.calcHp(status1.hp, status2.at, status1.df, 100, initConst.epoch));
+      expect(hps.hpB).equals(Util.calcHp(status2.hp, status1.at, status2.df, 100, initConst.epoch));
 
       //expect
       Expect.frontier(await c.frontier.getFrontier(frontierId), {
@@ -240,7 +240,7 @@ describe("testing for JointTest", async () => {
       console.log("hp", hps.hpA.toString(), hps.hpB.toString());
       expect(hps.hpA).equals(0);
       expect(hps.hpB).equals(
-        Util.calcHp(status2.hp, status1.at, status2.df, (hps.deadBlock.toNumber() - block3) / initConst.epoch)
+        Util.calcHp(status2.hp, status1.at, status2.df, hps.deadBlock.toNumber() - block3, initConst.epoch)
       );
 
       //expect
@@ -334,7 +334,7 @@ describe("testing for JointTest", async () => {
       console.log("yama", block3, Number(hps.deadBlock))
       expect(hps.hpA).equals(0);
       expect(hps.hpB).equals(
-        Util.calcHp(status2.hp, status1.at, status2.df, (hps.deadBlock.toNumber() - block3) / initConst.epoch)
+        Util.calcHp(status2.hp, status1.at, status2.df, hps.deadBlock.toNumber() - block3, initConst.epoch)
       );
 
       //expect
@@ -401,8 +401,215 @@ describe("testing for JointTest", async () => {
       expect(await c.character.ownerOf(tokenId2)).equals(c.staking.address)
     });
 
-    it("staking 2, both dead(A and B were daed at same time)", async () => {
-      //TODO 
+    it("staking 2, B is dead", async () => {
+      status1 = {
+        hp: 500,
+        at: 200,
+        df: 100,
+        it: 80,
+        sp: 70,
+      };    
+      await c.status.setStatus(tokenId1, status1)
+
+      //claim
+      await c.mintLogic.connect(addr1).claim(tokenId1);
+      const block0 = await getBlockNumber()
+      await c.mintLogic.connect(addr2).claim(tokenId2);
+      const block1 = await getBlockNumber()
+      //approve
+      await c.character
+        .connect(addr1)
+        .setApprovalForAll(c.staking.address, true);
+      await c.character
+        .connect(addr2)
+        .setApprovalForAll(c.staking.address, true);
+
+      await c.logic.connect(addr1).stake(tokenId1, frontierId);
+      const block2 = await getBlockNumber()
+      await c.logic.connect(addr2).stake(tokenId2, frontierId);
+      const block3 = await getBlockNumber()
+
+      await evmMine(300);
+
+      let hps = await c.logic.getBattleHp(frontierId);
+      console.log("hp", hps.hpA.toString(), hps.hpB.toString());
+
+      expect(hps.hpA).equals(
+        Util.calcHp(status1.hp, status2.at, status1.df, Number(hps.deadBlock) - block3, initConst.epoch)
+      );
+      expect(hps.hpB).equals(0);
+
+      //expect
+      Expect.frontier(await c.frontier.getFrontier(frontierId), {
+        tokenIdA: tokenId1,
+        tokenIdB: tokenId2,
+        blockNumber: block3,
+      });
+      Expect.hp(await c.hp.getHp(tokenId1), {
+        hp: status1.hp,
+        blockNumber: block0,
+      });
+      Expect.hp(await c.hp.getHp(tokenId2), {
+        hp: status2.hp,
+        blockNumber: block1,
+      });
+      Expect.stake(await c.staking.getStake(tokenId1), {
+        frontierId: frontierId,
+        staker: addr1.address,
+        blockNumber: block2,
+      });
+      Expect.stake(await c.staking.getStake(tokenId2), {
+        frontierId: frontierId,
+        staker: addr2.address,
+        blockNumber: block3,
+      });
+      expect(await c.reward.rewards(tokenId1)).equals(initConst.rewardPerBlock);
+      expect(await c.reward.rewards(tokenId2)).equals(0);
+      expect(await c.character.ownerOf(tokenId1)).equals(c.staking.address)
+      expect(await c.character.ownerOf(tokenId2)).equals(c.staking.address)
+
+      //unstake
+      await c.logic.connect(addr2).unStake(tokenId2);
+      const block4 = await getBlockNumber()
+
+      //expect
+      Expect.frontier(await c.frontier.getFrontier(frontierId), {
+        tokenIdA: tokenId1,
+        tokenIdB: 0,
+        blockNumber: block4,
+      });
+      Expect.hp(await c.hp.getHp(tokenId1), {
+        hp: hps.hpA,
+        blockNumber: await getBlockNumber(),
+      });
+      Expect.hp(await c.hp.getHp(tokenId2), {
+        hp: hps.hpB,
+        blockNumber: await getBlockNumber(),
+      });
+      Expect.stake(await c.staking.getStake(tokenId1), {
+        frontierId: frontierId,
+        staker: addr1.address,
+        blockNumber: block2,
+      });
+      Expect.stake(await c.staking.getStake(tokenId2), {
+        frontierId: 0,
+        staker: NilAddress,
+        blockNumber: 0,
+      });
+      // deadBlock - stakingBlock
+      expect(await c.reward.rewards(tokenId1)).equals(initConst.rewardPerBlock * (block4 - block2));
+      expect(await c.reward.rewards(tokenId2)).equals(initConst.rewardPerBlock * (Number(hps.deadBlock) - block3));
+      expect(await c.character.ownerOf(tokenId1)).equals(c.staking.address)
+      expect(await c.character.ownerOf(tokenId2)).equals(addr2.address)
+    });
+
+    it("both are dead at same time", async () => {
+      status1 = {
+        hp: 400,
+        at: 200,
+        df: 200,
+        it: 80,
+        sp: 70,
+      };    
+      let status2: Status = {
+        hp: 300,
+        at: 300,
+        df: 100,
+        it: 80,
+        sp: 70,
+      };
+      await c.status.setStatus(tokenId1, status1)
+      await c.status.setStatus(tokenId2, status2)
+
+      //claim
+      await c.mintLogic.connect(addr1).claim(tokenId1);
+      const block0 = await getBlockNumber()
+      await c.mintLogic.connect(addr2).claim(tokenId2);
+      const block1 = await getBlockNumber()
+
+      //approve
+      await c.character
+        .connect(addr1)
+        .setApprovalForAll(c.staking.address, true);
+      await c.character
+        .connect(addr2)
+        .setApprovalForAll(c.staking.address, true);
+
+      await c.logic.connect(addr1).stake(tokenId1, frontierId);
+      const block2 = await getBlockNumber()
+      await c.logic.connect(addr2).stake(tokenId2, frontierId);
+      const block3 = await getBlockNumber()
+
+      await evmMine(500);
+
+      let hps = await c.logic.getBattleHp(frontierId);
+      console.log("hp", hps.hpA.toString(), hps.hpB.toString());
+      expect(hps.hpA).equals(0)
+      expect(hps.hpB).equals(0)
+
+      //expect
+      Expect.frontier(await c.frontier.getFrontier(frontierId), {
+        tokenIdA: tokenId1,
+        tokenIdB: tokenId2,
+        blockNumber: block3,
+      });
+      Expect.hp(await c.hp.getHp(tokenId1), {
+        hp: status1.hp,
+        blockNumber: block0,
+      });
+      Expect.hp(await c.hp.getHp(tokenId2), {
+        hp: status2.hp,
+        blockNumber: block1,
+      });
+      Expect.stake(await c.staking.getStake(tokenId1), {
+        frontierId: frontierId,
+        staker: addr1.address,
+        blockNumber: block2,
+      });
+      Expect.stake(await c.staking.getStake(tokenId2), {
+        frontierId: frontierId,
+        staker: addr2.address,
+        blockNumber: block3,
+      });
+      expect(await c.reward.rewards(tokenId1)).equals(initConst.rewardPerBlock);
+      expect(await c.reward.rewards(tokenId2)).equals(0);
+      expect(await c.character.ownerOf(tokenId1)).equals(c.staking.address)
+      expect(await c.character.ownerOf(tokenId2)).equals(c.staking.address)
+
+      //unstake
+      await c.logic.connect(addr1).unStake(tokenId1);
+      const block4 = await getBlockNumber()
+
+      //expect
+      Expect.frontier(await c.frontier.getFrontier(frontierId), {
+        tokenIdA: 0,
+        tokenIdB: 0,
+        blockNumber: 0,
+      });
+      Expect.hp(await c.hp.getHp(tokenId1), {
+        hp: hps.hpA,
+        blockNumber: await getBlockNumber(),
+      });
+      Expect.hp(await c.hp.getHp(tokenId2), {
+        hp: hps.hpB,
+        blockNumber: await getBlockNumber(),
+      });
+      Expect.stake(await c.staking.getStake(tokenId1), {
+        frontierId: 0,
+        staker: NilAddress,
+        blockNumber: 0,
+      });
+      Expect.stake(await c.staking.getStake(tokenId2), {
+        frontierId: frontierId,
+        staker: addr2.address,
+        blockNumber: block3,
+      });
+      // deadBlock - stakingBlock
+      expect(await c.reward.rewards(tokenId1)).equals(initConst.rewardPerBlock * (Number(hps.deadBlock) - block2));
+      expect(await c.reward.rewards(tokenId2)).equals(initConst.rewardPerBlock * (Number(hps.deadBlock) - block3));
+      expect(await c.character.ownerOf(tokenId1)).equals(addr1.address)
+      expect(await c.character.ownerOf(tokenId2)).equals(c.staking.address)
+
     });
 
   });

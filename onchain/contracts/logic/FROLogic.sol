@@ -16,74 +16,77 @@ import "hardhat/console.sol";
 
 contract FROLogic is Ownable, FROAddressesProxy, ILogic {
     // uint public epoch = 60 * 60 * 6 / 2; //6h polygon
-    uint public epoch = 100;
-    uint public rewardPerBlock = 10000;
-    uint public reviveEpoch = 100;
+
+    uint256 constant maticHour = 60 * 60 / 2;
+
+    uint256 public epoch = maticHour * 3; //3h
+    uint256 public rewardPerBlock = 1000 * (10 ** 18) / (maticHour * 6); //6hで1000
+    uint256 public reviveEpoch = maticHour * 6; //6h
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
 
-    function _reward(uint tokenId, uint blockNumbers) internal {
-        uint reward = blockNumbers * rewardPerBlock;
+    function _reward(uint256 tokenId, uint256 blockNumbers) internal {
+        uint256 reward = blockNumbers * rewardPerBlock;
         IReward(registry.getRegistry("FROReward")).addReward(tokenId, reward);
     }
 
-    function _clearFrontier(uint _frontierId) internal {
+    function _clearFrontier(uint256 _frontierId) internal {
         IFrontier(registry.getRegistry("FROFrontier")).setFrontier(
             _frontierId,
             IFrontier.Frontier(0, 0, 0)
         );
     }
 
-    function setEpoch(uint _epoch) external onlyOwner {
+    function setEpoch(uint256 _epoch) external onlyOwner {
         epoch = _epoch;
     }
 
-    function setRewardPerBlock(uint _rewardPerBlock) external onlyOwner {
+    function setRewardPerBlock(uint256 _rewardPerBlock) external onlyOwner {
         rewardPerBlock = _rewardPerBlock;
     }
 
-    function setReviveEpoch(uint _reviveEpoch) external onlyOwner {
+    function setReviveEpoch(uint256 _reviveEpoch) external onlyOwner {
         reviveEpoch = _reviveEpoch;
     }
 
     function _calcDeadBlock(
-        uint hp,
-        uint at,
-        uint df
-    ) internal view returns (uint) {
+        uint256 hp,
+        uint256 at,
+        uint256 df
+    ) internal view returns (uint256) {
         return (hp * epoch) / (at - (df / 2));
     }
 
     function _calcDamage(
-        uint blockNumbers,
-        uint at,
-        uint df
-    ) internal view returns (uint) {
+        uint256 blockNumbers,
+        uint256 at,
+        uint256 df
+    ) internal view returns (uint256) {
         return ((at - (df / 2)) * blockNumbers) / epoch;
     }
 
     function _getBattleHp(
-        uint blockNumbers,
-        uint playerHp,
-        uint enemyAt,
-        uint playerDf
-    ) private view returns(uint hp, uint deadBlockNums){        
-        if(playerHp > _calcDamage(blockNumbers, enemyAt, playerDf)){
+        uint256 blockNumbers,
+        uint256 playerHp,
+        uint256 enemyAt,
+        uint256 playerDf
+    ) private view returns (uint256 hp, uint256 deadBlockNums) {
+        if (playerHp > _calcDamage(blockNumbers, enemyAt, playerDf)) {
             hp = playerHp - _calcDamage(blockNumbers, enemyAt, playerDf);
             deadBlockNums = 0;
-        }else{
+        } else {
             hp = 0;
             deadBlockNums = _calcDeadBlock(playerHp, enemyAt, playerDf);
         }
     }
 
-    function getBattleHp(uint frontierId)
+    function getBattleHp(uint256 frontierId)
         public
         view
         returns (
-            uint hpA,
-            uint hpB,
-            uint deadBlock
+            uint256 hpA,
+            uint256 hpB,
+            uint256 deadBlock
         )
     {
         IFrontier.Frontier memory f = IFrontier(
@@ -114,7 +117,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
             // both A and B
         } else {
             console.log("FROLogic: both A and B");
-            uint blockNumbers = block.number - f.blockNumber;
+            uint256 blockNumbers = block.number - f.blockNumber;
 
             IStatus.Status memory statusA = IStatus(
                 registry.getRegistry("FROStatus")
@@ -123,68 +126,88 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
                 registry.getRegistry("FROStatus")
             ).getStatus(f.tokenIdB);
 
-            uint tokenAHp = IHp(registry.getRegistry("FROHp"))
+            uint256 tokenAHp = IHp(registry.getRegistry("FROHp"))
                 .getHp(f.tokenIdA)
                 .hp;
-            uint tokenBHp = IHp(registry.getRegistry("FROHp"))
+            uint256 tokenBHp = IHp(registry.getRegistry("FROHp"))
                 .getHp(f.tokenIdB)
                 .hp;
 
-            (uint battleHpA, uint deadBlockNumsA) = _getBattleHp(blockNumbers, tokenAHp, statusB.at, statusA.df);
-            (uint battleHpB, uint deadBlockNumsB) = _getBattleHp(blockNumbers, tokenBHp, statusA.at, statusB.df);
+            (uint256 battleHpA, uint256 deadBlockNumsA) = _getBattleHp(
+                blockNumbers,
+                tokenAHp,
+                statusB.at,
+                statusA.df
+            );
+            (uint256 battleHpB, uint256 deadBlockNumsB) = _getBattleHp(
+                blockNumbers,
+                tokenBHp,
+                statusA.at,
+                statusB.df
+            );
 
-            bool isADead = (battleHpA == 0);
-            bool isBDead = (battleHpB == 0);
+            (bool isDeadA, bool isDeadB) = (false, false);
 
             // both live
-            if (!isADead && !isBDead) {
-                console.log("FROLogic: both live");
+            if (battleHpA > 0 && battleHpB > 0) {
+                // A is dead
+            } else if (battleHpA == 0 && battleHpB > 0) {
+                (isDeadA, isDeadB) = (true, false);
+
+                // B is dead
+            } else if (battleHpA > 0 && battleHpB == 0) {
+                (isDeadA, isDeadB) = (false, true);
+
+                // both dead
+            } else {
+                //A is dead
+                if (deadBlockNumsA < deadBlockNumsB) {
+                    (isDeadA, isDeadB) = (true, false);
+
+                    //B is dead
+                } else if (deadBlockNumsA > deadBlockNumsB) {
+                    (isDeadA, isDeadB) = (false, true);
+
+                    //draw
+                } else {
+                    (isDeadA, isDeadB) = (true, true);
+                }
+            }
+
+            if (!isDeadA && !isDeadB) {
                 hpA = battleHpA;
                 hpB = battleHpB;
                 deadBlock = 0;
 
-                // A is dead
-            } else if (isADead && !isBDead) {
-                console.log("FROLogic: A is dead");
+            } else if (isDeadA && !isDeadB) {
                 hpA = 0;
-                (hpB,) = _getBattleHp(deadBlockNumsA, tokenBHp, statusA.at, statusB.df);
+                (hpB, ) = _getBattleHp(
+                    deadBlockNumsA,
+                    tokenBHp,
+                    statusA.at,
+                    statusB.df
+                );
                 deadBlock = deadBlockNumsA + f.blockNumber;
 
-                // B is dead
-            } else if (!isADead && isBDead) {
-                console.log("FROLogic: B is dead");
-                (hpA,) = _getBattleHp(deadBlockNumsB, tokenAHp, statusB.at, statusA.df);
+            } else if (!isDeadA && isDeadB) {
+                (hpA, ) = _getBattleHp(
+                    deadBlockNumsB,
+                    tokenAHp,
+                    statusB.at,
+                    statusA.df
+                );
                 hpB = 0;
                 deadBlock = deadBlockNumsB + f.blockNumber;
 
-                // both dead
             } else {
-                console.log("FROLogic: both dead");
-
-                //A is dead
-                if (deadBlockNumsA < deadBlockNumsB) {
-                    console.log("FROlogic: blockNumbers", blockNumbers);
-                    hpA = 0;
-                    (hpB,) = _getBattleHp(deadBlockNumsA, tokenBHp, statusA.at, statusB.df);
-                    deadBlock = deadBlockNumsA + f.blockNumber;
-
-                    //B is dead
-                } else if (deadBlockNumsA > deadBlockNumsB) {
-                    (hpA,) = _getBattleHp(deadBlockNumsB, tokenAHp, statusB.at, statusA.df);
-                    hpB = 0;
-                    deadBlock = deadBlockNumsB + f.blockNumber;
-
-                    //draw
-                } else {
-                    hpA = 0;
-                    hpB = 0;
-                    deadBlock = deadBlockNumsA + f.blockNumber;
-                }
+                hpA = 0;
+                hpB = 0;
+                deadBlock = deadBlockNumsA + f.blockNumber;
             }
         }
     }
 
-    function stake(uint tokenId, uint frontierId) external override {
+    function stake(uint256 tokenId, uint256 frontierId) external override {
         require(
             ICharacter(registry.getRegistry("FROCharacter")).ownerOf(tokenId) ==
                 msg.sender,
@@ -218,7 +241,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
 
             // both A and B
         } else {
-            (uint hpA, uint hpB, uint deadBlock) = getBattleHp(
+            (uint256 hpA, uint256 hpB, uint256 deadBlock) = getBattleHp(
                 frontierId
             );
 
@@ -258,7 +281,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
         );
     }
 
-    function unStake(uint tokenId) external override {
+    function unStake(uint256 tokenId) external override {
         IStaking.Stake memory s = IStaking(registry.getRegistry("FROStaking"))
             .getStake(tokenId);
         IStaking(registry.getRegistry("FROStaking")).withdraw(
@@ -289,7 +312,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
 
             // both A and B
         } else {
-            (uint hpA, uint hpB, uint deadBlock) = getBattleHp(
+            (uint256 hpA, uint256 hpB, uint256 deadBlock) = getBattleHp(
                 s.frontierId
             );
 
@@ -298,7 +321,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
                 revert("cannnot unstake while battle");
 
                 // A is dead
-            } else if (hpA == 0) {
+            } else if (hpA == 0 && hpB > 0) {
                 _reward(f.tokenIdA, deadBlock - f.blockNumber);
                 _reward(f.tokenIdB, block.number - f.blockNumber);
 
@@ -313,7 +336,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
                 }
 
                 // B is dead
-            } else if (hpB == 0) {
+            } else if (hpA > 0 && hpB == 0) {
                 _reward(f.tokenIdA, block.number - f.blockNumber);
                 _reward(f.tokenIdB, deadBlock - f.blockNumber);
 
@@ -338,7 +361,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
         }
     }
 
-    function revive(uint tokenId) external override {
+    function revive(uint256 tokenId) external override {
         require(
             ICharacter(registry.getRegistry("FROCharacter")).ownerOf(tokenId) ==
                 msg.sender,
@@ -347,8 +370,14 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
 
         IHp.Hp memory hp = IHp(registry.getRegistry("FROHp")).getHp(tokenId);
         require(hp.hp == 0, "not hp 0 or staking now");
-        require(block.number > hp.blockNumber + reviveEpoch, "must be past reviveEpoch");
+        require(
+            block.number > hp.blockNumber + reviveEpoch,
+            "must be past reviveEpoch"
+        );
 
-        IHp(registry.getRegistry("FROHp")).setHp(tokenId, IStatus(registry.getRegistry("FROStatus")).getStatus(tokenId).hp);
+        IHp(registry.getRegistry("FROHp")).setHp(
+            tokenId,
+            IStatus(registry.getRegistry("FROStatus")).getStatus(tokenId).hp
+        );
     }
 }

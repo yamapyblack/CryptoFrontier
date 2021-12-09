@@ -184,8 +184,10 @@ export class Expect {
 }
 
 export class Util {
-  static calcHp = (initHp: BigNumberish, enemyAt: BigNumberish, df: BigNumberish, epoch: number = 1): BigNumberish => {
-    return Number(initHp) - ((Number(enemyAt) - Number(df)/2) * epoch)
+  static calcHp = (initHp: BigNumberish, enemyAt: BigNumberish, df: BigNumberish, blockNums: number, epoch: number): BigNumber => {
+    const df2 = Math.floor(Number(df)/2)
+    const ret = Number(initHp) - Math.floor(((Number(enemyAt) - df2) * blockNums / epoch))
+    return BigNumber.from(ret)
   }  
 }
 
