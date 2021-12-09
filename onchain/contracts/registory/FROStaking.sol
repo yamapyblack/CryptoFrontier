@@ -9,6 +9,7 @@ import "../lib/ERC721Receiver.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
+    //TODO userによる強制withdrawをつけるか？
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
 
@@ -24,23 +25,49 @@ contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
         return tokenStaked[_tokenId];
     }
 
-    function setStake(uint _tokenId, address _sender, uint _frontierId) external override {    
+    function setStake(
+        uint256 _tokenId,
+        address _sender,
+        uint256 _frontierId
+    ) external override {
         registry.checkRegistory("FROLogic", msg.sender);
-        require(ICharacter(registry.getRegistry("FROCharacter")).isApprovedForAll(_sender, address(this)),
-            string(abi.encodePacked("FROStaking: ", address(this), "isNotApproved by", _sender))
+        require(
+            ICharacter(registry.getRegistry("FROCharacter")).isApprovedForAll(
+                _sender,
+                address(this)
+            ),
+            "FROStaking: is not approved"
         );
 
-        ICharacter(registry.getRegistry("FROCharacter")).safeTransferFrom(_sender, address(this), _tokenId);
+        ICharacter(registry.getRegistry("FROCharacter")).safeTransferFrom(
+            _sender,
+            address(this),
+            _tokenId
+        );
         _setStake(_tokenId, _sender, _frontierId);
     }
 
-    function _setStake(uint _tokenId, address _sender, uint _frontierId) internal {
-        tokenStaked[_tokenId] = IStaking.Stake(_frontierId, _sender, block.number);
+    function _setStake(
+        uint256 _tokenId,
+        address _sender,
+        uint256 _frontierId
+    ) internal {
+        tokenStaked[_tokenId] = IStaking.Stake(
+            _frontierId,
+            _sender,
+            block.number
+        );
     }
 
     function withdraw(uint256 _tokenId, address _sender) external override {
-        require(tokenStaked[_tokenId].blockNumber > 0, "this token is not staked");
-        require(tokenStaked[_tokenId].staker == _sender, "FROStaking: sender is not staker");
+        require(
+            tokenStaked[_tokenId].blockNumber > 0,
+            "this token is not staked"
+        );
+        require(
+            tokenStaked[_tokenId].staker == _sender,
+            "FROStaking: sender is not staker"
+        );
 
         registry.checkRegistory("FROLogic", msg.sender);
         _withdraw(_tokenId);
@@ -52,12 +79,19 @@ contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
 
     function _withdraw(uint256 _tokenId) internal {
         address staker = tokenStaked[_tokenId].staker;
-        
-        require(ICharacter(registry.getRegistry("FROCharacter")).isApprovedForAll(staker, address(this)),
-            string(abi.encodePacked("FROStaking: ", address(this), "isNotApproved by", staker))
+
+        require(
+            ICharacter(registry.getRegistry("FROCharacter")).isApprovedForAll(
+                staker,
+                address(this)
+            ),
+            "FROStaking: is not approved"
         );
-        ICharacter(registry.getRegistry("FROCharacter")).safeTransferFrom(address(this), staker, _tokenId);
+        ICharacter(registry.getRegistry("FROCharacter")).safeTransferFrom(
+            address(this),
+            staker,
+            _tokenId
+        );
         delete tokenStaked[_tokenId];
     }
-
 }

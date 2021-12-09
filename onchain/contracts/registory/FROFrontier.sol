@@ -16,7 +16,7 @@ contract FROFrontier is Ownable, FROAddressesProxy, IFrontier {
     mapping(uint => IFrontier.Frontier) frontiers;
 
     function setMaxFrontier(uint _maxFrontier) external override onlyOwner{
-        _maxFrontier = maxFrontier;
+        maxFrontier = _maxFrontier;
     }
 
     function getFrontier(uint _frontierId)
@@ -32,7 +32,7 @@ contract FROFrontier is Ownable, FROAddressesProxy, IFrontier {
         override
         external
     {
-        require(_frontierId <= maxFrontier, "over mas frontiers");
+        require(_frontierId <= maxFrontier, "over max frontiers");
         registry.checkRegistory("FROLogic", msg.sender);
         frontiers[_frontierId] = _frontier;
     }

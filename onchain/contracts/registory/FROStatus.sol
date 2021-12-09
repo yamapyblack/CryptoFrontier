@@ -30,7 +30,7 @@ contract FROStatus is IStatus, Ownable, FROAddressesProxy {
     }
 
     function _setStatus(uint256 tokenId, IStatus.Status calldata status_)
-        private
+        internal
     {
         status[tokenId] = status_;
     }

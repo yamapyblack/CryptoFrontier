@@ -13,7 +13,7 @@ contract FROHp is IHp, FROAddressesProxy, Ownable {
     // mapping(tokenId => hp)
     mapping(uint256 => IHp.Hp) private tokenHp;
 
-    // TODO これでバトル中のHPは取得不可能
+    // これでバトル中のHPは取得不可能
     function getHp(uint256 _tokenId)
         external
         view
@@ -28,7 +28,12 @@ contract FROHp is IHp, FROAddressesProxy, Ownable {
         _setHp(_tokenId, _hp);
     }
 
-    function _setHp(uint256 _tokenId, uint256 _hp) internal {
+    function setHpByMint(uint256 _tokenId, uint256 _hp) external override {
+        registry.checkRegistory("FROMintLogic", msg.sender);
+        _setHp(_tokenId, _hp);
+    }
+
+    function _setHp(uint256 _tokenId, uint256 _hp) internal virtual {
         tokenHp[_tokenId] = IHp.Hp(_hp, block.number);
     }
 
