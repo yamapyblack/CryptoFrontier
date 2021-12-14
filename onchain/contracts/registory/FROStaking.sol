@@ -59,7 +59,7 @@ contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
         );
     }
 
-    function withdraw(uint256 _tokenId, address _sender) external override {
+    function withdrawByStaker(uint256 _tokenId, address _sender) external override {
         require(
             tokenStaked[_tokenId].blockNumber > 0,
             "this token is not staked"
@@ -69,6 +69,11 @@ contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
             "FROStaking: sender is not staker"
         );
 
+        registry.checkRegistory("FROLogic", msg.sender);
+        _withdraw(_tokenId);
+    }
+
+    function withdrawByLogic(uint256 _tokenId) external override {
         registry.checkRegistory("FROLogic", msg.sender);
         _withdraw(_tokenId);
     }

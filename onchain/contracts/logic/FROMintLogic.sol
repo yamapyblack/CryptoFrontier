@@ -11,11 +11,11 @@ import "../interfaces/ICharacter.sol";
 
 contract FROMintLogic is Ownable, FROAddressesProxy, IMintLogic {
 
-    uint public maxTokenId = 10;
+    uint public maxTokenId = 128;
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
 
-    function setMaxRange(uint _maxTokenId) external onlyOwner{
+    function setMaxTokenId(uint _maxTokenId) external onlyOwner{
         require(maxTokenId < _maxTokenId, "must be over maxTokenId");
         maxTokenId = _maxTokenId;
     }

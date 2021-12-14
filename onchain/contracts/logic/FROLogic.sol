@@ -253,24 +253,37 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
             } else if (hpA == 0 && hpB > 0) {
                 _reward(f.tokenIdA, deadBlock - f.blockNumber);
                 _reward(f.tokenIdB, block.number - f.blockNumber);
+                IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdA, hpA);
+                IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdB, hpB);
+
+                IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdA);
+
                 f.tokenIdA = tokenId;
 
                 // B is dead
             } else if (hpA > 0 && hpB == 0) {
                 _reward(f.tokenIdA, block.number - f.blockNumber);
                 _reward(f.tokenIdB, deadBlock - f.blockNumber);
+                IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdA, hpA);
+                IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdB, hpB);
+
+                IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdB);
+
                 f.tokenIdB = tokenId;
 
                 // both dead
             } else {
                 _reward(f.tokenIdA, deadBlock - f.blockNumber);
                 _reward(f.tokenIdB, deadBlock - f.blockNumber);
+                IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdA, hpA);
+                IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdB, hpB);
+
+                IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdA);
+                IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdB);
+
                 f.tokenIdA = tokenId;
             }
 
-            //setHP
-            IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdA, hpA);
-            IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdB, hpB);
         }
 
         //set frontier
@@ -284,7 +297,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
     function unStake(uint256 tokenId) external override {
         IStaking.Stake memory s = IStaking(registry.getRegistry("FROStaking"))
             .getStake(tokenId);
-        IStaking(registry.getRegistry("FROStaking")).withdraw(
+        IStaking(registry.getRegistry("FROStaking")).withdrawByStaker(
             tokenId,
             msg.sender
         );

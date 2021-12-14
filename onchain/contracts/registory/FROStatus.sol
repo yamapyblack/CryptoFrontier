@@ -21,13 +21,28 @@ contract FROStatus is IStatus, Ownable, FROAddressesProxy {
         return status[tokenId];
     }
 
-    function setStatus(uint256 tokenId, IStatus.Status calldata status_)
+    function setStatusByOwner(uint[] calldata _tokenIds, IStatus.Status[] calldata _status)
         external
         override
+        onlyOwner
     {
-        //TODO from check
-        _setStatus(tokenId, status_);
+        require(
+            _tokenIds.length == _status.length,
+            "input length must be same"
+        );
+        for (uint8 i = 0; i < _tokenIds.length; i++) {
+            _setStatus(_tokenIds[i], _status[i]);
+        }
     }
+
+    //TODO from check
+    // function setStatus(uint256 tokenId, IStatus.Status calldata status_)
+    //     external
+    //     override
+    // {
+    //     
+    //     _setStatus(tokenId, status_);
+    // }
 
     function _setStatus(uint256 tokenId, IStatus.Status calldata status_)
         internal

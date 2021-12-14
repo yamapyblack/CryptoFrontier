@@ -10,7 +10,7 @@ contract FROFrontier is Ownable, FROAddressesProxy, IFrontier {
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
 
-    uint public maxFrontier = 0;
+    uint public maxFrontier = 64;
 
     // mapping(frontierID => tokenID)
     mapping(uint => IFrontier.Frontier) frontiers;

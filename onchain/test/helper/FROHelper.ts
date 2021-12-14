@@ -57,6 +57,12 @@ export type Stake = {
   blockNumber: BigNumberish
 }
 
+export type InitConstant = {
+  epoch: BigNumberish
+  reviveEpoch: BigNumberish
+  rewardPerBlock: BigNumberish
+}
+
 export const deploy = async (): Promise<ContractType> => {
   let addresses: FROAddresses
   // let addreseProxy: FROAddressesProxy
@@ -143,21 +149,19 @@ export const deploy = async (): Promise<ContractType> => {
   return c
 }
 
-export const setup = async (c: ContractType, tokenIds: number[], status: Status[]): Promise<void> => {
+export const setup = async (c: ContractType, initConst: InitConstant,  tokenIds: number[], status: Status[]): Promise<void> => {
   if(tokenIds.length != status.length){
     console.error("tokenIds.length != status.length")
     return  
   }
 
-  for(let i = 0; i < tokenIds.length;  i++){
-    await c.status.setStatus(tokenIds[i],status[i])
-    await c.status.setStatus(tokenIds[i],status[i])
-  }
+  await c.status.setStatusByOwner(tokenIds,status)
 
   const MINTER_ROLE = await c.character.MINTER_ROLE()
   await c.character.grantRole(MINTER_ROLE, c.mintLogic.address)
-  await c.mintLogic.setMaxRange(initConst.mintRange)
-  await c.frontier.setMaxFrontier(initConst.maxFrontier)
+
+  // await c.mintLogic.setMaxTokenId(initConst.mintMaxTokenId)
+  // await c.frontier.setMaxFrontier(initConst.maxFrontier)
   await c.logic.setEpoch(initConst.epoch)
   await c.logic.setReviveEpoch(initConst.reviveEpoch)
   await c.logic.setRewardPerBlock(initConst.rewardPerBlock)
@@ -191,10 +195,3 @@ export class Util {
   }  
 }
 
-export const initConst = {
-  epoch: 100,
-  mintRange: 100,
-  maxFrontier: 10,
-  reviveEpoch: 100,
-  rewardPerBlock: 10000,
-}

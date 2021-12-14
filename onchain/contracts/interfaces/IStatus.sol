@@ -16,6 +16,7 @@ interface IStatus {
         view
         returns (IStatus.Status memory);
 
-    function setStatus(uint256 tokenId, IStatus.Status calldata status_) external;
+    // function setStatus(uint256 tokenId, IStatus.Status calldata status_) external;
+    function setStatusByOwner(uint[] calldata _tokenIds, IStatus.Status[] calldata _status) external;
 
 }

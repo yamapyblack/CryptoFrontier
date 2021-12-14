@@ -36,7 +36,7 @@ abstract contract ERC721Mintable is IERC721Mintable, ERC721, AccessControlEnumer
             _toList.length == _tokenIdList.length,
             "input length must be same"
         );
-        for (uint256 i = 0; i < _tokenIdList.length; i++) {
+        for (uint8 i = 0; i < _tokenIdList.length; i++) {
             mint(_toList[i], _tokenIdList[i]);
         }
     }
