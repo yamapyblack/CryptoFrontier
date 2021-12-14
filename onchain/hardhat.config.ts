@@ -19,28 +19,15 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
     },
-    rinkeby: {
-      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_KEY}`,
-      chainId: 4,
-      accounts: accounts(),
-    },
-    mainnet: {
-      url: `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`,
-      chainId: 1,
-      gasPrice: 48000000000,
-      accounts: accounts(),
-    },
     mumbai: { // matic testnet
       url: "https://rpc-mumbai.maticvigil.com/",
       chainId: 80001,
-      gasPrice: 1000000000,
-      accounts: accounts(),
+      gasPrice: 30000000000,
     },
     matic: {
       url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_KEY}`,
       chainId: 137,
-      gasPrice: 2000000000,
-      accounts: accounts(),
+      gasPrice: 30000000000,
     },
   },
   solidity: {

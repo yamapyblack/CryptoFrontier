@@ -13,7 +13,6 @@
     "@types/chai": "^4.2.21",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.9.1",
-    "aws-kms-provider": "^0.2.3",
     "aws-sdk": "^2.871.0",
     "chai": "^4.3.4",
     "ethereum-waffle": "^3.4.0",
@@ -30,6 +29,7 @@
   },
   "dependencies": {
     "@typechain/hardhat": "^2.3.0",
+    "aws-kms-ethers-signer": "^0.0.3",
     "base64-sol": "^1.0.1"
   }
 }
