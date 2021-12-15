@@ -28,12 +28,23 @@ contract FROFrontier is Ownable, FROAddressesProxy, IFrontier {
         return frontiers[_frontierId];
     }
 
-    function setFrontier(uint _frontierId, IFrontier.Frontier memory _frontier)
+    function _setFrontier(uint _frontierId, IFrontier.Frontier memory _frontier) internal {
+        require(_frontierId <= maxFrontier, "over max frontiers");
+        frontiers[_frontierId] = _frontier;
+    }
+
+    function setFrontier(uint _frontierId, uint _tokenIdA, uint _tokenIdB)
         override
         external
     {
-        require(_frontierId <= maxFrontier, "over max frontiers");
         registry.checkRegistory("FROLogic", msg.sender);
-        frontiers[_frontierId] = _frontier;
+        _setFrontier(_frontierId, IFrontier.Frontier(_tokenIdA, _tokenIdB, block.number));
+    }
+
+    function clearFrontier(uint _frontierId) external override {
+        registry.checkRegistory("FROLogic", msg.sender);
+        require(_frontierId <= maxFrontier, "over max frontiers");
+
+        _setFrontier(_frontierId, IFrontier.Frontier(0, 0, 0));
     }
 }

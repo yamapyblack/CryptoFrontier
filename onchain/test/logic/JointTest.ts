@@ -191,7 +191,7 @@ describe("testing for JointTest", async () => {
       await evmMine(100);
 
       // expect battleHp
-      let hps = await c.logic.getBattleHp(frontierId);
+      let hps = await c.logic.getBothBattleHp(frontierId);
       console.log("hp", hps.hpA.toString(), hps.hpB.toString());
       expect(hps.hpA).equals(Util.calcHp(status1.hp, status2.at, status1.df, 100, Number(initConst.epoch)));
       expect(hps.hpB).equals(Util.calcHp(status2.hp, status1.at, status2.df, 100, Number(initConst.epoch)));
@@ -252,7 +252,7 @@ describe("testing for JointTest", async () => {
 
       await evmMine(300);
 
-      let hps = await c.logic.getBattleHp(frontierId);
+      let hps = await c.logic.getBothBattleHp(frontierId);
       console.log("hp", hps.hpA.toString(), hps.hpB.toString());
       expect(hps.hpA).equals(0);
       expect(hps.hpB).equals(
@@ -345,7 +345,7 @@ describe("testing for JointTest", async () => {
 
       await evmMine(500);
 
-      let hps = await c.logic.getBattleHp(frontierId);
+      let hps = await c.logic.getBothBattleHp(frontierId);
       console.log("hp", hps.hpA.toString(), hps.hpB.toString());
       console.log("yama", block3, Number(hps.deadBlock))
       expect(hps.hpA).equals(0);
@@ -418,7 +418,7 @@ describe("testing for JointTest", async () => {
     });
 
     //TODO
-    it("staking 2, A was dead and no unstake", async () => {
+    it("staking 2, A was dead and re-stake", async () => {
       //claim
       await c.mintLogic.connect(addr1).claim(tokenId1);
       const block0 = await getBlockNumber()
@@ -440,7 +440,7 @@ describe("testing for JointTest", async () => {
 
       await evmMine(500);
 
-      let hps = await c.logic.getBattleHp(frontierId);
+      let hps = await c.logic.getBothBattleHp(frontierId);
       console.log("hp", hps.hpA.toString(), hps.hpB.toString());
       console.log("yama", block3, Number(hps.deadBlock))
       expect(hps.hpA).equals(0);
@@ -546,7 +546,7 @@ describe("testing for JointTest", async () => {
 
       await evmMine(300);
 
-      let hps = await c.logic.getBattleHp(frontierId);
+      let hps = await c.logic.getBothBattleHp(frontierId);
       console.log("hp", hps.hpA.toString(), hps.hpB.toString());
 
       expect(hps.hpA).equals(
@@ -656,7 +656,7 @@ describe("testing for JointTest", async () => {
 
       await evmMine(500);
 
-      let hps = await c.logic.getBattleHp(frontierId);
+      let hps = await c.logic.getBothBattleHp(frontierId);
       console.log("hp", hps.hpA.toString(), hps.hpB.toString());
       expect(hps.hpA).equals(0)
       expect(hps.hpB).equals(0)

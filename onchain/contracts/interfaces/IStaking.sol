@@ -10,7 +10,7 @@ interface IStaking {
     }
     function getStake(uint256 _tokenId) external view returns(Stake memory);
     function setStake(uint256 _tokenId, address _sender, uint _frontierId) external;
-    function withdrawByStaker(uint256 _tokenId, address _sender) external;
+    function withdrawByStaker(uint256 _tokenId) external;
     function withdrawByOwner(uint256 _tokenId) external;
     function withdrawByLogic(uint256 _tokenId) external;
 }
