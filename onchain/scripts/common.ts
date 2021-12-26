@@ -37,7 +37,7 @@ export const Addresses = () => {
     case "mumbai":
       return {
         Deployer: "0x76D8a627dA0EA33ABDF3A922E7dA6e6ee78ab7A1",
-        addresses: "0xF7e3A4463ecCE0B2C76677168732Fe3baA05c609",
+        addresses: "0x6B889d814AC75255714adA38527BEE9533441519",
         frontier: "0xE3dD3ABfeAA02B279177f748b97751e4868553F3",
         status: "0x7121d703515638073Be323536FA672142FABbA44",
         hp: "0x428843F997bD69b95d23F6105bFf5D8141641C62",

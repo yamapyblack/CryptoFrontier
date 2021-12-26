@@ -9,4 +9,10 @@ interface ITokenDescriptor {
         external
         view
         returns (string memory);
+
+    struct Pixel {
+        uint x;
+        uint y;
+        string rgb;
+    }    
 }

@@ -149,16 +149,16 @@ export const deploy = async (): Promise<ContractType> => {
   return c
 }
 
-export const setup = async (c: ContractType, initConst: InitConstant,  tokenIds: number[], status: Status[]): Promise<void> => {
+export const setup = async (c: ContractType, initConst: InitConstant,  tokenIds: number[], status: Status[], weapons: number[], colors: number[]): Promise<void> => {
   if(tokenIds.length != status.length){
     console.error("tokenIds.length != status.length")
     return  
   }
 
-  await c.status.setStatusByOwner(tokenIds,status)
+  await c.status.setStatusByOwner(tokenIds,status, weapons, colors)
 
-  const MINTER_ROLE = await c.character.MINTER_ROLE()
-  await c.character.grantRole(MINTER_ROLE, c.mintLogic.address)
+  // const MINTER_ROLE = await c.character.MINTER_ROLE()
+  // await c.character.grantRole(MINTER_ROLE, c.mintLogic.address)
 
   // await c.mintLogic.setMaxTokenId(initConst.mintMaxTokenId)
   // await c.frontier.setMaxFrontier(initConst.maxFrontier)

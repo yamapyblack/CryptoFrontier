@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.9;
 
 import "../address/FROAddressesProxy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -11,7 +11,7 @@ import "../interfaces/ICharacter.sol";
 
 contract FROMintLogic is Ownable, FROAddressesProxy, IMintLogic {
 
-    uint public maxTokenId = 128;
+    uint public maxTokenId = 60;
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
 

@@ -64,7 +64,8 @@ describe("testing for JointTest", async () => {
     [owner, addr1, addr2, addr3] = await ethers.getSigners();
 
     c = await deploy();
-    await setup(c, initConst, [tokenId1, tokenId2, tokenId3], [status1, status2, status3]);
+    //TODO weaponとcolor修正
+    await setup(c, initConst, [tokenId1, tokenId2, tokenId3], [status1, status2, status3], [1,2,3], [1,2,3]);
   });
 
   describe("staking", async () => {

@@ -30,6 +30,7 @@
   "dependencies": {
     "@typechain/hardhat": "^2.3.0",
     "aws-kms-ethers-signer": "^0.0.3",
-    "base64-sol": "^1.0.1"
+    "base64-sol": "^1.0.1",
+    "hardhat-gas-reporter": "^1.0.6"
   }
 }
