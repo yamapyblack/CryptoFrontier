@@ -10,9 +10,9 @@ interface ITokenDescriptor {
         view
         returns (string memory);
 
-    struct Pixel {
-        uint x;
-        uint y;
-        string rgb;
-    }    
+    // struct Pixel {
+    //     uint x;
+    //     uint y;
+    //     string rgb;
+    // }    
 }

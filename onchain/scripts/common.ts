@@ -19,6 +19,12 @@ export interface AddressesType {
   token: string
   logic: string
   mintLogic: string
+  FROStatus: string
+  FROHp: string
+  FROSvg: string
+  FROTokenDescriptor: string
+  FROCharacter: string
+  FROMintLogic: string
 }
 
 export const address = (name: string): string => {
@@ -48,6 +54,13 @@ export const Addresses = () => {
         token: "0xfEEe0f789e5367cBc4fCf4a33F56d2B9b6b8b8Ad",
         logic: "0x52a6a2698aE46ab26f4bec6136Ea89238b14D56c",
         mintLogic: "0x16d5DBaa11Ee2B0f19D5837Bf31DF5AB2CFe1582",
+
+        FROStatus: "0x0e3EA9Fb71FF871A3a2dFE9F4B80b44D6614ae51",
+        FROHp: "0x470E38A5422Add8567a64748aAA51Fa36c1d3002",
+        FROSvg: "0x9ba659388F3F11228aDB3336027af6522BA81c35",
+        FROTokenDescriptor: "0xAda3D5820bAB9380460beDC43b0EffEE75ca5709",
+        FROCharacter: "0xfa2cB59be9D3b591AF1D4001a27D3bB974d3b8c0",
+        FROMintLogic: "0x77776B57dcE93577a3537aF466Bfe46eC596eeC8",
     } as AddressesType
 
     case "matic":

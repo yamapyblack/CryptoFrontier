@@ -13,6 +13,7 @@ let addr2: SignerWithAddress
 import { FROAddresses } from "typechain/FROAddresses"
 import { FROTokenDescriptor } from "typechain/FROTokenDescriptor"
 import { FROStatus } from "typechain/FROStatus"
+import { FROSvg } from "typechain/FROSvg"
 
 type Status = {
     hp: BigNumberish
@@ -31,7 +32,8 @@ type Pixel = {
 describe("testing for FROCharacter", async () => {
     let registroy: FROAddresses
     let c1: FROStatus
-    let c2: FROTokenDescriptor
+    let c2: FROSvg
+    let c3: FROTokenDescriptor
 
     beforeEach(async () => {
         const signers = await ethers.getSigners()
@@ -47,9 +49,20 @@ describe("testing for FROCharacter", async () => {
         c1 = (await FROStatus.deploy(registroy.address)) as FROStatus
         await c1.deployed()
 
-        const FROTokenDescriptor = await ethers.getContractFactory("FROTokenDescriptor");
-        c2 = (await FROTokenDescriptor.deploy(registroy.address)) as FROTokenDescriptor
+        const FROSvg = await ethers.getContractFactory("FROSvg");
+        c2 = (await FROSvg.deploy()) as FROSvg
         await c2.deployed()
+
+        const FROTokenDescriptor = await ethers.getContractFactory(
+            "FROTokenDescriptor",
+            { libraries: 
+                {FROSvg: c2.address}
+            }
+        );
+        c3 = (await FROTokenDescriptor.deploy(
+            registroy.address,
+        )) as FROTokenDescriptor
+        await c3.deployed()
 
         registroy.setRegistry("FROStatus", c1.address)
     })
@@ -70,9 +83,9 @@ describe("testing for FROCharacter", async () => {
 
             await c1.setStatusByOwner([1], [statusParam], [weapon], [color])
 
-            // await c2.setWeaponPixels(weapon)
+            // await c3.setWeaponPixels(weapon)
 
-            const m = await c2.tokenURI(NilAddress, tokenId)
+            const m = await c3.tokenURI(NilAddress, tokenId)
             const m2 = m.split(",")[1]
             const m3 = ethers.utils.toUtf8String(ethers.utils.base64.decode(m2))
             console.log(m3)

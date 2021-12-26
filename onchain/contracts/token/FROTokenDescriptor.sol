@@ -47,8 +47,8 @@ contract FROTokenDescriptor is ITokenDescriptor, FROAddressesProxy, Ownable {
     //     }
     // }
 
-    function generateName(uint256 tokenId)
-        private
+    function _generateName(uint256 tokenId)
+        internal
         pure
         returns (string memory)
     {
@@ -61,9 +61,9 @@ contract FROTokenDescriptor is ITokenDescriptor, FROAddressesProxy, Ownable {
             );
     }
 
-    function generateDescription(uint256 tokenId)
-        private
-        view
+    function _generateDescription(uint256 tokenId)
+        internal
+        pure
         returns (string memory)
     {
         return
@@ -71,14 +71,14 @@ contract FROTokenDescriptor is ITokenDescriptor, FROAddressesProxy, Ownable {
                 abi.encodePacked(
                     "CryptoFrontier Character #",
                     tokenId.toString(),
-                    "\n\nCryptoFrontier is the Full On-chained Game by FrontierDAO.\n\nFull On-chained Game is the game where all the data of the game is stored on-chain. Not only the NFTs, but also characters status, skills, battle results and even the battle logic are recorded on-chain.",
-                    "\nhttps://medium.com/@yamapyblack/full-on-chained-game-by-frontierdao-b8e50549811d"
+                    '\\n\\nCryptoFrontier is the Full On-chained Game by FrontierDAO.\\n\\nFull On-chained Game is the game where all the data of the game is stored on-chain. Not only the NFTs, but also characters status, skills, battle results and even the battle logic are recorded on-chain.',
+                    '\\nhttps://medium.com/@yamapyblack/full-on-chained-game-by-frontierdao-b8e50549811d'
                 )
             );
     }
 
-    function generateAttributes(uint256 tokenId)
-        private
+    function _generateAttributes(uint256 tokenId)
+        internal
         view
         returns (string memory)
     {
@@ -104,7 +104,7 @@ contract FROTokenDescriptor is ITokenDescriptor, FROAddressesProxy, Ownable {
     function _buildAttributes(
         string[7] memory trait_types,
         string[7] memory values
-    ) private view returns (string memory) {
+    ) private pure returns (string memory) {
         string memory ret = "[";
 
         for (uint8 i = 0; i < values.length; i++) {
@@ -150,8 +150,8 @@ contract FROTokenDescriptor is ITokenDescriptor, FROAddressesProxy, Ownable {
         return string(abi.encodePacked(ret, "]"));
     }
 
-    function generateImage(uint256 tokenId)
-        private
+    function _generateImage(uint256 tokenId)
+        internal
         view
         returns (string memory)
     {
@@ -261,13 +261,13 @@ contract FROTokenDescriptor is ITokenDescriptor, FROAddressesProxy, Ownable {
                         bytes(
                             abi.encodePacked(
                                 '{"name":"',
-                                generateName(tokenId),
+                                _generateName(tokenId),
                                 '", "description":"',
-                                generateDescription(tokenId),
+                                _generateDescription(tokenId),
                                 '", "attributes":',
-                                generateAttributes(tokenId),
+                                _generateAttributes(tokenId),
                                 ', "image": "data:image/svg+xml;base64,',
-                                generateImage(tokenId),
+                                _generateImage(tokenId),
                                 '"}'
                             )
                         )
