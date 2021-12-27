@@ -11,6 +11,8 @@ import "../interfaces/ICharacter.sol";
 
 contract FROMintLogic is Ownable, FROAddressesProxy, IMintLogic {
 
+    mapping(address => bool) public isClaim;
+
     uint public maxTokenId = 60;
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
@@ -23,6 +25,8 @@ contract FROMintLogic is Ownable, FROAddressesProxy, IMintLogic {
     function claim(uint _tokenId) external override {
         //minimum 1
         require(_tokenId > 0 && _tokenId < maxTokenId, "tokdnId is out of range");
+        require(!isClaim[msg.sender], "already claimed");
+        isClaim[msg.sender] = true;
 
         ICharacter c = ICharacter(registry.getRegistry("FROCharacter"));
         c.mintByLogic(msg.sender, _tokenId);

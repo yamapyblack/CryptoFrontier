@@ -32,24 +32,4 @@ contract FROCharacter is ICharacter, ERC721Mintable, Ownable, FROAddressesProxy 
         registry.checkRegistory("FROMintLogic", msg.sender);
         _mint(to, tokenId);
     }
-
-    function mint(address to, uint256 tokenId)
-        public
-        virtual
-        override
-        onlyOwner
-    {
-        super._mint(to, tokenId);
-    }
-
-    function mint(address[] memory _toList, uint256[] memory _tokenIdList) external onlyOwner
-    {
-        require(
-            _toList.length == _tokenIdList.length,
-            "input length must be same"
-        );
-        for (uint8 i = 0; i < _tokenIdList.length; i++) {
-            super._mint(_toList[i], _tokenIdList[i]);
-        }
-    }
 }
