@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.9;
 
 import "../lib/ERC721Mintable.sol";
+import "../lib/ERC721Permit.sol";
 import "../address/FROAddressesProxy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/ITokenDescriptor.sol";
@@ -10,7 +11,7 @@ import "../interfaces/ICharacter.sol";
 // import "../interfaces/IStatus.sol";
 // import "../interfaces/IHpRegistory.sol";
 
-contract FROCharacter is ICharacter, ERC721Mintable, Ownable, FROAddressesProxy {
+contract FROCharacter is ICharacter, ERC721Mintable, ERC721Permit, Ownable, FROAddressesProxy {
     constructor(address registry_)
         ERC721Mintable("FROCharacter", "FROC")
         FROAddressesProxy(registry_)
@@ -30,19 +31,24 @@ contract FROCharacter is ICharacter, ERC721Mintable, Ownable, FROAddressesProxy 
 
     function mintByLogic(address to, uint256 tokenId) external override {
         registry.checkRegistory("FROMintLogic", msg.sender);
-        _mint(to, tokenId);
+        super._mint(to, tokenId);
     }
 
-    // function mintSetStatus(
-    //     address to,
-    //     uint256 tokenId,
-    //     IStatus.Status calldata status_
-    // ) external onlyOwner {
-    //     super.mint(to, tokenId);
-    //     IStatus(registry.getRegistry("FROStatus")).setStatus(tokenId, status_);
-    //     IHpRegistory(registry.getRegistry("FROHpRegistory")).setBattleHp(
-    //         tokenId,
-    //         status_.hp
-    //     );
-    // }
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721Mintable, IERC165, ERC721)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721Mintable, ERC721){
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
 }

@@ -14,6 +14,7 @@ import { FROStaking } from "typechain/FROStaking"
 import { FROToken } from "typechain/FROToken"
 import { FROLogic } from "typechain/FROLogic"
 import { FROMintLogic } from "typechain/FROMintLogic"
+import { FROSvg } from 'typechain/FROSvg';
 
 export const NilAddress = "0x0000000000000000000000000000000000000000"
 
@@ -23,6 +24,7 @@ export type ContractType = {
   frontier: FROFrontier
   status: FROStatus
   hp: FROHp
+  svg: FROSvg
   descriptor: FROTokenDescriptor
   character: FROCharacter
   reward: FROReward
@@ -57,12 +59,19 @@ export type Stake = {
   blockNumber: BigNumberish
 }
 
+export type InitConstant = {
+  epoch: BigNumberish
+  reviveEpoch: BigNumberish
+  rewardPerBlock: BigNumberish
+}
+
 export const deploy = async (): Promise<ContractType> => {
   let addresses: FROAddresses
   // let addreseProxy: FROAddressesProxy
   let frontier: FROFrontier
   let status: FROStatus
   let hp: FROHp
+  let svg: FROSvg
   let descriptor: FROTokenDescriptor
   let character: FROCharacter
   let reward: FROReward
@@ -87,7 +96,15 @@ export const deploy = async (): Promise<ContractType> => {
   hp = (await FROHp.deploy(addresses.address)) as FROHp
   await hp.deployed()
 
-  const FROTokenDescriptor = await ethers.getContractFactory("FROTokenDescriptor");
+  const FROSvg = await ethers.getContractFactory("FROSvg");
+  svg = (await FROSvg.deploy()) as FROSvg
+  await svg.deployed()
+
+  const FROTokenDescriptor = await ethers.getContractFactory("FROTokenDescriptor",
+        { libraries: 
+          {FROSvg: svg.address}
+    }
+  );
   descriptor = (await FROTokenDescriptor.deploy(addresses.address)) as FROTokenDescriptor
   await descriptor.deployed()
 
@@ -120,6 +137,7 @@ export const deploy = async (): Promise<ContractType> => {
     frontier: frontier,
     status: status,
     hp: hp,
+    svg: svg,
     descriptor: descriptor,
     character: character,
     reward: reward,
@@ -143,21 +161,19 @@ export const deploy = async (): Promise<ContractType> => {
   return c
 }
 
-export const setup = async (c: ContractType, tokenIds: number[], status: Status[]): Promise<void> => {
+export const setup = async (c: ContractType, initConst: InitConstant,  tokenIds: number[], status: Status[], weapons: number[], colors: number[]): Promise<void> => {
   if(tokenIds.length != status.length){
     console.error("tokenIds.length != status.length")
     return  
   }
 
-  for(let i = 0; i < tokenIds.length;  i++){
-    await c.status.setStatus(tokenIds[i],status[i])
-    await c.status.setStatus(tokenIds[i],status[i])
-  }
+  await c.status.setStatusByOwner(tokenIds,status, weapons, colors)
 
-  const MINTER_ROLE = await c.character.MINTER_ROLE()
-  await c.character.grantRole(MINTER_ROLE, c.mintLogic.address)
-  await c.mintLogic.setMaxRange(initConst.mintRange)
-  await c.frontier.setMaxFrontier(initConst.maxFrontier)
+  // const MINTER_ROLE = await c.character.MINTER_ROLE()
+  // await c.character.grantRole(MINTER_ROLE, c.mintLogic.address)
+
+  // await c.mintLogic.setMaxTokenId(initConst.mintMaxTokenId)
+  // await c.frontier.setMaxFrontier(initConst.maxFrontier)
   await c.logic.setEpoch(initConst.epoch)
   await c.logic.setReviveEpoch(initConst.reviveEpoch)
   await c.logic.setRewardPerBlock(initConst.rewardPerBlock)
@@ -191,10 +207,3 @@ export class Util {
   }  
 }
 
-export const initConst = {
-  epoch: 100,
-  mintRange: 100,
-  maxFrontier: 10,
-  reviveEpoch: 100,
-  rewardPerBlock: 10000,
-}

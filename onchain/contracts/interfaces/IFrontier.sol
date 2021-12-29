@@ -9,6 +9,7 @@ interface IFrontier  {
         uint blockNumber;
     }
     function getFrontier(uint _frontierId) external view returns (IFrontier.Frontier memory);
-    function setFrontier(uint _frontierId, IFrontier.Frontier memory _frontier) external;
+    function setFrontier(uint _frontierId, uint _tokenIdA, uint _tokenIdB) external;
     function setMaxFrontier(uint _maxFrontier) external;
+    function clearFrontier(uint _frontierId) external;
 }

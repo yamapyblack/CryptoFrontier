@@ -19,6 +19,12 @@ export interface AddressesType {
   token: string
   logic: string
   mintLogic: string
+  FROStatus: string
+  FROHp: string
+  FROSvg: string
+  FROTokenDescriptor: string
+  FROCharacter: string
+  FROMintLogic: string
 }
 
 export const address = (name: string): string => {
@@ -37,7 +43,7 @@ export const Addresses = () => {
     case "mumbai":
       return {
         Deployer: "0x76D8a627dA0EA33ABDF3A922E7dA6e6ee78ab7A1",
-        addresses: "0xF7e3A4463ecCE0B2C76677168732Fe3baA05c609",
+        addresses: "0x6B889d814AC75255714adA38527BEE9533441519",
         frontier: "0xE3dD3ABfeAA02B279177f748b97751e4868553F3",
         status: "0x7121d703515638073Be323536FA672142FABbA44",
         hp: "0x428843F997bD69b95d23F6105bFf5D8141641C62",
@@ -48,11 +54,25 @@ export const Addresses = () => {
         token: "0xfEEe0f789e5367cBc4fCf4a33F56d2B9b6b8b8Ad",
         logic: "0x52a6a2698aE46ab26f4bec6136Ea89238b14D56c",
         mintLogic: "0x16d5DBaa11Ee2B0f19D5837Bf31DF5AB2CFe1582",
+
+        FROStatus: "0x0e3EA9Fb71FF871A3a2dFE9F4B80b44D6614ae51",
+        FROHp: "0x470E38A5422Add8567a64748aAA51Fa36c1d3002",
+        FROSvg: "0x9ba659388F3F11228aDB3336027af6522BA81c35",
+        FROTokenDescriptor: "0xAda3D5820bAB9380460beDC43b0EffEE75ca5709",
+        FROCharacter: "0xfa2cB59be9D3b591AF1D4001a27D3bB974d3b8c0",
+        FROMintLogic: "0x77776B57dcE93577a3537aF466Bfe46eC596eeC8",
     } as AddressesType
 
     case "matic":
       return {
         Deployer: "0x76D8a627dA0EA33ABDF3A922E7dA6e6ee78ab7A1",
+        addresses: "0x264A8Ed6C52CbC4937AD7A7F62Cc066B83e37Ea8",
+        FROStatus: "0x1D4c01f63a4d0a2B37D7993e6E92e5fB8FAcd586",
+        FROHp: "0x1c24CbE9A306e04f12D4d1E9539048cD03f4027c",
+        FROSvg: "0xd5dd91E33272d86d6176e3D8d111c99D6ee1edD1",
+        FROTokenDescriptor: "0xdA02718148d40fD3F13fa8252c37726dE0faFF86",
+        FROCharacter: "0x9689FF81Ddb4AE0bf29D5c53687842267CD5B563",
+        FROMintLogic: "0x85a54817F409Dc1B4Dc3e13474836Bc642d2E96c",
       } as AddressesType
 
     default:

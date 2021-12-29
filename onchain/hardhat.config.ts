@@ -6,6 +6,7 @@ import '@typechain/hardhat'
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import "@nomiclabs/hardhat-etherscan";
+import "hardhat-gas-reporter"
 
 const accounts = (): HttpNetworkAccountsConfig => {
   if (!process.env.PRIV_KEY) {
@@ -31,7 +32,7 @@ const config: HardhatUserConfig = {
     },
   },
   solidity: {
-    version: "0.8.6",
+    version: "0.8.9",
     settings: {
       optimizer: {
         enabled: true,
@@ -50,7 +51,12 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: `${process.env.ETHERSCAN_API_KEY}`
-  }
+  },
+  gasReporter: {
+    currency: 'MATIC',
+    gasPrice: 30,
+    enabled: true
+  },
 };
 
 export default config;

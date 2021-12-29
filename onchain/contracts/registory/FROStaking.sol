@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.9;
 
 import "../interfaces/IStaking.sol";
 import "../interfaces/ICharacter.sol";
@@ -59,16 +59,15 @@ contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
         );
     }
 
-    function withdraw(uint256 _tokenId, address _sender) external override {
+    function withdrawByStaker(uint256 _tokenId) external override {
         require(
-            tokenStaked[_tokenId].blockNumber > 0,
-            "this token is not staked"
-        );
-        require(
-            tokenStaked[_tokenId].staker == _sender,
+            tokenStaked[_tokenId].staker == msg.sender,
             "FROStaking: sender is not staker"
         );
+        _withdraw(_tokenId);
+    }
 
+    function withdrawByLogic(uint256 _tokenId) external override {
         registry.checkRegistory("FROLogic", msg.sender);
         _withdraw(_tokenId);
     }
@@ -78,6 +77,11 @@ contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
     }
 
     function _withdraw(uint256 _tokenId) internal {
+        require(
+            tokenStaked[_tokenId].blockNumber > 0,
+            "this token is not staked"
+        );
+
         address staker = tokenStaked[_tokenId].staker;
 
         require(
