@@ -38,8 +38,8 @@ const main = async () => {
 
     addresses = await ethers.getContractAt("FROAddresses", a.addresses, signer) as FROAddresses
 
-    // await deploy("FROStatus")
-    // await deploy("FROHp")
+    await deploy("FROStatus")
+    await deploy("FROHp")
 
     const FROSvg = await ethers.getContractFactory("FROSvg");
     const svg = (await FROSvg.connect(signer).deploy()) as FROSvg
@@ -48,8 +48,8 @@ const main = async () => {
 
     await deploy("FROTokenDescriptor", {FROSvg: svg.address})
 
-    // await deploy("FROCharacter")
-    // await deploy("FROMintLogic")
+    await deploy("FROCharacter")
+    await deploy("FROMintLogic")
     // await deploy("FROReward")
     // await deploy("FROStaking")
     // await deploy("FROToken")

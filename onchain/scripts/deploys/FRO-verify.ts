@@ -1,28 +1,31 @@
 import { Addresses, Verify, AddressesType } from "../common"
 
-const verify = async (c: AddressesType): Promise<void> => {
-    // await Verify(c.addresses, [])
-    // await Verify(c.frontier, [c.addresses])
-    // await Verify(c.status, [c.addresses])
-    // await Verify(c.hp, [c.addresses])
-    // await Verify(c.descriptor, [c.addresses])
-    // await Verify(c.character, [c.addresses])
-    // await Verify(c.reward, [c.addresses])
-    // await Verify(c.staking, [c.addresses])
-    // await Verify(c.token, [c.addresses])
-    // await Verify(c.logic, [c.addresses])
-    // await Verify(c.mintLogic, [c.addresses])
+const verify = async (a: AddressesType): Promise<void> => {
+    await Verify(a.addresses, [])
 
-    // await Verify(c.FROStatus, [c.addresses])
-    // await Verify(c.FROHp, [c.addresses])
-    // await Verify(c.FROCharacter, [c.addresses])
-    await Verify(c.FROTokenDescriptor, [c.addresses])
+    // await Verify(a.frontier, [a.addresses])
+    // await Verify(a.status, [a.addresses])
+    // await Verify(a.hp, [a.addresses])
+    // await Verify(a.descriptor, [a.addresses])
+    // await Verify(a.character, [a.addresses])
+    // await Verify(a.reward, [a.addresses])
+    // await Verify(a.staking, [a.addresses])
+    // await Verify(a.token, [a.addresses])
+    // await Verify(a.logic, [a.addresses])
+    // await Verify(a.mintLogic, [a.addresses])
+
+    await Verify(a.FROStatus, [a.addresses])
+    await Verify(a.FROHp, [a.addresses])
+    await Verify(a.FROSvg, [])
+    await Verify(a.FROTokenDescriptor, [a.addresses])
+    await Verify(a.FROCharacter, [a.addresses])
+    await Verify(a.FROMintLogic, [a.addresses])
 }
 
 const main = async () => {
-    const addresses = Addresses()!
+    const a = Addresses()!
 
-    await verify(addresses)
+    await verify(a)
     // await Verify("0x77776B57dcE93577a3537aF466Bfe46eC596eeC8", [addresses.addresses])
 }
 

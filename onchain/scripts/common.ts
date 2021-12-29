@@ -66,6 +66,13 @@ export const Addresses = () => {
     case "matic":
       return {
         Deployer: "0x76D8a627dA0EA33ABDF3A922E7dA6e6ee78ab7A1",
+        addresses: "0x264A8Ed6C52CbC4937AD7A7F62Cc066B83e37Ea8",
+        FROStatus: "0x1D4c01f63a4d0a2B37D7993e6E92e5fB8FAcd586",
+        FROHp: "0x1c24CbE9A306e04f12D4d1E9539048cD03f4027c",
+        FROSvg: "0xd5dd91E33272d86d6176e3D8d111c99D6ee1edD1",
+        FROTokenDescriptor: "0xdA02718148d40fD3F13fa8252c37726dE0faFF86",
+        FROCharacter: "0x9689FF81Ddb4AE0bf29D5c53687842267CD5B563",
+        FROMintLogic: "0x85a54817F409Dc1B4Dc3e13474836Bc642d2E96c",
       } as AddressesType
 
     default:
