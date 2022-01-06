@@ -50,6 +50,8 @@ describe("testing for JointTest", async () => {
     it: 80,
     sp: 70,
   };
+
+
   const frontierId = 1;
 
   const initConst: InitConstant = {
@@ -479,8 +481,11 @@ describe("testing for JointTest", async () => {
       expect(await c.character.ownerOf(tokenId2)).equals(c.staking.address)
 
       //re-stake
-      await c.mintLogic.connect(addr1).claim(tokenId3);
-      await c.logic.connect(addr1).stake(tokenId3, frontierId);
+      await c.mintLogic.connect(addr3).claim(tokenId3);
+      await c.character
+        .connect(addr3)
+        .setApprovalForAll(c.staking.address, true);
+      await c.logic.connect(addr3).stake(tokenId3, frontierId);
       const block4 = await getBlockNumber()
 
       //expect
@@ -514,9 +519,6 @@ describe("testing for JointTest", async () => {
       expect(await c.character.ownerOf(tokenId2)).equals(c.staking.address)
     });
 
-
-
-
     it("staking 2, B is dead", async () => {
       status1 = {
         hp: 500,
@@ -525,7 +527,7 @@ describe("testing for JointTest", async () => {
         it: 80,
         sp: 70,
       };    
-      await c.status.setStatusByOwner([tokenId1], [status1])
+      await c.status.setStatusByOwner([tokenId1], [status1], [1], [1])
 
       //claim
       await c.mintLogic.connect(addr1).claim(tokenId1);
@@ -634,7 +636,7 @@ describe("testing for JointTest", async () => {
         it: 80,
         sp: 70,
       };
-      await c.status.setStatusByOwner([tokenId1,tokenId2], [status1, status2])
+      await c.status.setStatusByOwner([tokenId1,tokenId2], [status1, status2], [1,2], [1,2])
 
       //claim
       await c.mintLogic.connect(addr1).claim(tokenId1);
