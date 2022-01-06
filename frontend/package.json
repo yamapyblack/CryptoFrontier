@@ -1,0 +1,22 @@
+{
+  "name": "CryptoFrontier",
+  "version": "1.0.0",
+  "description": "CryptoFrontier",
+  "author": "yamapyblack",
+  "scripts": {
+    "dev": "HOST=0.0.0.0 PORT=3000 nuxt",
+    "build": "NODE_ENV=production nuxt build",
+    "start": "NODE_ENV=production nuxt start",
+    "generate": "NODE_ENV=production nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+  },
+  "dependencies": {
+    "node-sass": "^7.0.1",
+    "nuxt": "^2.15.8",
+    "nuxt-windicss": "^2.2.2",
+    "sass": "^1.45.2",
+    "sass-loader": "10.1.1",
+    "web3": "^1.6.1"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,194 @@
+{
+  "welcome": "ようこそ",
+  "login": "ログイン",
+  "logout": "ログアウト",
+  "faq": "よくある質問",
+  "forget-password": "パスワードを忘れてしまった方は運営へご連絡ください。",
+  "profile": "プロフィール設定",
+  "top-description": "ブロックチェーンで\nクリエイターの応援を増やす",
+  "connect-wallet": "ウォレットに接続",
+  "accept": "",
+  "use-service": "に同意してサービスを利用します。",
+  "creator-here": "クリエイターの方はこちら",
+  "buy": "購入する",
+  "login-to-buy": "購入にはログインが必要です",
+  "use-in-other-service": "他サービスでの利用",
+  "commercial": "商用利用",
+  "terms": "利用規約",
+  "privacy": "プライバシーポリシー",
+  "company": "運営会社",
+  "transaction-act": "特定商取引法に基づく表記",
+  "footer-discord": "お問い合わせ",
+  "discord": "お問い合わせ",
+  "card-creator-info": "クリエイター詳細",
+  "actions": {
+    "register": "登録する" 
+  },
+  "flash": {
+    "generalError": "処理に失敗しました。しばらくしてもう一度お試しください。"
+  },
+  "sessions": {
+    "success": "ログインに成功しました",
+    "connectWallet": "ウォレットを接続",
+    "connectSns": "SNSログイン",
+    "idPasswordFailed": "User IDまたはパスワードが違います",
+    "illustratorLogin": "クリエイターログイン",
+    "requireWalletLogin": "ウォレットログインが必要なページです",
+    "requireLogin": "ログインが必要なページです",
+    "alreadyLoggedin": "既にログインしています",
+    "requireIllustratorLogin": "閲覧権限のないページです",
+    "illustratorsNotAllowed": "一般ユーザーのみ利用可能な機能です。"
+  },
+  "profiles": {
+    "edit": {
+      "title": "プロフィールの編集",
+      "imagePlaceholder": "画像をアップロード",
+      "uploadSuccess": "保存に成功しました",
+      "uploadFailure": "保存に失敗しました"
+    },
+    "show": {
+      "copySuccess": "コピーしました",
+      "copyFailure": "コピーに失敗しました"
+    }
+  },
+  "card_issues": {
+    "Name": "名前 e. g. 'ロゴ入りTシャツ'",
+    "englishName": "名前(英語) e. g. 'T-Shirt with logo'",
+    "description": "ディスクリプション e. g. '購入後に、本物のT-SHIRTを手に入れることができます'",
+    "englishDescription": "ディスクリプション(英語) e. g. 'After purchasing you’ll be able to get the real T-Shirt'",
+    "price": "1枚の価格を入力",
+    "maxAmount": "発行枚数",
+    "thumbnail": "カバー画像を追加してください",
+    "title": "アイテム作成",
+    "dialogTitle": "NFTを作成しますか？",
+    "dialogText": "情報に誤りがないかご確認ください。作成には時間が掛かることがあります。",
+    "dialogCloseBtn": "キャンセル",
+    "dialogConfirmBtn": "確認",
+    "mintSuccess": "NFT作成完了しました",
+    "startSale": "販売開始時間 (日本標準時)"
+  },
+  "dashboard": {
+    "menu": {
+      "revenues": "売上管理",
+      "payouts": "報酬の申請",
+      "account": "設定",
+      "password": "パスワード"
+    },
+    "flash": {
+      "success": {
+        "submit": "送信に成功しました"
+      },
+      "error": {
+        "save": "無効なリクエストです"
+      }
+    },
+    "revenues": {
+      "title": "今月の売上",
+      "titleForList": "売上明細",
+      "caption": {
+        "allTime": "全期間の売上内訳"
+      },
+      "tables": {
+        "date": "日付",
+        "amount": "",
+        "content": "内容",
+        "purchasedUser": "購入ユーザー"
+      }
+    },
+    "payouts": {
+      "title": "申請可能金額",
+      "titleForList": "報酬申請履歴",
+      "captionForList": "振込タイミング：毎週月曜日（祝日等の場合は翌週以降）",
+      "requestConfirmation": "申請可能金額の振込を申請します（別途振込手数料３００円）。本当によろしいでしょうか？",
+      "summary": {
+        "warning": "報酬の振込申請には、お支払い先の登録が必要です",
+        "totalAmount": "総額",
+        "requestable": "申請可能金額",
+        "fee": "別途振込手数料一律300円",
+        "submit": "申請"
+      },
+      "tables": {
+        "date": "申請日",
+        "amount": "金額",
+        "status": "状況"        
+      },
+      "statuses": {
+        "requested": "申請中",
+        "paid": "支払済",
+        "pending": "処理中",
+        "rejected": "申請却下（お問い合わせからご連絡ください"
+      }
+    },
+    "settings": {
+      "titles": {
+        "payoutSetting": "お振込情報の登録",
+        "bankPayout": "銀行振込",
+        "amazonGift": "Amazonギフト券",
+        "amazonOrPaypal": "Amazonギフト券・PayPal"
+      },
+      "labels": {
+        "lastName": "性（全角）",
+        "firstName": "名（全角）",
+        "lastNameKana": "せい（全角）",
+        "firstNameKana": "めい（全角）",
+        "bankName": "銀行名",
+        "bankAccountType": "口座種類",
+        "bankAccountName": "銀行口座名",
+        "bankBranchNum": "支店番号",
+        "bankAccountNum": "銀行口座番号",
+        "bankAccountUserName": "口座名義カナ（全角）",
+        "amazonGiftEmail": "送付先メールアドレス",
+        "paypalGiftEmail": "送金先PayPalアカウント（メールアドレス）"
+      },
+      "placeholders": {
+        "lastName": "田中",
+        "firstName": "太郎",
+        "lastNameKana": "たなか",
+        "firstNameKana": "たろう",
+        "bankName": "みずほ銀行",
+        "bankAccountType": "",
+        "bankAccountName": "銀行口座名",
+        "bankBranchNum": "銀行口座番号",
+        "bankAccountNum": "銀行口座名",
+        "bankAccountUserName": "タナカタロウ",
+        "amazonGiftEmail": "",
+        "paypalGiftEmail": ""
+      },
+      "forms": {
+        "bankAccountTypes": {
+          "normal": "普通口座",
+          "checking": "当座口座"
+        }
+      },
+      "flash": {
+        "success": "保存に成功しました",
+        "failed": "保存に失敗しました。入力した内容を再度確認してください",
+        "noName": "エラー：名前が入力されていません",
+        "noKana": "エラー：名前（かな）が入力されていません",
+        "noBank": "エラー：口座情報が正しく入力されていません"
+      }
+    },
+    "password": {
+      "title": "パスワード変更",
+      "label": {
+        "new": "新しいパスワード",
+        "re-type": "確認用再入力"
+      },
+      "button": "更新する",
+      "success": "変更に成功しました",
+      "failure": "変更に失敗しました"
+    }
+  },
+  "auction": {
+    "currentBid": "最高入札価格",
+    "placeBid": "入札する",
+    "bidAmount": "入札価格",
+    "auctionEndingText": "オークション終了まで",
+    "bidHistory": "オークションの入札履歴",      
+    "lackOfBalance": "WETHの残高が不足しています",
+    "lowBid": "最高入札価格以上の金額を入力してください",
+    "bidSuccess": "入札しました",
+    "approve": "承認",
+    "needApprove": "入札には事前に承認が必要です"
+  }
+}

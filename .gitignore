@@ -1,7 +1,18 @@
-onchain/.envrc
-onchain/node_modules
 .DS_Store
+*.swp
 
+#node yarn
+.envrc
+node_modules
+yarn-error.log
+yarn-debug.log*
+
+# onchain
 onchain/cache
 onchain/artifacts
 onchain/typechain
+
+# frontend
+.nuxt
+dist
+
