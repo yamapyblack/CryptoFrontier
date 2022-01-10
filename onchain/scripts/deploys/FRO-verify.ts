@@ -1,25 +1,30 @@
 import { Addresses, Verify, AddressesType } from "../common"
 
 const verify = async (a: AddressesType): Promise<void> => {
-    await Verify(a.addresses, [])
+    // await Verify(a.FROAddresses, [])
 
-    // await Verify(a.frontier, [a.addresses])
-    // await Verify(a.status, [a.addresses])
-    // await Verify(a.hp, [a.addresses])
-    // await Verify(a.descriptor, [a.addresses])
-    // await Verify(a.character, [a.addresses])
-    // await Verify(a.reward, [a.addresses])
-    // await Verify(a.staking, [a.addresses])
-    // await Verify(a.token, [a.addresses])
-    // await Verify(a.logic, [a.addresses])
-    // await Verify(a.mintLogic, [a.addresses])
+    // await Verify(a.frontier, [a.FROAddresses])
+    // await Verify(a.status, [a.FROAddresses])
+    // await Verify(a.hp, [a.FROAddresses])
+    // await Verify(a.descriptor, [a.FROAddresses])
+    // await Verify(a.character, [a.FROAddresses])
+    // await Verify(a.reward, [a.FROAddresses])
+    // await Verify(a.staking, [a.FROAddresses])
+    // await Verify(a.token, [a.FROAddresses])
+    // await Verify(a.logic, [a.FROAddresses])
+    // await Verify(a.mintLogic, [a.FROAddresses])
 
-    await Verify(a.FROStatus, [a.addresses])
-    await Verify(a.FROHp, [a.addresses])
-    await Verify(a.FROSvg, [])
-    await Verify(a.FROTokenDescriptor, [a.addresses])
-    await Verify(a.FROCharacter, [a.addresses])
-    await Verify(a.FROMintLogic, [a.addresses])
+    // await Verify(a.FROStatus, [a.FROAddresses])
+    // await Verify(a.FROHp, [a.FROAddresses])
+    // await Verify(a.FROSvg, [])
+    // await Verify(a.FROTokenDescriptor, [a.FROAddresses])
+    // await Verify(a.FROCharacter, [a.FROAddresses])
+    // await Verify(a.FROMintLogic, [a.FROAddresses])
+    // await Verify(a.FROReward, [a.FROAddresses])
+    // await Verify(a.FROStaking, [a.FROAddresses])
+    // await Verify(a.FROToken, [a.FROAddresses])
+    await Verify(a.FROFrontier, [a.FROAddresses])
+    // await Verify(a.FROLogic, [a.FROAddresses])
 }
 
 const main = async () => {
