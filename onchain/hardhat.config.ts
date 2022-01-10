@@ -30,6 +30,14 @@ const config: HardhatUserConfig = {
       chainId: 137,
       gasPrice: 30000000000,
     },
+    optest: {
+      url: "https://kovan.optimism.io",
+      chainId: 69,
+    },
+    op: {
+      url: "https://mainnet.optimism.io",
+      chainId: 10,
+    },
   },
   solidity: {
     version: "0.8.9",

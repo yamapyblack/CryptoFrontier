@@ -1,13 +1,40 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: CC0
 
 pragma solidity ^0.8.0;
 
 import '@openzeppelin/contracts/utils/Strings.sol';
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "../interfaces/ISvgWeapon.sol";
 
-library FROSvg {
-    using Strings for uint256;
+contract FROSvgWeapon is ISvgWeapon, Ownable {
+    // for over weapon 11
+    // weapon => name(for attributes)
+    mapping(uint8 => string) private _weaponName;
+    // weapon => svg
+    mapping(uint8 => string) private _weaponSvg;
 
-    function weaponSvg(uint8 weapon) external pure returns(string memory){
+    string[10] _weaponName10 = ["axe","glove","sword","katana","blade","lance","wand","rod","dagger","shuriken"];
+
+    function setWeaponSvg(uint8[] calldata weapon, string[] calldata name, string[] calldata svg) public onlyOwner {
+        require(
+            weapon.length == name.length && weapon.length == svg.length,
+            "input length must be same"
+        );
+        for(uint8 i = 0; i < weapon.length; i++) {
+            _weaponName[weapon[i]] = name[i];
+            _weaponSvg[weapon[i]] = svg[i];
+        }
+    }
+
+    function weaponName(uint8 weapon) external view returns(string memory){
+        if(weapon <= 10){
+            return _weaponName10[weapon - 1];
+        }else{
+            return _weaponName[weapon];
+        }
+    }
+
+    function weaponSvg(uint8 weapon) external view returns(string memory){
 
         if(weapon == 1){ // axe
             return '<style>.w1{fill:#333;}.w2{fill:#999;}.w3{fill:#000;}</style><rect x="20" y="60" class="s w2"/><rect x="30" y="60" class="s w2"/><rect x="50" y="60" class="s w2"/><rect x="60" y="60" class="s w2"/><rect x="70" y="60" class="s w2"/><rect x="80" y="60" class="s w2"/><rect x="20" y="70" class="s w2"/><rect x="30" y="70" class="s w1"/><rect x="40" y="70" class="s w1"/><rect x="50" y="70" class="s w1"/><rect x="60" y="70" class="s w1"/><rect x="70" y="70" class="s w1"/><rect x="80" y="70" class="s w1"/><rect x="90" y="70" class="s w2"/><rect x="30" y="80" class="s w1"/><rect x="40" y="80" class="s w1"/><rect x="50" y="80" class="s w1"/><rect x="60" y="80" class="s w1"/><rect x="70" y="80" class="s w1"/><rect x="80" y="80" class="s w1"/><rect x="90" y="80" class="s w2"/><rect x="20" y="90" class="s w2"/><rect x="30" y="90" class="s w1"/><rect x="40" y="90" class="s w1"/><rect x="50" y="90" class="s w1"/><rect x="60" y="90" class="s w1"/><rect x="80" y="90" class="s w1"/><rect x="90" y="90" class="s w2"/><rect x="20" y="100" class="s w2"/><rect x="30" y="100" class="s w1"/><rect x="40" y="100" class="s w1"/><rect x="50" y="100" class="s w1"/><rect x="60" y="100" class="s w1"/><rect x="70" y="100" class="s w1"/><rect x="90" y="100" class="s w2"/><rect x="20" y="110" class="s w2"/><rect x="30" y="110" class="s w1"/><rect x="40" y="110" class="s w1"/><rect x="60" y="110" class="s w1"/><rect x="70" y="110" class="s w1"/><rect x="80" y="110" class="s w1"/><rect x="20" y="120" class="s w2"/><rect x="30" y="120" class="s w1"/><rect x="40" y="120" class="s w1"/><rect x="50" y="120" class="s w1"/><rect x="70" y="120" class="s w1"/><rect x="80" y="120" class="s w1"/><rect x="90" y="120" class="s w1"/><rect x="30" y="130" class="s w2"/><rect x="40" y="130" class="s w2"/><rect x="50" y="130" class="s w2"/><rect x="60" y="130" class="s w2"/><rect x="80" y="130" class="s w1"/><rect x="90" y="130" class="s w1"/><rect x="100" y="130" class="s w1"/><rect x="90" y="140" class="s w1"/><rect x="100" y="140" class="s w1"/><rect x="110" y="140" class="s w1"/><rect x="100" y="150" class="s w1"/><rect x="110" y="150" class="s w1"/><rect x="120" y="150" class="s w1"/><rect x="130" y="150" class="s w3"/><rect x="140" y="150" class="s w3"/><rect x="110" y="160" class="s w1"/><rect x="120" y="160" class="s w1"/><rect x="110" y="170" class="s w3"/>';
@@ -39,7 +66,8 @@ library FROSvg {
         }else if(weapon == 10){// shuriken
             return '<style>.w1{fill:#000;}.w2{fill:#19A;}</style><rect x="20" y="110" class="s w1"/><rect x="30" y="110" class="s w1"/><rect x="40" y="110" class="s w1"/><rect x="100" y="110" class="s w1"/><rect x="110" y="110" class="s w1"/><rect x="120" y="110" class="s w1"/><rect x="20" y="120" class="s w1"/><rect x="30" y="120" class="s w2"/><rect x="40" y="120" class="s w2"/><rect x="50" y="120" class="s w1"/><rect x="90" y="120" class="s w1"/><rect x="100" y="120" class="s w2"/><rect x="110" y="120" class="s w2"/><rect x="120" y="120" class="s w1"/><rect x="20" y="130" class="s w1"/><rect x="30" y="130" class="s w2"/><rect x="40" y="130" class="s w2"/><rect x="50" y="130" class="s w2"/><rect x="60" y="130" class="s w1"/><rect x="80" y="130" class="s w1"/><rect x="90" y="130" class="s w2"/><rect x="100" y="130" class="s w2"/><rect x="110" y="130" class="s w2"/><rect x="120" y="130" class="s w1"/><rect x="30" y="140" class="s w1"/><rect x="40" y="140" class="s w2"/><rect x="50" y="140" class="s w2"/><rect x="60" y="140" class="s w2"/><rect x="70" y="140" class="s w1"/><rect x="80" y="140" class="s w2"/><rect x="90" y="140" class="s w2"/><rect x="100" y="140" class="s w2"/><rect x="110" y="140" class="s w1"/><rect x="40" y="150" class="s w1"/><rect x="50" y="150" class="s w2"/><rect x="60" y="150" class="s w2"/><rect x="70" y="150" class="s w2"/><rect x="80" y="150" class="s w2"/><rect x="90" y="150" class="s w2"/><rect x="100" y="150" class="s w1"/><rect x="130" y="150" class="s w1"/><rect x="140" y="150" class="s w1"/><rect x="50" y="160" class="s w1"/><rect x="60" y="160" class="s w2"/><rect x="70" y="160" class="s w1"/><rect x="80" y="160" class="s w2"/><rect x="90" y="160" class="s w1"/><rect x="120" y="160" class="s w1"/><rect x="40" y="170" class="s w1"/><rect x="50" y="170" class="s w2"/><rect x="60" y="170" class="s w2"/><rect x="70" y="170" class="s w2"/><rect x="80" y="170" class="s w2"/><rect x="90" y="170" class="s w2"/><rect x="100" y="170" class="s w1"/><rect x="110" y="170" class="s w1"/><rect x="30" y="180" class="s w1"/><rect x="40" y="180" class="s w2"/><rect x="50" y="180" class="s w2"/><rect x="60" y="180" class="s w2"/><rect x="70" y="180" class="s w1"/><rect x="80" y="180" class="s w2"/><rect x="90" y="180" class="s w2"/><rect x="100" y="180" class="s w2"/><rect x="110" y="180" class="s w1"/><rect x="20" y="190" class="s w1"/><rect x="30" y="190" class="s w2"/><rect x="40" y="190" class="s w2"/><rect x="50" y="190" class="s w2"/><rect x="60" y="190" class="s w1"/><rect x="80" y="190" class="s w1"/><rect x="90" y="190" class="s w2"/><rect x="100" y="190" class="s w2"/><rect x="110" y="190" class="s w2"/><rect x="120" y="190" class="s w1"/><rect x="20" y="200" class="s w1"/><rect x="30" y="200" class="s w2"/><rect x="40" y="200" class="s w2"/><rect x="50" y="200" class="s w1"/><rect x="90" y="200" class="s w1"/><rect x="100" y="200" class="s w2"/><rect x="110" y="200" class="s w2"/><rect x="120" y="200" class="s w1"/><rect x="20" y="210" class="s w1"/><rect x="30" y="210" class="s w1"/><rect x="40" y="210" class="s w1"/><rect x="100" y="210" class="s w1"/><rect x="110" y="210" class="s w1"/><rect x="120" y="210" class="s w1"/>';
         }
-        
-        return "";
+
+        // over 11 return mapping        
+        return _weaponSvg[weapon];
     }
 }

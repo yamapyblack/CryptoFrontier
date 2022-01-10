@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: CC0
 
 pragma solidity ^0.8.9;
 
@@ -8,8 +8,6 @@ import "../address/FROAddressesProxy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/ITokenDescriptor.sol";
 import "../interfaces/ICharacter.sol";
-// import "../interfaces/IStatus.sol";
-// import "../interfaces/IHpRegistory.sol";
 
 contract FROCharacter is ICharacter, ERC721Mintable, ERC721Permit, Ownable, FROAddressesProxy {
     constructor(address registry_)

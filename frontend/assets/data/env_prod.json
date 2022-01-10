@@ -1,0 +1,17 @@
+{
+  "auth": {
+    "auth_env": "prod",
+    "client_id": "std-prod",
+    "redirect_uri": "https://nft-studio.com/users/auth/mch/callback",
+    "auth_uri": "https://auth.mch.plus/authorize",
+    "token_uri": "https://auth.mch.plus/api/token",
+    "phone_uri": "https://auth.mch.plus/verify-number",
+    "phone_redirect_uri": "http://localhost:3000/",
+    "cookie_domain": ""
+  },
+  "network": {
+    "host": "matic",
+    "chainId": 137,
+    "networkName": "matic"
+  }
+}

@@ -13,7 +13,8 @@ let addr2: SignerWithAddress
 import { FROAddresses } from "typechain/FROAddresses"
 import { FROTokenDescriptor } from "typechain/FROTokenDescriptor"
 import { FROStatus } from "typechain/FROStatus"
-import { FROSvg } from "typechain/FROSvg"
+import { FROSvgWeapon } from "typechain/FROSvgWeapon"
+import { FROSvgBase } from "typechain/FROSvgBase"
 
 type Status = {
     hp: BigNumberish
@@ -32,8 +33,9 @@ type Pixel = {
 describe("testing for FROCharacter", async () => {
     let registroy: FROAddresses
     let c1: FROStatus
-    let c2: FROSvg
-    let c3: FROTokenDescriptor
+    let c2: FROSvgBase
+    let c3: FROSvgWeapon
+    let c4: FROTokenDescriptor
 
     beforeEach(async () => {
         const signers = await ethers.getSigners()
@@ -49,22 +51,27 @@ describe("testing for FROCharacter", async () => {
         c1 = (await FROStatus.deploy(registroy.address)) as FROStatus
         await c1.deployed()
 
-        const FROSvg = await ethers.getContractFactory("FROSvg");
-        c2 = (await FROSvg.deploy()) as FROSvg
+        const FROSvgBase = await ethers.getContractFactory("FROSvgBase");
+        c2 = (await FROSvgBase.deploy()) as FROSvgBase
         await c2.deployed()
+
+        const FROSvgWeapon = await ethers.getContractFactory("FROSvgWeapon");
+        c3 = (await FROSvgWeapon.deploy()) as FROSvgWeapon
+        await c3.deployed()
 
         const FROTokenDescriptor = await ethers.getContractFactory(
             "FROTokenDescriptor",
             { libraries: 
-                {FROSvg: c2.address}
+                {FROSvgBase: c2.address}
             }
         );
-        c3 = (await FROTokenDescriptor.deploy(
+        c4 = (await FROTokenDescriptor.deploy(
             registroy.address,
         )) as FROTokenDescriptor
-        await c3.deployed()
+        await c4.deployed()
 
         registroy.setRegistry("FROStatus", c1.address)
+        registroy.setRegistry("FROSvgWeapon", c3.address)
     })
 
     describe("tokenURI", async () => {
@@ -85,7 +92,7 @@ describe("testing for FROCharacter", async () => {
 
             // await c3.setWeaponPixels(weapon)
 
-            const m = await c3.tokenURI(NilAddress, tokenId)
+            const m = await c4.tokenURI(NilAddress, tokenId)
             const m2 = m.split(",")[1]
             const m3 = ethers.utils.toUtf8String(ethers.utils.base64.decode(m2))
             console.log(m3)

@@ -19,12 +19,19 @@ export interface AddressesType {
   token: string
   logic: string
   mintLogic: string
+  FROAddresses: string
   FROStatus: string
   FROHp: string
-  FROSvg: string
+  FROSvg: string //old
+  FROSvgBase: string
   FROTokenDescriptor: string
   FROCharacter: string
   FROMintLogic: string
+  FROReward: string
+  FROStaking: string
+  FROToken: string
+  FROFrontier: string
+  FROLogic: string
 }
 
 export const address = (name: string): string => {
@@ -55,26 +62,48 @@ export const Addresses = () => {
         logic: "0x52a6a2698aE46ab26f4bec6136Ea89238b14D56c",
         mintLogic: "0x16d5DBaa11Ee2B0f19D5837Bf31DF5AB2CFe1582",
 
+        FROAddresses: "0x6B889d814AC75255714adA38527BEE9533441519",
         FROStatus: "0x0e3EA9Fb71FF871A3a2dFE9F4B80b44D6614ae51",
         FROHp: "0x470E38A5422Add8567a64748aAA51Fa36c1d3002",
         FROSvg: "0x9ba659388F3F11228aDB3336027af6522BA81c35",
         FROTokenDescriptor: "0xAda3D5820bAB9380460beDC43b0EffEE75ca5709",
         FROCharacter: "0xfa2cB59be9D3b591AF1D4001a27D3bB974d3b8c0",
         FROMintLogic: "0x77776B57dcE93577a3537aF466Bfe46eC596eeC8",
+        FROReward: "0x03eE11b6f210Ef41De0088AF878F4516aee0fc45",
+        FROStaking: "0x079D3f3CE972372D12e21829a784e073984DF6fa",
+        FROToken: "0x1A413892570E6837baF45E7355a7c2bC8656BF46",
+        FROFrontier: "0xD8F3Df0C9BEa30C1217641bBCd8241f18cd70f8D",
+        FROLogic: "0x69b187B5a7C0b46388d852D032FC2a93eC02Fd16",
     } as AddressesType
 
     case "matic":
       return {
         Deployer: "0x76D8a627dA0EA33ABDF3A922E7dA6e6ee78ab7A1",
-        addresses: "0x264A8Ed6C52CbC4937AD7A7F62Cc066B83e37Ea8",
+        FROAddresses: "0x264A8Ed6C52CbC4937AD7A7F62Cc066B83e37Ea8",
         FROStatus: "0x1D4c01f63a4d0a2B37D7993e6E92e5fB8FAcd586",
         FROHp: "0x1c24CbE9A306e04f12D4d1E9539048cD03f4027c",
         FROSvg: "0xd5dd91E33272d86d6176e3D8d111c99D6ee1edD1",
         FROTokenDescriptor: "0xdA02718148d40fD3F13fa8252c37726dE0faFF86",
         FROCharacter: "0x9689FF81Ddb4AE0bf29D5c53687842267CD5B563",
         FROMintLogic: "0x85a54817F409Dc1B4Dc3e13474836Bc642d2E96c",
+        FROReward: "0x7761865990b8841141247AD8547C3cfE112745EF",
+        FROStaking: "0x48D5900672293BAA4903B94FA14F0c5083770a98",
+        FROToken: "0x803762bEde7685923f47a2b21262D9215Fa77613",
+        FROLogic: "0xE3dD3ABfeAA02B279177f748b97751e4868553F3",
       } as AddressesType
 
+    case "optest":
+      return {
+        Deployer: "0x76D8a627dA0EA33ABDF3A922E7dA6e6ee78ab7A1",
+        FROAddresses: "0x264A8Ed6C52CbC4937AD7A7F62Cc066B83e37Ea8",
+        FROSvgBase: "0x264A8Ed6C52CbC4937AD7A7F62Cc066B83e37Ea8",
+      } as AddressesType
+
+    case "op":
+      return {
+        Deployer: "0x76D8a627dA0EA33ABDF3A922E7dA6e6ee78ab7A1",
+      } as AddressesType
+  
     default:
       return undefined
   }

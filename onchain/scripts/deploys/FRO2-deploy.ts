@@ -5,7 +5,7 @@ import { Addresses, KmsSigner} from "../common"
 
 import { FROAddresses } from "typechain/FROAddresses"
 // import { FROAddressesProxy } from "typechain/FROAddressesProxy"
-import { FROSvg } from "typechain/FROSvg"
+import { FROSvgBase } from "typechain/FROSvgBase"
 
 type Lib = {
     key: string
@@ -36,23 +36,24 @@ const main = async () => {
     signer = KmsSigner()
     const a = Addresses()!
 
-    addresses = await ethers.getContractAt("FROAddresses", a.addresses, signer) as FROAddresses
+    addresses = await ethers.getContractAt("FROAddresses", a.FROAddresses, signer) as FROAddresses
 
-    await deploy("FROStatus")
-    await deploy("FROHp")
+    // await deploy("FROStatus")
+    // await deploy("FROHp")
 
-    const FROSvg = await ethers.getContractFactory("FROSvg");
-    const svg = (await FROSvg.connect(signer).deploy()) as FROSvg
-    await svg.deployed()
-    console.log("FROSvg" + ": \"" + svg.address + "\",")
+    // const FROSvgBase = await ethers.getContractFactory("FROSvgBase");
+    // const svg = (await FROSvgBase.connect(signer).deploy()) as FROSvgBase
+    // await svg.deployed()
+    // console.log("FROSvgBase" + ": \"" + svg.address + "\",")
 
-    await deploy("FROTokenDescriptor", {FROSvg: svg.address})
+    // await deploy("FROTokenDescriptor", {FROSvgBase: svg.address})
 
-    await deploy("FROCharacter")
-    await deploy("FROMintLogic")
+    // await deploy("FROCharacter")
+    // await deploy("FROMintLogic")
     // await deploy("FROReward")
     // await deploy("FROStaking")
     // await deploy("FROToken")
+    await deploy("FROFrontier")
     // await deploy("FROLogic")
 }
 

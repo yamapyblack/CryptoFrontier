@@ -6,7 +6,8 @@ import "../interfaces/IReward.sol";
 import "../address/FROAddressesProxy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/ICharacter.sol";
-import "../interfaces/IToken.sol";
+// import "../interfaces/IToken.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract FROReward is IReward, FROAddressesProxy, Ownable {
 
@@ -32,7 +33,8 @@ contract FROReward is IReward, FROAddressesProxy, Ownable {
         );
         require(rewards[_tokenId] > 0,"tokenId has no reward");
 
-        IToken(registry.getRegistry("FROToken")).mint(msg.sender, rewards[_tokenId]);
+        // IToken(registry.getRegistry("FROToken")).mint(msg.sender, rewards[_tokenId]);
+        IERC20(registry.getRegistry("FROToken")).transferFrom(address(this), msg.sender, rewards[_tokenId]);
         rewards[_tokenId] = 0;
     }
 

@@ -1,15 +1,11 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: CC0
 
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-
-interface IERC721Permit {
-    function permit(address owner, address spender, uint256 tokenId, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external;
-    function nonces(address owner) external view returns (uint256);
-}
+import "../interfaces/IERC721Permit.sol";
 
 abstract contract ERC721Permit is ERC721, IERC721Permit {
     using Counters for Counters.Counter;

@@ -1,0 +1,194 @@
+{
+  "welcome": "Welcome",
+  "login": "Login",
+  "logout": "Logout",
+  "faq": "FAQ",
+  "forget-password": "If you forget your password, please contact us.",
+  "profile": "Profile setting",
+  "top-description": "Increasing support for illustrators with blockchain",
+  "connect-wallet": "Connect Wallet",
+  "accept": "I accept the",
+  "use-service": "of Service",
+  "creator-here": "Creator here",
+  "buy": "Buy now",
+  "login-to-buy": "Please login to buy",
+  "use-in-other-service": "Use in other service",
+  "commercial": "Commercial",
+  "terms": "Terms",
+  "privacy": "Privacy",
+  "company": "Company",
+  "transaction-act": "Specified Commercial Transaction Act",
+  "footer-discord": "Contact us",
+  "discord": "Contact us",
+  "card-creator-info": "Creator",
+  "actions": {
+    "register": "Submit" 
+  },
+  "flash": {
+    "generalError": "Request failed. Please try again later"
+  },
+  "sessions": {
+    "connectWallet": "Connect wallet",
+    "connectSns": "Connect SNS",
+    "success": "Successfully Logged in",
+    "idPasswordFailed": "User ID or password is incorrect",
+    "illustratorLogin": "Creator Login",
+    "requireWalletLogin": "This page requires wallet login",
+    "requireLogin": "This page requires login",
+    "alreadyLoggedin": "You are already logged in",
+    "requireIllustratorLogin": "You don't have permission for the action",
+    "illustratorsNotAllowed": "Creators are not allowed to perform this action"
+  },
+  "profiles": {
+    "edit": {
+      "title": "Edit Your Profile",
+      "imagePlaceholder": "Upload Profile Image",
+      "uploadSuccess": "Update Success!!",
+      "uploadFailure": "Update Failed"
+    },
+    "show": {
+      "copySuccess": "Copied!!",
+      "copyFailure": "Copy Failed"
+    }
+  },
+  "card_issues": {
+    "Name": "Name e. g. 'ロゴ入りTシャツ'",
+    "englishName": "English Name e. g. 'T-Shirt with logo'",
+    "description": "Description(JP) e. g. '購入後に、本物のT-SHIRTを手に入れることができます'",
+    "englishDescription": "Description e. g. 'After purchasing you’ll be able to get the real T-Shirt'",
+    "price": "Enter price for one piece",
+    "maxAmount": "Issue Number",
+    "thumbnail": "Please add cover image to your media file",
+    "title": "Create single collectible",
+    "dialogTitle": "Do you want to create NFT?",
+    "dialogText": "Please make sure the information is correct. It may take some time to create.",
+    "dialogCloseBtn": "Cancel",
+    "dialogConfirmBtn": "Confirm",
+    "mintSuccess": "Create Success!!",
+    "startSale": "Start sale time (JST)"
+  },
+  "dashboard": {
+    "menu": {
+      "revenues": "Revenue Report",
+      "payouts": "Payout Request",
+      "account": "Settings",
+      "password": "Password"
+    },
+    "flash": {
+      "success": {
+        "submit": "Successfully submitted"
+      },
+      "error": {
+        "save": "Error, invalid request."
+      }
+    },
+    "revenues": {
+      "title": "Revenue Report",
+      "titleForList": "List of Sold NFTs",
+      "caption": {
+        "allTime": "showing all results"
+      },
+      "tables": {
+        "date": "Date",
+        "amount": "",
+        "content": "Content",
+        "purchasedUser": "Purchased user"
+      }
+    },
+    "payouts": {
+      "title": "Payout Requests",
+      "titleForList": "Payout Histories",
+      "captionForList": "Estimated payout schefule：every monday（if it's national holiday in japan. it maybe postponed）",
+      "requestConfirmation": "Are you sure you would like to request payout? ※300 yen deposite fee will be deducted.",
+      "summary": {
+        "warning": "To request payout, you need to update your deposite settings.",
+        "totalAmount": "Total",
+        "requestable": "Payout requestable amount",
+        "fee": "300yen deposite fee will be deducted after submission",
+        "submit": "Claim"
+      },
+      "tables": {
+        "date": "Date",
+        "amount": "",
+        "status": "Status"
+      },
+      "statuses": {
+        "requested": "Requested",
+        "paid": "Paid",
+        "pending": "Pending",
+        "rejected": "Rejected (please contact us for more details"
+      }
+    },
+    "settings": {
+      "titles": {
+        "payoutSetting": "Payout settings",
+        "bankPayout": "Bank account",
+        "amazonGift": "Amazon gift",
+        "amazonOrPaypal": "Amazon gift・PayPal"
+      },
+      "labels": {
+        "lastName": "Last name",
+        "firstName": "First name",
+        "lastNameKana": "Last name (Kana)",
+        "firstNameKana": "First name (Kana)",
+        "bankName": "Bank Name",
+        "bankAccountType": "Account type",
+        "bankAccountName": "",
+        "bankBranchNum": "Branch number",
+        "bankAccountNum": "Account number",
+        "bankAccountUserName": "Account holder’s name",
+        "amazonGiftEmail": "Email address",
+        "paypalGiftEmail": "Paypal account (Email address)"
+      },
+      "placeholders": {
+        "lastName": "田中",
+        "firstName": "太郎",
+        "lastNameKana": "タナカ",
+        "firstNameKana": "タロウ",
+        "bankName": "みずほ銀行",
+        "bankAccountType": "",
+        "bankAccountName": "銀行口座名",
+        "bankBranchNum": "銀行口座番号",
+        "bankAccountNum": "銀行口座名",
+        "bankAccountUserName": "タナカタロウ",
+        "amazonGiftEmail": "",
+        "paypalGiftEmail": ""
+      },
+      "forms": {
+        "bankAccountTypes": {
+          "normal": "普通口座",
+          "checking": "当座口座"
+        }
+      },
+      "flash": {
+        "success": "Update sucess",
+        "failed": "Failed to update, please make sure everything is filled out.",
+        "noName": "Error: Name is required.",
+        "noKana": "Error: Name(Kana) is required.",
+        "noBank": "Error: Bank is required."
+      }
+    },
+    "password": {
+      "title": "Change Password",
+      "label": {
+        "new": "New Password",
+        "re-type": "Re-type New"
+      },
+      "button": "UPDATE PASSWORD",
+      "success": "Update Succeeded",
+      "failure": "Update Failure"
+    }
+  },
+  "auction": {
+    "currentBid": "Current Bid",
+    "placeBid": "Place a bid",
+    "bidAmount": "bid amount",
+    "auctionEndingText": "Auction ending in",
+    "bidHistory": "Auction activity",
+    "lackOfBalance": "Insufficient funds of weth",
+    "lowBid": "Bid too low",
+    "bidSuccess": "Success bid",
+    "approve": "Approve",
+    "needApprove": "You need to approve before"
+  }
+}
