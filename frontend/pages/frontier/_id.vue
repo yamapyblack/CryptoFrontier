@@ -3,7 +3,7 @@
     <div class="flex justify-between mt-6">
       <div class="w-32 font-bold"><span class="text-xl">F</span>rontier No. <span class="text-xl">{{$route.params.id}}</span></div>
       <div v-if="!isBattleNow()" class="w-32 text-right">
-        <button class="text-frontier border-2 rounded-xl border-frontier px-6 py-1 font-bold" @click="showStakeModal()">
+        <button class="text-frontier border-solid border-2 rounded-xl border-frontier px-6 py-1 font-bold" @click="showStakeModal()">
         Stake
         </button>
       </div>
@@ -39,7 +39,7 @@
 
           <!-- unstake button -->
           <div class="mt-12 text-center">
-            <button v-if="stakerA.staker.toLowerCase() == walletAddress.toLowerCase()" class="text-frontier border-2 rounded-xl border-frontier px-6 py-1 font-bold">unStake</button>
+            <button v-if="stakerA.staker.toLowerCase() == walletAddress.toLowerCase()" class="text-frontier border-solid border-2 rounded-xl border-frontier px-6 py-1 font-bold">unStake</button>
           </div>
 
         </div><!-- black left -->
@@ -73,7 +73,7 @@
 
           <!-- unstake button -->
           <div class="mt-12 text-center">
-              <button v-if="stakerB.staker.toLowerCase() == walletAddress.toLowerCase()" class="text-frontier border-2 rounded-xl border-frontier px-6 py-1 font-bold">unStake</button>
+              <button v-if="stakerB.staker.toLowerCase() == walletAddress.toLowerCase()" class="text-frontier border-solid border-2 rounded-xl border-frontier px-6 py-1 font-bold">unStake</button>
           </div>
 
         </div><!-- black right -->
@@ -81,12 +81,12 @@
 
     </div>
 
-    <modal
+    <StakeModal
       v-if="isModal"
       :frontierId="frontierId"
       @closeModal="closeModal"
       >
-    </modal>
+    </StakeModal>
 
   </div>
 </template>
@@ -94,7 +94,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import Web3 from "web3";
-import Modal from "~/components/Modal.vue"
+import StakeModal from "~/components/frontier/StakeModal.vue"
 import Status from "~/components/frontier/Status.vue"
 import Hp from "~/components/frontier/Hp.vue"
 
@@ -102,7 +102,7 @@ const tokenId = 1;
 
 export default {
   components: {
-    Modal,Status,Hp
+    StakeModal,Status,Hp
   },
   data() {
     return {

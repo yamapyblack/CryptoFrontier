@@ -19,7 +19,7 @@
 
         <div class="mt-6 text-center">
           <button
-            class="text-frontier border-2 rounded-xl border-frontier px-6 py-1 font-bold"
+            class="text-frontier border-solid border-2 rounded-xl border-frontier px-6 py-1 font-bold"
             :class="{ 'border-gray-500' : isApproved, 'text-gray-500' : isApproved }"
             @click="approve()">
             Approve
@@ -27,7 +27,7 @@
         </div>
         <div class="mt-6 text-center">
           <button
-            class="text-frontier border-2 rounded-xl border-frontier px-6 py-1 font-bold"
+            class="text-frontier border-solid border-2 rounded-xl border-frontier px-6 py-1 font-bold"
             :class="{ 'border-gray-500' : !isApproved, 'text-gray-500' : !isApproved }"
             @click="stake()">
           Stake
