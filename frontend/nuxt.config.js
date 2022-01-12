@@ -72,6 +72,7 @@ export default {
   components: true,
   buildModules: [
     'nuxt-windicss',
+    '@nuxtjs/vuetify',
   ],
   modules: [
   ],

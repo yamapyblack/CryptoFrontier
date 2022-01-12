@@ -4,9 +4,9 @@
       <div class="mt-8 mb-4 h-128 w-full overflow-y-scroll overflow-x-scroll relative">
         <!-- <div v-for="i in frontiers" class="h-18 absolute w-60" > -->
         <div v-for="i in frontiers" v-bind:class="classFrontier(i)" class="h-18 absolute w-60">
-          <nuxt-link :to="`/frontier/${i}`">
+          <button @click="linkFrontier(i)">
             <img class="" :src="imgObject(i)" />
-          </nuxt-link>
+          </button>
         </div>
       </div>
     </main>
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   components: {
   },
@@ -25,12 +27,7 @@ export default {
     };
   },
   computed: {
-    classObject: function () {
-      return {
-        active: this.isActive && !this.error,
-        'text-danger': this.error && this.error.type === 'fatal'
-      }
-    },
+    ...mapState(["walletAddress"]),
   },
   // ページ読み込み時にタイル状に表示させる
   mounted: function () {
@@ -45,6 +42,14 @@ export default {
     },
     imgObject: function (i) {
       return require('../assets/img/diamond.png')
+    },
+    linkFrontier: function(i) {
+      if(!this.$ethereumService.isLoginCorrectChain()){return}
+      // if(this.walletAddress.length == 0){
+      //   console.log("walletAddress")
+      //   return this.$store.dispatch('showSnackbar', {show: true, text: "not connected"})
+      // }
+      this.$router.push(`/frontier/${i}`)
     },
   },
 };

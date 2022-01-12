@@ -1,36 +1,39 @@
 export const state = () => ({
   walletAddress: "",
+  chainId: 0,
+  globalSnackbar: {
+    show: false,
+    text: `Hello, I'm a snackbar yes!!!`,
+  },
 });
 
 export const mutations = {
   SET_WALLET_ADDRESS(state, walletAddress) {
     state.walletAddress = walletAddress;
   },
+  SET_CHAIN_ID(state, chainId) {
+    state.chainId = chainId;
+  },
+  SET_SNACKBAR (state, snackbar) {
+    state.globalSnackbar = snackbar
+  },
 };
 
 export const actions = {
-  async login({ commit }, _context) {
-    console.log('login')
+  async setChainId({ commit }, chainId) {
+    await commit("SET_CHAIN_ID", chainId);
+  },
 
-    // TODO error handling
+  async setWalletAddress({ commit }, walletAddress) {
+    await commit("SET_WALLET_ADDRESS", walletAddress);
+  },
 
-    if (typeof window.ethereum !== "undefined") {
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      const account = accounts[0];
-      console.log("account", account);
+  async showSnackbar({ commit }, { show: show, text: text }) {
+    await commit('SET_SNACKBAR', { show: show, text: text })
+  },
 
-      await commit("SET_WALLET_ADDRESS", account);
-
-      // await ethereum.enable()
-      // .catch(() => {
-      // 	console.log('error')
-      // })
-    } else {
-      console.log("MetaMask is not installed");
-    }
-
+  async clearSnackbar({ commit }) {
+    await commit('SET_SNACKBAR', { show: false, text: ""} )
   },
   
 };

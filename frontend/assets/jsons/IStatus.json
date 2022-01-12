@@ -1,0 +1,150 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IStatus",
+  "sourceName": "contracts/interfaces/IStatus.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "color",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getStatus",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "hp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "at",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "df",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "it",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sp",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IStatus.Status",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "_tokenIds",
+          "type": "uint256[]"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "hp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "at",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "df",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "it",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sp",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IStatus.Status[]",
+          "name": "_status",
+          "type": "tuple[]"
+        },
+        {
+          "internalType": "uint8[]",
+          "name": "_weapons",
+          "type": "uint8[]"
+        },
+        {
+          "internalType": "uint8[]",
+          "name": "_colors",
+          "type": "uint8[]"
+        }
+      ],
+      "name": "setStatusByOwner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "weapon",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

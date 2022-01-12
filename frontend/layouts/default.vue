@@ -7,9 +7,14 @@
         </nuxt-link>
       </div>
       <div class="flex flex-row-reverse w-5/12 mt-8">
-        <div class="ml-6">Rewards</div>
-        <div class="ml-6">MyNFTs</div>
-        <div v-if="walletAddress" class="ml-6">{{ shortenAddr(walletAddress) }}</div>        
+        <!-- <div class="ml-6">Rewards</div>
+        <div class="ml-6">MyNFTs</div> -->
+
+        <template v-if="walletAddress">
+          <div v-if="chainId == 80001" class="ml-6">Polygon</div>
+          <div v-else class="ml-6" @click="changeChain()">Wrong Network</div>
+          <div class="ml-6">{{ shortenAddr(walletAddress) }}</div>
+        </template>
         <div v-else class="ml-6" @click="connect()">Connect</div>
       </div>
     </header>
@@ -22,28 +27,64 @@
       </div>
       <div class="flex justify-center mb-4">© 2021 FrontierDAO</div>
     </footer>
+
+    <v-snackbar
+      v-model="isSnackbarVisible"
+      text
+      top
+      right
+      :timeout="3000"
+    >
+      <div @click="$store.dispatch('clearSnackbar')">
+        {{ globalSnackbar.text }}
+      </div>          
+    </v-snackbar>
+
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   components: {
   },
+  data: () => ({
+    // globalSnackbar: {
+    //   show: true,
+    //   text: `Hello, I'm a snackbar`,
+    // },
+  }),
+  async mounted() {
+    await this.connect()
+  },
   computed: {
-    ...mapState(["walletAddress"]),
-    // ...mapGetters(["walletAddress"]),
+    ...mapState(["walletAddress","chainId","globalSnackbar"]),
+    isSnackbarVisible: {
+      get() {
+        return this.globalSnackbar.show;
+      },
+      set() {
+        return this.$store.dispatch("clearSnackbar");
+      },
+    },
   },  
-// const walletAddress = useState('walletAddress', () => "")
   methods: {
     shortenAddr: function(addr) {
       return addr.slice(0, 32) + '...';
     },
+    getChainId: async function() {
+      if(this.walletAddress.length == 0){return}
+      const chainid = await this.$ethereumService.getChainId()
+      console.log(chainid)
+      return chainid
+    },
     connect: async function() {
       console.log('connect')
       await this.$ethereumService.walletLogin()
-
+    },
+    changeChain: async function() {
+      await this.$ethereumService.changeChain()
     },
   },
 }
