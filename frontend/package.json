@@ -2,6 +2,7 @@
   "name": "CryptoFrontier",
   "version": "1.0.0",
   "description": "CryptoFrontier",
+  "license": "UNLICENSED",
   "author": "yamapyblack",
   "scripts": {
     "dev": "HOST=0.0.0.0 PORT=3000 nuxt",
