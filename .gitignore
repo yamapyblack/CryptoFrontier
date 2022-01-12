@@ -14,5 +14,6 @@ onchain/typechain
 
 # frontend
 .nuxt
-dist
+/frontend/dist/*
+!/frontend/dist/.keep
 

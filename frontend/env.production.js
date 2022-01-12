@@ -1,37 +1,28 @@
 // 機密情報はここに入力しない 必要な場合はAWS SSM経由で
-// リリース前のテスト
 module.exports = {
-    apiBaseUrl: '',
-     //mainnet
-     contract:	"0xe988A19284CC9ed7512a7d13c61278B6eaB873f8",
-     deposit: "0x301Ab4c6b2C69055d5b230C3C55F933cf852931c",
-     auction: "0x5e0A1452649F2FbFee05Da8CeB86aB483ba9d1eC",
-     weth: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  //mumbai
+  FROStatus: "0x0e3EA9Fb71FF871A3a2dFE9F4B80b44D6614ae51",
+  FROHp: "0x470E38A5422Add8567a64748aAA51Fa36c1d3002",
+  FROSvg: "0x9ba659388F3F11228aDB3336027af6522BA81c35",
+  FROTokenDescriptor: "0xAda3D5820bAB9380460beDC43b0EffEE75ca5709",
+  FROCharacter: "0xfa2cB59be9D3b591AF1D4001a27D3bB974d3b8c0",
+  FROMintLogic: "0x77776B57dcE93577a3537aF466Bfe46eC596eeC8",
+  FROReward: "0x03eE11b6f210Ef41De0088AF878F4516aee0fc45",
+  FROStaking: "0x079D3f3CE972372D12e21829a784e073984DF6fa",
+  FROToken: "0x1A413892570E6837baF45E7355a7c2bC8656BF46",
+  FROFrontier: "0xD8F3Df0C9BEa30C1217641bBCd8241f18cd70f8D",
+  FROLogic: "0x69b187B5a7C0b46388d852D032FC2a93eC02Fd16",
 
-     auth: {
-        auth_env: "prod",
-        client_id: "one-prod",
-        redirect_uri: "",
-        auth_uri: "https://auth.mch.plus/authorize",
-        token_uri: "https://auth.mch.plus/api/token",
-        phone_uri: "https://auth.mch.plus/verify-number",
-        phone_redirect_uri: "http://localhost:3000/",
-        cookie_domain: ""
+  chainId: 80001,
+
+  chainInfo: {
+    chainId: '0x13881',
+    chainName: 'mumbai',
+    nativeCurrency: {
+        name: 'MATIC',
+        symbol: 'MATIC',
+        decimals: 18,
     },
-    network: {
-      host: "https://mainnet.infura.io/v3/",
-      chainId: 1,
-      networkName: "mainnet",
-    },
-    chainInfo: {
-      chainId: 1,
-      chainName: 'Ethereum ネットワーク',
-      nativeCurrency: {
-          name: 'ETH',
-          symbol: 'ETH',
-          decimals: 18,
-      },
-      rpcUrls: ['https://mainnet.infura.io/v3/'],
-    }
+    rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+  }
 }
-
