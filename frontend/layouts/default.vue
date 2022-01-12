@@ -21,9 +21,6 @@
     <nuxt />
     <footer class="mt-12">
       <div class="flex justify-center">
-        <div class="m-4">利用規約</div>
-        <div class="m-4">プライバシーポリシー</div>
-        <div class="m-4">運営会社</div>
       </div>
       <div class="flex justify-center mb-4">© 2021 FrontierDAO</div>
     </footer>
