@@ -81,11 +81,6 @@ export default class EthereumService {
     await this.store.dispatch('setChainId', chainId)
   }
 
-  async setChainId() {
-    const chainId = await this.getChainId()
-    await this.store.dispatch('setChainId', chainId)
-  }
-
   /* get from onchain */
   async getFrontier(_frontierId){
     const contract = new this.web3.eth.Contract(IFrontier.abi, envSet.FROFrontier)
