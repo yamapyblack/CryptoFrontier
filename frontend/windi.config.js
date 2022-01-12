@@ -9,7 +9,6 @@ export default defineConfig({
       colors: {
         frontier: '#00DFFF',
       },
-
     },
   },
 })

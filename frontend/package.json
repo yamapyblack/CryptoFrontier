@@ -18,5 +18,7 @@
     "sass-loader": "10.1.1",
     "web3": "^1.6.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.12.3"
+  }
 }

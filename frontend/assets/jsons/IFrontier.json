@@ -1,0 +1,96 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IFrontier",
+  "sourceName": "contracts/interfaces/IFrontier.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_frontierId",
+          "type": "uint256"
+        }
+      ],
+      "name": "clearFrontier",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_frontierId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getFrontier",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "tokenIdA",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenIdB",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IFrontier.Frontier",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_frontierId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tokenIdA",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tokenIdB",
+          "type": "uint256"
+        }
+      ],
+      "name": "setFrontier",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_maxFrontier",
+          "type": "uint256"
+        }
+      ],
+      "name": "setMaxFrontier",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
