@@ -218,6 +218,11 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
 
     function stake(uint256 tokenId, uint256 frontierId) external override {
         require(
+            IHp(registry.getRegistry("FROHp")).getHp(tokenId).hp > 0,
+            "tokens hp0"
+        );        
+
+        require(
             ICharacter(registry.getRegistry("FROCharacter")).ownerOf(tokenId) ==
                 msg.sender,
             "sender is not owner of tokenId"

@@ -7,4 +7,5 @@ interface IReward {
     function setReward(uint256 _tokenId, uint _reward) external;
     function addReward(uint _tokenId, uint _addReward) external;
     function withdrawReward(uint _tokenId) external;
+    function withdrawReward(uint[] calldata _tokenIds) external;
 }
