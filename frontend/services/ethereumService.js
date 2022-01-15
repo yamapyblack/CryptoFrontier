@@ -8,9 +8,6 @@ const IStaking = require('../assets/jsons/IStaking.json')
 const IStatus = require('../assets/jsons/IStatus.json')
 const IReward = require('../assets/jsons/IReward.json')
 
-const tokenId = 1
-const frontierId = 1
-
 export default class EthereumService {
   constructor(web3, store, app) {
     this.web3 = web3
@@ -126,16 +123,12 @@ export default class EthereumService {
     return await contract.methods.isApprovedForAll(this.store.state.walletAddress, envSet.FROStaking).call({})
   }
 
-
-   
   async getBothBattleHp(_frontierId){
     console.log('this.web3.eth.net.getId()', await this.web3.eth.net.getId())
   
     const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic)
     return await contract.methods.getBothBattleHp(_frontierId).call({})
   }
-
-
 
     // async logout() {
   //   try {
