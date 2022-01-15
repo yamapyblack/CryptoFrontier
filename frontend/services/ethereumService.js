@@ -6,6 +6,7 @@ const IFrontier = require('../assets/jsons/IFrontier.json')
 const ILogic = require('../assets/jsons/ILogic.json')
 const IStaking = require('../assets/jsons/IStaking.json')
 const IStatus = require('../assets/jsons/IStatus.json')
+const IReward = require('../assets/jsons/IReward.json')
 
 const tokenId = 1
 const frontierId = 1
@@ -41,19 +42,19 @@ export default class EthereumService {
 
   async walletLogin() {
     if (typeof window.ethereum !== "undefined") {
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      const account = accounts[0];
-      console.log("account", account);
-
-      await this.store.dispatch("setWalletAddress", account);
-      await this.setChainId()
-
-      // await ethereum.enable()
-      // .catch(() => {
-      // 	console.log('error')
-      // })
+      try{
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        const account = accounts[0];
+        console.log("account", account);
+  
+        await this.store.dispatch("setWalletAddress", account);
+        await this.setChainId()
+  
+      }catch(e){
+        console.error(e)
+      }
     } else {
       console.log("MetaMask is not installed");
       this.store.dispatch('showSnackbar', {show: true, text: "MetaMask is not installed"})
@@ -112,12 +113,29 @@ export default class EthereumService {
     }
   }
 
+  async rewards(_tokenId){
+    console.log('rewards', _tokenId)
+
+    const contract = new this.web3.eth.Contract(IReward.abi, envSet.FROReward)
+    const rewardWei = await contract.methods.rewards(_tokenId).call({})
+    return this.web3.utils.fromWei(rewardWei)
+  }
+
+  async isApprovedForAll(){
+    const contract = new this.web3.eth.Contract(ICharacter.abi, envSet.FROCharacter)
+    return await contract.methods.isApprovedForAll(this.store.state.walletAddress, envSet.FROStaking).call({})
+  }
+
+
+   
   async getBothBattleHp(_frontierId){
     console.log('this.web3.eth.net.getId()', await this.web3.eth.net.getId())
-
+  
     const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic)
     return await contract.methods.getBothBattleHp(_frontierId).call({})
   }
+
+
 
     // async logout() {
   //   try {
@@ -138,16 +156,11 @@ export default class EthereumService {
   // }
 
   /* tx */
-  async stake(_tokenId, _frontierId){
-    console.log('stake', _tokenId, _frontierId);
-    // const web3 = new Web3()
-
-    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic);
-
+  async sendTransaction(_to, _data){
     const transactionParameters = {
-      to: envSet.FROLogic,
+      to: _to,
       from: this.store.state.walletAddress,
-      data: contract.methods.stake(_tokenId, _frontierId).encodeABI(),
+      data: _data,
     };
 
     try{
@@ -163,28 +176,33 @@ export default class EthereumService {
     }
   }
 
+  async stake(_tokenId, _frontierId){
+    console.log('stake', _tokenId, _frontierId);
+
+    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic);
+    this.sendTransaction(envSet.FROLogic, contract.methods.stake(_tokenId, _frontierId).encodeABI())
+  }
+
+  async unStake(_tokenId){
+    console.log('unStake', _tokenId);
+
+    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic);
+    this.sendTransaction(envSet.FROLogic, contract.methods.unStake(_tokenId).encodeABI())
+  }
+
   async setApproveForAll(){
     console.log('setApproveForAll');
 
     const contract = new this.web3.eth.Contract(ICharacter.abi, envSet.FROCharacter)
+    this.sendTransaction(envSet.FROStaking, contract.methods.setApproveForAll(envSet.FROStaking, true).encodeABI())
+  }
 
-    const transactionParameters = {
-      to: envSet.FROStaking,
-      from: this.store.state.walletAddress,
-      data: contract.methods.setApproveForAll(envSet.FROStaking, true).encodeABI(),
-    };
+  async withdrawReward(_tokenId){
+    console.log('withdrawReward', _tokenId);
 
-    try{
-      const txHash = await ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [transactionParameters],
-      });
-      console.log(txHash)
+    const contract = new this.web3.eth.Contract(IReward.abi, envSet.FROReward)
+    this.sendTransaction(envSet.FROReward, contract.methods.withdrawReward(_tokenId).encodeABI())
 
-    } catch (e) {
-      console.error(e)
-      this.store.dispatch('showSnackbar', {show: true, text: "transaction failed"})
-    }
   }
 
 }

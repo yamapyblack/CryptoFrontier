@@ -7,15 +7,18 @@
         </nuxt-link>
       </div>
       <div class="flex flex-row-reverse w-5/12 mt-8">
-        <!-- <div class="ml-6">Rewards</div>
-        <div class="ml-6">MyNFTs</div> -->
 
         <template v-if="walletAddress">
+          <!-- <div class="ml-6">MyNFTs</div> -->
+          <div class="ml-6"><button @click="linkReward()">Rewards</button></div>
+
           <div v-if="chainId == 80001" class="ml-6">Polygon</div>
           <div v-else class="ml-6" @click="changeChain()">Wrong Network</div>
           <div class="ml-6">{{ shortenAddr(walletAddress) }}</div>
         </template>
-        <div v-else class="ml-6" @click="connect()">Connect</div>
+        <div v-else class="ml-6">
+          <button @click="connect()">Connect</button>
+        </div>
       </div>
     </header>
     <nuxt />
@@ -82,6 +85,10 @@ export default {
     },
     changeChain: async function() {
       await this.$ethereumService.changeChain()
+    },
+    linkReward: function(i) {
+      if(!this.$ethereumService.isLoginCorrectChain()){return}
+      this.$router.push('/contents/reward')
     },
   },
 }

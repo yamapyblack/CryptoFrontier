@@ -66,7 +66,7 @@ export default {
       const owner = await this.$ethereumService.ownerOf(this.selectedTokenId)
       if(owner.toLowerCase() != this.walletAddress){
         console.log('not owner')
-        return this.$store.dispatch('showSnackbar', {show: true, text: "this token is not your own"})
+        return this.$store.dispatch('showSnackbar', {show: true, text: "this token is not your own or staked"})
       }
 
       console.log('stake')
