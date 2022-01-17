@@ -56,4 +56,4 @@ https://medium.com/@yamapyblack/full-on-chained-game-by-frontierdao-b8e50549811d
 
 Join our discord!
 
-https://discord.gg/q4xqPQcn
+https://t.co/RmUcBTGwt5
