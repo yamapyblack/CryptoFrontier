@@ -1,27 +1,40 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "ILogic",
-  "sourceName": "contracts/interfaces/ILogic.sol",
+  "contractName": "IReward",
+  "sourceName": "contracts/interfaces/IReward.sol",
   "abi": [
     {
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "tokenId",
+          "name": "_tokenId",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "_blockNumber",
+          "name": "_addReward",
           "type": "uint256"
         }
       ],
-      "name": "canRevive",
+      "name": "addReward",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "rewards",
       "outputs": [
         {
-          "internalType": "bool",
+          "internalType": "uint256",
           "name": "",
-          "type": "bool"
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -31,40 +44,16 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "frontierId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getBothBattleHp",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "hpA",
+          "name": "_tokenId",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "hpB",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "deadBlock",
+          "name": "_reward",
           "type": "uint256"
         }
       ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "revive",
+      "name": "setReward",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -73,29 +62,11 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "frontierId",
+          "name": "_tokenId",
           "type": "uint256"
         }
       ],
-      "name": "stake",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "unStake",
+      "name": "withdrawReward",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

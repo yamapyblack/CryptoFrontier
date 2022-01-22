@@ -59,14 +59,14 @@ export default {
   methods: {
     approve: async function() {
       if(this.isApproved){return}
-      await this.$ethereumService.setApproveForAll()
+      await this.$ethereumService.setApprovalForAll()
     },
     stake: async function() {
       if(!this.isApproved){return}
       const owner = await this.$ethereumService.ownerOf(this.selectedTokenId)
       if(owner.toLowerCase() != this.walletAddress){
         console.log('not owner')
-        return this.$store.dispatch('showSnackbar', {show: true, text: "this token is not your own"})
+        return this.$store.dispatch('showSnackbar', {show: true, text: "this token is not your own or staked"})
       }
 
       console.log('stake')

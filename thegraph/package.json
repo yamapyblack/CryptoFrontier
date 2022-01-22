@@ -1,0 +1,12 @@
+{
+  "name": "thegraph",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "@yamapyblack",
+  "license": "MIT",
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.25.3",
+    "@openzeppelin/contracts": "^4.4.2",
+    "@openzeppelin/subgraphs": "^0.1.6-1"
+  }
+}

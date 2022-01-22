@@ -31,11 +31,23 @@ contract FROReward is IReward, FROAddressesProxy, Ownable {
             ICharacter(registry.getRegistry("FROCharacter")).ownerOf(_tokenId) == msg.sender,
             "sender is not owner of tokenId"
         );
-        require(rewards[_tokenId] > 0,"tokenId has no reward");
 
-        // IToken(registry.getRegistry("FROToken")).mint(msg.sender, rewards[_tokenId]);
-        IERC20(registry.getRegistry("FROToken")).transferFrom(address(this), msg.sender, rewards[_tokenId]);
+        IERC20(registry.getRegistry("FROToken")).transfer(msg.sender, rewards[_tokenId]);
         rewards[_tokenId] = 0;
+    }
+
+    function withdrawReward(uint[] calldata _tokenIds) external override {
+        uint totalRewards = 0;
+        for(uint8 i = 0; i < _tokenIds.length; i++){
+            require(
+                ICharacter(registry.getRegistry("FROCharacter")).ownerOf(_tokenIds[i]) == msg.sender,
+                "sender is not owner of tokenId"
+            );
+            totalRewards += rewards[_tokenIds[i]];
+            rewards[_tokenIds[i]] = 0;
+        }
+
+        IERC20(registry.getRegistry("FROToken")).transfer(msg.sender, totalRewards);
     }
 
 }
