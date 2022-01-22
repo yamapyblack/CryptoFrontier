@@ -7,15 +7,20 @@
         </nuxt-link>
       </div>
       <div class="flex flex-row-reverse w-5/12 mt-8">
-        <!-- <div class="ml-6">Rewards</div>
-        <div class="ml-6">MyNFTs</div> -->
 
         <template v-if="walletAddress">
+          <div class="ml-6"><button @click="linkMyNFTs()">MyNFTs</button></div>
+          <div class="ml-6"><button @click="linkReward()">Rewards</button></div>
+
           <div v-if="chainId == 80001" class="ml-6">Polygon</div>
-          <div v-else class="ml-6" @click="changeChain()">Wrong Network</div>
-          <div class="ml-6">{{ shortenAddr(walletAddress) }}</div>
+          <div v-else class="ml-6" @click="changeChain()">
+          <button>Wrong Network</button>
+          </div>
+          <div class="ml-6">{{ $ethereumService.shortenAddr(walletAddress, 32) }}</div>
         </template>
-        <div v-else class="ml-6" @click="connect()">Connect</div>
+        <div v-else class="ml-6">
+          <button @click="connect()">Connect</button>
+        </div>
       </div>
     </header>
     <nuxt />
@@ -67,9 +72,6 @@ export default {
     },
   },  
   methods: {
-    shortenAddr: function(addr) {
-      return addr.slice(0, 32) + '...';
-    },
     getChainId: async function() {
       if(this.walletAddress.length == 0){return}
       const chainid = await this.$ethereumService.getChainId()
@@ -82,6 +84,14 @@ export default {
     },
     changeChain: async function() {
       await this.$ethereumService.changeChain()
+    },
+    linkReward: function(i) {
+      if(!this.$ethereumService.isLoginCorrectChain()){return}
+      this.$router.push('/contents/reward')
+    },
+    linkMyNFTs: function(i) {
+      if(!this.$ethereumService.isLoginCorrectChain()){return}
+      this.$router.push('/contents/mynfts')
     },
   },
 }

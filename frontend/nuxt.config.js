@@ -5,9 +5,7 @@ console.log(process.env.NODE_ENV);
 // module.export = { plugins: ["~/plugins/vue-scrollto"] };
 
 export default {
-  env: {
-    contract: envSet.contract,
-  },
+  env: envSet,
   title:
     "CryptoFrontier: Fully On-chained and decentralized NFT Gaming",
   head: {
@@ -75,7 +73,16 @@ export default {
     '@nuxtjs/vuetify',
   ],
   modules: [
+    '@nuxtjs/apollo',
   ],
+  // Apollo module configuration
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: envSet.graphEndpoint,
+      }
+    }
+  },
   build: {
     extend(config, ctx) {},
   },

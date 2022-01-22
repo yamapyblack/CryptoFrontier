@@ -1,0 +1,7 @@
+{
+  "output": "frocharacter/",
+  "chain": "mumbai",
+  "datasources": [
+    { "address": "0xfa2cB59be9D3b591AF1D4001a27D3bB974d3b8c0", "startBlock":  23140776, "module": "erc721" }
+  ]
+}

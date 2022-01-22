@@ -9,7 +9,6 @@ import "../lib/ERC721Receiver.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
-    //TODO userによる強制withdrawをつけるか？
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
 
@@ -59,13 +58,13 @@ contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
         );
     }
 
-    function withdrawByStaker(uint256 _tokenId) external override {
-        require(
-            tokenStaked[_tokenId].staker == msg.sender,
-            "FROStaking: sender is not staker"
-        );
-        _withdraw(_tokenId);
-    }
+    // function withdrawByStaker(uint256 _tokenId) external override {
+    //     require(
+    //         tokenStaked[_tokenId].staker == msg.sender,
+    //         "FROStaking: sender is not staker"
+    //     );
+    //     _withdraw(_tokenId);
+    // }
 
     function withdrawByLogic(uint256 _tokenId) external override {
         registry.checkRegistory("FROLogic", msg.sender);
@@ -77,21 +76,10 @@ contract FROStaking is IStaking, FROAddressesProxy, Ownable, ERC721Receiver {
     }
 
     function _withdraw(uint256 _tokenId) internal {
-        require(
-            tokenStaked[_tokenId].blockNumber > 0,
-            "this token is not staked"
-        );
 
         address staker = tokenStaked[_tokenId].staker;
 
-        require(
-            ICharacter(registry.getRegistry("FROCharacter")).isApprovedForAll(
-                staker,
-                address(this)
-            ),
-            "FROStaking: is not approved"
-        );
-        ICharacter(registry.getRegistry("FROCharacter")).safeTransferFrom(
+        ICharacter(registry.getRegistry("FROCharacter")).transferFrom(
             address(this),
             staker,
             _tokenId

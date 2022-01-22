@@ -1,0 +1,13 @@
+query ($account: String!) {
+  account(id: $account) {
+    id
+    ERC721tokens {
+      id
+      identifier
+      uri      
+      contract{
+        name
+      }
+    }
+  }
+}
