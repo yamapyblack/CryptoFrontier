@@ -1,6 +1,3 @@
-const environment = process.env.NODE_ENV || 'development'
-const envSet = require(`../env.${environment}.js`)
-
 const ICharacter = require('../assets/jsons/ICharacter.json')
 const IFrontier = require('../assets/jsons/IFrontier.json')
 const ILogic = require('../assets/jsons/ILogic.json')
@@ -39,7 +36,7 @@ export default class EthereumService {
     if (window.ethereum) {
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
-        params: [envSet.chainInfo],
+        params: [process.env.chainInfo],
       })
       await this.setChainId()
     }
@@ -71,7 +68,7 @@ export default class EthereumService {
       this.store.dispatch('showSnackbar', {show: true, text: "not connected"})
       return false
     }
-    if(this.store.state.chainId != envSet.chainId){
+    if(this.store.state.chainId != process.env.chainId){
       this.store.dispatch('showSnackbar', {show: true, text: "wrong network"})
       return false
     }
@@ -89,33 +86,33 @@ export default class EthereumService {
 
   /* get from onchain */
   async getFrontier(_frontierId){
-    const contract = new this.web3.eth.Contract(IFrontier.abi, envSet.FROFrontier)
+    const contract = new this.web3.eth.Contract(IFrontier.abi, process.env.FROFrontier)
     return await contract.methods.getFrontier(_frontierId).call({})
   }
 
   async getStake(_tokenId){
-    const contract = new this.web3.eth.Contract(IStaking.abi, envSet.FROStaking)
+    const contract = new this.web3.eth.Contract(IStaking.abi, process.env.FROStaking)
     return await contract.methods.getStake(_tokenId).call({})
   }
 
   async getStatus(_tokenId){
-    const contract = new this.web3.eth.Contract(IStatus.abi, envSet.FROStatus)
+    const contract = new this.web3.eth.Contract(IStatus.abi, process.env.FROStatus)
     return await contract.methods.getStatus(_tokenId).call({})
   }
 
   async getHp(_tokenId){
-    const contract = new this.web3.eth.Contract(IHp.abi, envSet.FROHp)
+    const contract = new this.web3.eth.Contract(IHp.abi, process.env.FROHp)
     return await contract.methods.getHp(_tokenId).call({})
   }
 
   async isApprovedForAll(){
-    const contract = new this.web3.eth.Contract(ICharacter.abi, envSet.FROCharacter)
-    return await contract.methods.isApprovedForAll(this.store.state.walletAddress, envSet.FROStaking).call({})
+    const contract = new this.web3.eth.Contract(ICharacter.abi, process.env.FROCharacter)
+    return await contract.methods.isApprovedForAll(this.store.state.walletAddress, process.env.FROStaking).call({})
   }
 
   async ownerOf(_tokenId){
     try{
-      const contract = new this.web3.eth.Contract(ICharacter.abi, envSet.FROCharacter)
+      const contract = new this.web3.eth.Contract(ICharacter.abi, process.env.FROCharacter)
       return await contract.methods.ownerOf(_tokenId).call({})  
     }catch(e){
       console.log(e)
@@ -126,29 +123,28 @@ export default class EthereumService {
   async rewards(_tokenId){
     console.log('rewards', _tokenId)
 
-    const contract = new this.web3.eth.Contract(IReward.abi, envSet.FROReward)
+    const contract = new this.web3.eth.Contract(IReward.abi, process.env.FROReward)
     const rewardWei = await contract.methods.rewards(_tokenId).call({})
     return this.web3.utils.fromWei(rewardWei)
   }
 
   async canRevive(_tokenId){
-    console.log('canRevive', _tokenId)
 
     const unixtime = Math.floor( new Date().getTime() / 1000 ) ;
 
-    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic)
+    const contract = new this.web3.eth.Contract(ILogic.abi, process.env.FROLogic)
     return await contract.methods.canRevive(_tokenId, unixtime).call({})
   }
 
   async isApprovedForAll(){
-    const contract = new this.web3.eth.Contract(ICharacter.abi, envSet.FROCharacter)
-    return await contract.methods.isApprovedForAll(this.store.state.walletAddress, envSet.FROStaking).call({})
+    const contract = new this.web3.eth.Contract(ICharacter.abi, process.env.FROCharacter)
+    return await contract.methods.isApprovedForAll(this.store.state.walletAddress, process.env.FROStaking).call({})
   }
 
   async getBothBattleHp(_frontierId){
-    console.log('this.web3.eth.net.getId()', await this.web3.eth.net.getId())
+    console.log('getBothBattleHp', _frontierId)
   
-    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic)
+    const contract = new this.web3.eth.Contract(ILogic.abi, process.env.FROLogic)
     return await contract.methods.getBothBattleHp(_frontierId).call({})
   }
 
@@ -194,35 +190,35 @@ export default class EthereumService {
   async stake(_tokenId, _frontierId){
     console.log('stake', _tokenId, _frontierId);
 
-    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic);
-    this.sendTransaction(envSet.FROLogic, contract.methods.stake(_tokenId, _frontierId).encodeABI())
+    const contract = new this.web3.eth.Contract(ILogic.abi, process.env.FROLogic);
+    this.sendTransaction(process.env.FROLogic, contract.methods.stake(_tokenId, _frontierId).encodeABI())
   }
 
   async unStake(_tokenId){
     console.log('unStake', _tokenId);
 
-    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic);
-    this.sendTransaction(envSet.FROLogic, contract.methods.unStake(_tokenId).encodeABI())
+    const contract = new this.web3.eth.Contract(ILogic.abi, process.env.FROLogic);
+    this.sendTransaction(process.env.FROLogic, contract.methods.unStake(_tokenId).encodeABI())
   }
 
   async revive(_tokenId){
     console.log('revive', _tokenId);
 
-    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic);
-    this.sendTransaction(envSet.FROLogic, contract.methods.revive(_tokenId).encodeABI())
+    const contract = new this.web3.eth.Contract(ILogic.abi, process.env.FROLogic);
+    this.sendTransaction(process.env.FROLogic, contract.methods.revive(_tokenId).encodeABI())
   }
 
   async setApprovalForAll(){
     console.log('setApprovalForAll');
 
-    const contract = new this.web3.eth.Contract(ICharacter.abi, envSet.FROCharacter)
-    this.sendTransaction(envSet.FROCharacter, contract.methods.setApprovalForAll(envSet.FROStaking, true).encodeABI())
+    const contract = new this.web3.eth.Contract(ICharacter.abi, process.env.FROCharacter)
+    this.sendTransaction(process.env.FROCharacter, contract.methods.setApprovalForAll(process.env.FROStaking, true).encodeABI())
   }
 
   async withdrawReward(_tokenId){
     console.log('withdrawReward', _tokenId);
 
-    const contract = new this.web3.eth.Contract(IReward.abi, envSet.FROReward)
-    this.sendTransaction(envSet.FROReward, contract.methods.withdrawReward(_tokenId).encodeABI())
+    const contract = new this.web3.eth.Contract(IReward.abi, process.env.FROReward)
+    this.sendTransaction(process.env.FROReward, contract.methods.withdrawReward(_tokenId).encodeABI())
   }
 }

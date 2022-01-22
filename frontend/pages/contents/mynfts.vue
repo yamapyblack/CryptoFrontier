@@ -110,8 +110,7 @@ export default {
   },
   mounted: async function() {
     //staked
-    //TODO
-    const stakingAddr = "0xf7E06cfb2a8c3Fc2964824739eaAE268ba0Fbbeb".toLowerCase()
+    const stakingAddr = process.env.FROStaking.toLowerCase()
     const res0 = await this.$apollo.query({
       query: query,
       variables: {
@@ -122,7 +121,6 @@ export default {
     const stakedTokens = res0.data.account.ERC721tokens
 
     for(let i = 0; i < stakedTokens.length; i++){
-      console.log(i)
       stakedTokens[i].status = await this.$ethereumService.getStatus(
         stakedTokens[i].identifier
       );
@@ -143,7 +141,6 @@ export default {
     const tokens = res.data.account.ERC721tokens
 
     for(let i = 0; i < tokens.length; i++){
-      console.log(i)
       tokens[i].status = await this.$ethereumService.getStatus(
         tokens[i].identifier
       );
@@ -178,7 +175,6 @@ export default {
   //     prefetch: true,
   //     query: query,
   //     variables: {
-  //       //TODO
   //       account: this.walletAddress,
   //     }
   //   }

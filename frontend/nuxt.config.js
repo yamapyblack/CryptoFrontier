@@ -5,9 +5,7 @@ console.log(process.env.NODE_ENV);
 // module.export = { plugins: ["~/plugins/vue-scrollto"] };
 
 export default {
-  env: {
-    contract: envSet.contract,
-  },
+  env: envSet,
   title:
     "CryptoFrontier: Fully On-chained and decentralized NFT Gaming",
   head: {
