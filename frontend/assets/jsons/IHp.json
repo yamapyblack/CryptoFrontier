@@ -1,27 +1,34 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "ILogic",
-  "sourceName": "contracts/interfaces/ILogic.sol",
+  "contractName": "IHp",
+  "sourceName": "contracts/interfaces/IHp.sol",
   "abi": [
     {
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_blockNumber",
+          "name": "_tokenId",
           "type": "uint256"
         }
       ],
-      "name": "canRevive",
+      "name": "getHp",
       "outputs": [
         {
-          "internalType": "bool",
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "hp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IHp.Hp",
           "name": "",
-          "type": "bool"
+          "type": "tuple"
         }
       ],
       "stateMutability": "view",
@@ -31,25 +38,20 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "frontierId",
+          "name": "_tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_hpDiff",
           "type": "uint256"
         }
       ],
-      "name": "getBothBattleHp",
+      "name": "reduceHp",
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "hpA",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "hpB",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "deadBlock",
+          "name": "",
           "type": "uint256"
         }
       ],
@@ -60,11 +62,16 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "tokenId",
+          "name": "_tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_hp",
           "type": "uint256"
         }
       ],
-      "name": "revive",
+      "name": "setHp",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -73,29 +80,16 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "tokenId",
+          "name": "_tokenId",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "frontierId",
+          "name": "_hp",
           "type": "uint256"
         }
       ],
-      "name": "stake",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "unStake",
+      "name": "setHpByMint",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

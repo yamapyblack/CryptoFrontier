@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      reward: 21212121,
+      reward: 0,
       selectedTokenId: 0,
     };
   },

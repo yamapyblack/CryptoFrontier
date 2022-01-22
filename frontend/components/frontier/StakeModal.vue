@@ -59,7 +59,7 @@ export default {
   methods: {
     approve: async function() {
       if(this.isApproved){return}
-      await this.$ethereumService.setApproveForAll()
+      await this.$ethereumService.setApprovalForAll()
     },
     stake: async function() {
       if(!this.isApproved){return}

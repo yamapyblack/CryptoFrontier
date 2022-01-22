@@ -8,6 +8,7 @@ interface ILogic {
     function unStake(uint256 tokenId) external;
 
     function revive(uint256 tokenId) external;
+    function canRevive(uint256 tokenId, uint _blockNumber) external view returns(bool);
 
     function getBothBattleHp(uint256 frontierId)
         external

@@ -73,7 +73,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
         }
     }
 
-    function canRevive(uint256 tokenId, uint _blockNumber) public view returns(bool) {
+    function canRevive(uint256 tokenId, uint _blockNumber) public override view returns(bool) {
         IHp.Hp memory hp = IHp(registry.getRegistry("FROHp")).getHp(tokenId);
 
         if(hp.hp != 0) {return false;}

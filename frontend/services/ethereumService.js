@@ -6,6 +6,7 @@ const IFrontier = require('../assets/jsons/IFrontier.json')
 const ILogic = require('../assets/jsons/ILogic.json')
 const IStaking = require('../assets/jsons/IStaking.json')
 const IStatus = require('../assets/jsons/IStatus.json')
+const IHp = require('../assets/jsons/IHp.json')
 const IReward = require('../assets/jsons/IReward.json')
 
 export default class EthereumService {
@@ -25,6 +26,13 @@ export default class EthereumService {
         throw new Error(e)
       }
     }
+  }
+
+  shortenAddr(addr, len = 16) {
+    if (addr.length < len) {
+      return addr;
+    }
+    return addr.slice(0, len) + "...";
   }
 
   async changeChain() {
@@ -95,6 +103,11 @@ export default class EthereumService {
     return await contract.methods.getStatus(_tokenId).call({})
   }
 
+  async getHp(_tokenId){
+    const contract = new this.web3.eth.Contract(IHp.abi, envSet.FROHp)
+    return await contract.methods.getHp(_tokenId).call({})
+  }
+
   async isApprovedForAll(){
     const contract = new this.web3.eth.Contract(ICharacter.abi, envSet.FROCharacter)
     return await contract.methods.isApprovedForAll(this.store.state.walletAddress, envSet.FROStaking).call({})
@@ -116,6 +129,15 @@ export default class EthereumService {
     const contract = new this.web3.eth.Contract(IReward.abi, envSet.FROReward)
     const rewardWei = await contract.methods.rewards(_tokenId).call({})
     return this.web3.utils.fromWei(rewardWei)
+  }
+
+  async canRevive(_tokenId){
+    console.log('canRevive', _tokenId)
+
+    const unixtime = Math.floor( new Date().getTime() / 1000 ) ;
+
+    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic)
+    return await contract.methods.canRevive(_tokenId, unixtime).call({})
   }
 
   async isApprovedForAll(){
@@ -183,11 +205,18 @@ export default class EthereumService {
     this.sendTransaction(envSet.FROLogic, contract.methods.unStake(_tokenId).encodeABI())
   }
 
-  async setApproveForAll(){
-    console.log('setApproveForAll');
+  async revive(_tokenId){
+    console.log('revive', _tokenId);
+
+    const contract = new this.web3.eth.Contract(ILogic.abi, envSet.FROLogic);
+    this.sendTransaction(envSet.FROLogic, contract.methods.revive(_tokenId).encodeABI())
+  }
+
+  async setApprovalForAll(){
+    console.log('setApprovalForAll');
 
     const contract = new this.web3.eth.Contract(ICharacter.abi, envSet.FROCharacter)
-    this.sendTransaction(envSet.FROStaking, contract.methods.setApproveForAll(envSet.FROStaking, true).encodeABI())
+    this.sendTransaction(envSet.FROCharacter, contract.methods.setApprovalForAll(envSet.FROStaking, true).encodeABI())
   }
 
   async withdrawReward(_tokenId){
@@ -195,7 +224,5 @@ export default class EthereumService {
 
     const contract = new this.web3.eth.Contract(IReward.abi, envSet.FROReward)
     this.sendTransaction(envSet.FROReward, contract.methods.withdrawReward(_tokenId).encodeABI())
-
   }
-
 }

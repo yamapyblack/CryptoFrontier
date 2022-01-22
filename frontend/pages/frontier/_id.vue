@@ -5,13 +5,11 @@
         <span class="text-xl">F</span>rontier No.
         <span class="text-xl">{{ $route.params.id }}</span>
       </div>
-      <div v-if="!isBattleNow()" class="w-32 text-right">
-        <button
-          class="text-frontier border-solid border-2 rounded-xl border-frontier px-6 py-1 font-bold"
-          @click="showStakeModal()"
-        >
-          Stake
-        </button>
+      <div v-if="!isBattleNow" class="w-32 text-right">
+        <FroBtn              
+          :text="'Stake'"
+          @clickBtn="showStakeModal()"
+        />
       </div>
     </div>
 
@@ -19,24 +17,15 @@
       <!-- black left -->
       <template v-if="frontier.tokenIdA > 0">
         <div class="w-5/12 bg-black/[.5] p-8">
-          <div class="flex">
-            <div class="w-80">
-              <img
-                class="w-full"
-                src="~/assets/img/charactor_sample1.png"
-                alt=""
-              />
-            </div>
-            <div class="pl-4 pt-4">
-              <div class="font-bold">A</div>
-              <div class="">#{{ frontier.tokenIdA }}</div>
-              <div class="">Owner:</div>
-              <div class="">{{ shortenAddr2(stakerA.staker) }}</div>
-            </div>
-          </div>
+
+          <Character
+            :tokenId="frontier.tokenIdA"
+            :ownerAddr="stakerA.staker"
+          />
 
           <div class="mt-6">
             <hp
+              :isBattleNow="isBattleNow"
               :battleHp="bothBattleHp.hpA"
               :mapHp="statusA.hp"
               :deadBlock="bothBattleHp.deadBlock"
@@ -48,15 +37,13 @@
             <status :statusParam="statusA" />
           </div>
 
-          <!-- unstake button -->
           <div class="mt-12 text-center">
-            <button
+            <FroBtn              
               v-if="canUnStake(stakerA.staker)"
-              class="text-frontier border-solid border-2 rounded-xl border-frontier px-6 py-1 font-bold"
-              @click="unStake(frontier.tokenIdA)"
-            >
-              unStake
-            </button>
+              :text="'UnStake'"
+              @clickBtn="unStake(frontier.tokenIdA)"
+            />
+
           </div>
         </div>
         <!-- black left -->
@@ -65,24 +52,14 @@
       <!-- black right -->
       <template v-if="frontier.tokenIdB > 0">
         <div class="w-5/12 bg-black/[.5] p-8">
-          <div class="flex">
-            <div class="w-80">
-              <img
-                class="w-full"
-                src="~/assets/img/charactor_sample1.png"
-                alt=""
-              />
-            </div>
-            <div class="pl-4 pt-4">
-              <div class="font-bold">B</div>
-              <div class="">#{{ frontier.tokenIdB }}</div>
-              <div class="">Owner:</div>
-              <div class="">{{ shortenAddr2(stakerB.staker) }}</div>
-            </div>
-          </div>
+          <Character
+            :tokenId="frontier.tokenIdB"
+            :ownerAddr="stakerB.staker"
+          />
 
           <div class="mt-6">
             <hp
+              :isBattleNow="isBattleNow"
               :battleHp="bothBattleHp.hpB"
               :mapHp="statusB.hp"
               :deadBlock="bothBattleHp.deadBlock"
@@ -96,13 +73,12 @@
 
           <!-- unstake button -->
           <div class="mt-12 text-center">
-            <button
+            <FroBtn              
               v-if="canUnStake(stakerB.staker)"
-              class="text-frontier border-solid border-2 rounded-xl border-frontier px-6 py-1 font-bold"
-              @click="unStake(frontier.tokenIdB)"
-            >
-              unStake
-            </button>
+              :text="'UnStake'"
+              @clickBtn="unStake(frontier.tokenIdB)"
+            />
+
           </div>
         </div>
         <!-- black right -->
@@ -122,20 +98,25 @@
 import { mapGetters, mapState } from "vuex";
 import Web3 from "web3";
 import StakeModal from "~/components/frontier/StakeModal.vue";
-import Status from "~/components/frontier/Status.vue";
+import Status from "~/components/utils/Status.vue";
+import Character from "~/components/utils/Character.vue";
 import Hp from "~/components/frontier/Hp.vue";
+import FroBtn from "~/components/utils/FroBtn.vue";
 
 export default {
   components: {
     StakeModal,
     Status,
+    Character,
     Hp,
+    FroBtn,
   },
   data() {
     return {
       frontierId: 0,
       isModal: false,
       bothBattleHp: {},
+      isBattleNow: false,
       frontier: {},
       stakerA: { staker: "0x" },
       statusA: {},
@@ -164,6 +145,8 @@ export default {
     );
     console.log("bothBattleHp", bothBattleHp);
     this.bothBattleHp = bothBattleHp;
+
+    this.isBattleNow = (this.bothBattleHp.hpA > 0 && this.bothBattleHp.hpB > 0)
 
     if (this.frontier.tokenIdA > 0) {
       const stakerA = await this.$ethereumService.getStake(
@@ -198,19 +181,8 @@ export default {
     showStakeModal: function () {
       this.isModal = true;
     },
-    shortenAddr2: function (addr) {
-      if (addr.length < 16) {
-        return addr;
-      }
-      return addr.slice(0, 16) + "...";
-    },
-    isBattleNow: function () {
-      if (this.bothBattleHp.hpA > 0 && this.bothBattleHp.hpB > 0) {
-        return true;
-      }
-    },
     canUnStake: function (staker) {
-      if (this.isBattleNow()) {
+      if (this.isBattleNow) {
         return false;
       }
       if (staker.toLowerCase() != this.walletAddress.toLowerCase()) {
