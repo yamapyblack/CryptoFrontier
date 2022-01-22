@@ -17,11 +17,11 @@ import "hardhat/console.sol";
 contract FROLogic is Ownable, FROAddressesProxy, ILogic {
     // uint public epoch = 60 * 60 * 6 / 2; //6h polygon
 
-    uint256 constant maticHour = (60 * 60) / 2;
+    uint256 constant MATIC_HOUR = (60 * 60) / 2;
 
-    uint256 public epoch = maticHour * 3; //3h
-    uint256 public rewardPerBlock = (1000 * (10**18)) / (maticHour * 6); //6hで1000
-    uint256 public reviveEpoch = maticHour * 6; //6h
+    uint256 public epoch = MATIC_HOUR * 3; //3h
+    uint256 public rewardPerBlock = (1000 * (10**18)) / (MATIC_HOUR * 6); //6hで1000
+    uint256 public reviveEpoch = MATIC_HOUR * 6; //6h
 
     constructor(address registory_) FROAddressesProxy(registory_) {}
 
@@ -71,6 +71,30 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
             hp = 0;
             deadBlockNums = _calcDeadBlock(playerHp, enemyAt, playerDf);
         }
+    }
+
+    function canRevive(uint256 tokenId, uint _blockNumber) public view returns(bool) {
+        IHp.Hp memory hp = IHp(registry.getRegistry("FROHp")).getHp(tokenId);
+
+        if(hp.hp != 0) {return false;}
+        console.log("_blockNumber", _blockNumber);
+        console.log("hp.blockNumber + reviveEpoch", hp.blockNumber + reviveEpoch);
+        if(_blockNumber <= hp.blockNumber + reviveEpoch) {return false;}
+        return true;
+    }
+
+    function revive(uint256 tokenId) external override {
+        require(
+            ICharacter(registry.getRegistry("FROCharacter")).ownerOf(tokenId) ==
+                msg.sender,
+            "sender is not owner of tokenId"
+        );
+        require(canRevive(tokenId, block.number), "cannot revive");
+
+        IHp(registry.getRegistry("FROHp")).setHp(
+            tokenId,
+            IStatus(registry.getRegistry("FROStatus")).getStatus(tokenId).hp
+        );
     }
 
     function getBothBattleHp(uint256 frontierId)
@@ -194,26 +218,6 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
             deadBlock = deadBlockNumsA + f.blockNumber;
             return (hpA, hpB, deadBlock);
         }
-    }
-
-    function revive(uint256 tokenId) external override {
-        require(
-            ICharacter(registry.getRegistry("FROCharacter")).ownerOf(tokenId) ==
-                msg.sender,
-            "sender is not owner of tokenId"
-        );
-
-        IHp.Hp memory hp = IHp(registry.getRegistry("FROHp")).getHp(tokenId);
-        require(hp.hp == 0, "not hp 0 or staking now");
-        require(
-            block.number > hp.blockNumber + reviveEpoch,
-            "must be past reviveEpoch"
-        );
-
-        IHp(registry.getRegistry("FROHp")).setHp(
-            tokenId,
-            IStatus(registry.getRegistry("FROStatus")).getStatus(tokenId).hp
-        );
     }
 
     function stake(uint256 tokenId, uint256 frontierId) external override {
