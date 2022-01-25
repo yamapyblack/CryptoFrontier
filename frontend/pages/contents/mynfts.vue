@@ -109,52 +109,64 @@ export default {
     };
   },
   mounted: async function() {
+
     //staked
     const stakingAddr = process.env.FROStaking.toLowerCase()
-    const res0 = await this.$apollo.query({
-      query: query,
-      variables: {
-        account: stakingAddr,
-      }
-    })
-    console.log(res0.data.account)
-    const stakedTokens = res0.data.account.ERC721tokens
-
-    for(let i = 0; i < stakedTokens.length; i++){
-      stakedTokens[i].status = await this.$ethereumService.getStatus(
-        stakedTokens[i].identifier
-      );
-      stakedTokens[i].staked = await this.$ethereumService.getStake(
-        stakedTokens[i].identifier
-      );
-      this.stakedTokens.push(stakedTokens[i])
+    const nfts1 = await this.getNfts(stakingAddr)
+    console.log(nfts1)
+    if(nfts1.account){
+      this.setStakedToken(nfts1.account.ERC721tokens)
     }
 
     // not staked
-    const res = await this.$apollo.query({
-      query: query,
-      variables: {
-        account: this.walletAddress,
-      }
-    })
-    console.log(res.data.account)
-    const tokens = res.data.account.ERC721tokens
-
-    for(let i = 0; i < tokens.length; i++){
-      tokens[i].status = await this.$ethereumService.getStatus(
-        tokens[i].identifier
-      );
-      tokens[i].battleHp = await this.$ethereumService.getHp(
-        tokens[i].identifier
-      );
-      tokens[i].canRevive = await this.$ethereumService.canRevive(
-        tokens[i].identifier
-      );
-
-      this.tokens.push(tokens[i])
+    const nfts2 = await this.getNfts(this.walletAddress)
+    console.log(nfts2)
+    if(nfts2.account){
+      this.setOwnedToken(nfts2.account.ERC721tokens)
     }
   },
   methods: {
+    async getNfts(_account){
+      const res = await this.$apollo.query({
+        query: query,
+        variables: {
+          account: _account,
+        }
+      })
+      return res.data
+    },
+    async setStakedToken(_tokens){
+      const stakedTokens = _tokens
+
+      for(let i = 0; i < stakedTokens.length; i++){
+        stakedTokens[i].status = await this.$ethereumService.getStatus(
+          stakedTokens[i].identifier
+        );
+        stakedTokens[i].staked = await this.$ethereumService.getStake(
+          stakedTokens[i].identifier
+        );
+        this.stakedTokens.push(stakedTokens[i])
+      }
+
+    },
+    async setOwnedToken(_tokens){
+      const tokens = _tokens
+
+      for(let i = 0; i < tokens.length; i++){
+        tokens[i].status = await this.$ethereumService.getStatus(
+          tokens[i].identifier
+        );
+        tokens[i].battleHp = await this.$ethereumService.getHp(
+          tokens[i].identifier
+        );
+        tokens[i].canRevive = await this.$ethereumService.canRevive(
+          tokens[i].identifier
+        );
+
+        this.tokens.push(tokens[i])
+      }
+
+    },
     styleWidth: function(battleHp, hp){
       const rate = Math.round(battleHp / hp * 100)      
       return{
