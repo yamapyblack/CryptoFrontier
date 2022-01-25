@@ -1,8 +1,6 @@
 const environment = process.env.NODE_ENV || "development";
 const envSet = require(`./env.${environment}.js`);
 console.log(process.env.NODE_ENV);
-// console.log(envSet.contract)
-// module.export = { plugins: ["~/plugins/vue-scrollto"] };
 
 export default {
   env: envSet,
