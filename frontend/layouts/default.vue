@@ -12,7 +12,7 @@
           <div class="ml-6"><button @click="linkMyNFTs()">MyNFTs</button></div>
           <div class="ml-6"><button @click="linkReward()">Rewards</button></div>
 
-          <div v-if="chainId == 80001" class="ml-6">Polygon</div>
+          <div v-if="chainId == $ethereumService.getEnvChainId()" class="ml-6">Polygon</div>
           <div v-else class="ml-6" @click="changeChain()">
           <button>Wrong Network</button>
           </div>
