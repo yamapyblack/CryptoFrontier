@@ -1,0 +1,7 @@
+{
+  "output": "frocharacterPolygon/",
+  "chain": "matic",
+  "datasources": [
+    { "address": "0x9689FF81Ddb4AE0bf29D5c53687842267CD5B563", "startBlock":  23062023, "module": "erc721" }
+  ]
+}
