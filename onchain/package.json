@@ -5,7 +5,7 @@
   "author": "yamapyblack",
   "license": "MIT",
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^2.1.1",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@openzeppelin/contracts": "^4.2.0",
@@ -18,7 +18,7 @@
     "ethereum-waffle": "^3.4.0",
     "ethereumjs-util": "^7.0.9",
     "ethereumjs-wallet": "^1.0.1",
-    "ethers": "^5.4.6",
+    "ethers": "^5.5.3",
     "hardhat": "^2.6.4",
     "hardhat-typechain": "^0.3.5",
     "solc": "^0.8.3",
@@ -31,6 +31,8 @@
     "@typechain/hardhat": "^2.3.0",
     "aws-kms-ethers-signer": "^0.0.3",
     "base64-sol": "^1.0.1",
+    "hardhat-deploy": "^0.9.27",
+    "hardhat-deploy-ethers": "^0.3.0-beta.13",
     "hardhat-gas-reporter": "^1.0.6"
   }
 }

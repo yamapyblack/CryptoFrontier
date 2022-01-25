@@ -8,17 +8,6 @@ const keyId = process.env.KMS_KEY_ID!;
 
 export interface AddressesType {
   Deployer: string
-  addresses: string
-  frontier: string
-  status: string
-  hp: string
-  descriptor: string
-  character: string
-  reward: string
-  staking: string
-  token: string
-  logic: string
-  mintLogic: string
   FROAddresses: string
   FROStatus: string
   FROHp: string
@@ -32,6 +21,7 @@ export interface AddressesType {
   FROToken: string
   FROFrontier: string
   FROLogic: string
+  FROTokenTest: string
 }
 
 export const address = (name: string): string => {
@@ -50,17 +40,17 @@ export const Addresses = () => {
     case "mumbai":
       return {
         Deployer: "0x76D8a627dA0EA33ABDF3A922E7dA6e6ee78ab7A1",
-        addresses: "0x6B889d814AC75255714adA38527BEE9533441519",
-        frontier: "0xE3dD3ABfeAA02B279177f748b97751e4868553F3",
-        status: "0x7121d703515638073Be323536FA672142FABbA44",
-        hp: "0x428843F997bD69b95d23F6105bFf5D8141641C62",
-        descriptor: "0xF14Ec6f5350E339116a4Adb3e78fd7691d6E48f8",
-        character: "0x80042C77bd21C6Af61dA0334ef5042663554c63D",
-        reward: "0x87cc8BaB70f91C6fb83d7DF14c4548093d15795F",
-        staking: "0x8E8A46ea40Bf0f8Bb940eB1D0C9ae4b7a335C932",
-        token: "0xfEEe0f789e5367cBc4fCf4a33F56d2B9b6b8b8Ad",
-        logic: "0x52a6a2698aE46ab26f4bec6136Ea89238b14D56c",
-        mintLogic: "0x16d5DBaa11Ee2B0f19D5837Bf31DF5AB2CFe1582",
+        // addresses: "0x6B889d814AC75255714adA38527BEE9533441519",
+        // frontier: "0xE3dD3ABfeAA02B279177f748b97751e4868553F3",
+        // status: "0x7121d703515638073Be323536FA672142FABbA44",
+        // hp: "0x428843F997bD69b95d23F6105bFf5D8141641C62",
+        // descriptor: "0xF14Ec6f5350E339116a4Adb3e78fd7691d6E48f8",
+        // character: "0x80042C77bd21C6Af61dA0334ef5042663554c63D",
+        // reward: "0x87cc8BaB70f91C6fb83d7DF14c4548093d15795F",
+        // staking: "0x8E8A46ea40Bf0f8Bb940eB1D0C9ae4b7a335C932",
+        // token: "0xfEEe0f789e5367cBc4fCf4a33F56d2B9b6b8b8Ad",
+        // logic: "0x52a6a2698aE46ab26f4bec6136Ea89238b14D56c",
+        // mintLogic: "0x16d5DBaa11Ee2B0f19D5837Bf31DF5AB2CFe1582",
 
         FROAddresses: "0x6B889d814AC75255714adA38527BEE9533441519",
         FROStatus: "0x0e3EA9Fb71FF871A3a2dFE9F4B80b44D6614ae51",
@@ -86,10 +76,13 @@ export const Addresses = () => {
         FROTokenDescriptor: "0xdA02718148d40fD3F13fa8252c37726dE0faFF86",
         FROCharacter: "0x9689FF81Ddb4AE0bf29D5c53687842267CD5B563",
         FROMintLogic: "0x85a54817F409Dc1B4Dc3e13474836Bc642d2E96c",
-        FROReward: "0x7761865990b8841141247AD8547C3cfE112745EF",
-        FROStaking: "0x48D5900672293BAA4903B94FA14F0c5083770a98",
-        FROToken: "0x803762bEde7685923f47a2b21262D9215Fa77613",
-        FROLogic: "0xE3dD3ABfeAA02B279177f748b97751e4868553F3",
+
+        FROReward: "0x74EAbd235A44b37a181c1C2120C26f90D1b7C1e4",
+        FROStaking: "0x37126C46fbbEC00f18Fc1717a7D3D1d01400975E",
+        FROToken: "",
+        FROFrontier: "0x332f25Ac74c1ED7a524CCb5ce6BFFC8bF792784c",
+        FROLogic: "0x6B889d814AC75255714adA38527BEE9533441519",
+        FROTokenTest: "0xa07e1F3D92AB431F045a783865e12d12d9d56D9d",
       } as AddressesType
 
     case "optest":

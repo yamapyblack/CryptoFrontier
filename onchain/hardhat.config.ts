@@ -27,8 +27,9 @@ const config: HardhatUserConfig = {
     },
     matic: {
       url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_KEY}`,
+      // url: 'https://polygon-rpc.com/',
       chainId: 137,
-      gasPrice: 30000000000,
+      gasPrice: 381000000000,
     },
     optest: {
       url: "https://kovan.optimism.io",
@@ -63,7 +64,7 @@ const config: HardhatUserConfig = {
   gasReporter: {
     currency: 'MATIC',
     gasPrice: 30,
-    enabled: true
+    enabled: false
   },
 };
 
