@@ -285,7 +285,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
         if (hpA > 0 && hpB > 0) {
             revert("both alive");
 
-            // A is dead
+            // A is dead, unstake A
         } else if (hpA == 0 && hpB > 0) {
             _reward(f.tokenIdA, deadBlock - f.blockNumber);
             _reward(f.tokenIdB, block.number - f.blockNumber);
@@ -300,7 +300,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
                 f.tokenIdB
             );
 
-            // B is dead
+            // B is dead, unstake B
         } else if (hpA > 0 && hpB == 0) {
             _reward(f.tokenIdA, block.number - f.blockNumber);
             _reward(f.tokenIdB, deadBlock - f.blockNumber);
@@ -315,7 +315,7 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
                 tokenId
             );
 
-            // both dead
+            // both dead, unstake A and B
         } else {
             _reward(f.tokenIdA, deadBlock - f.blockNumber);
             _reward(f.tokenIdB, deadBlock - f.blockNumber);
@@ -340,8 +340,6 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
             .getStake(tokenId)
             .frontierId;
 
-        IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(tokenId);
-
         IFrontier.Frontier memory f = IFrontier(
             registry.getRegistry("FROFrontier")
         ).getFrontier(frontierId);
@@ -361,15 +359,12 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
             (f.tokenIdA == 0 && f.tokenIdB > 0)
         ) {
             _reward(tokenId, block.number - f.blockNumber);
-            IFrontier(registry.getRegistry("FROFrontier")).clearFrontier(
-                frontierId
-            );
+            IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(tokenId);
+            IFrontier(registry.getRegistry("FROFrontier")).clearFrontier(frontierId);
 
             // both A and B
         } else {
-            (uint256 hpA, uint256 hpB, uint256 deadBlock) = getBothBattleHp(
-                frontierId
-            );
+            (uint256 hpA, uint256 hpB, uint256 deadBlock) = getBothBattleHp(frontierId);
 
             // both alive
             if (hpA > 0 && hpB > 0) {
@@ -387,9 +382,12 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
                         0,
                         f.tokenIdB
                     );
+                    IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdA);
+
                 } else {
-                    IFrontier(registry.getRegistry("FROFrontier"))
-                        .clearFrontier(frontierId);
+                    IFrontier(registry.getRegistry("FROFrontier")).clearFrontier(frontierId);
+                    IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdA);
+                    IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdB);
                 }
 
                 // B is dead
@@ -399,23 +397,25 @@ contract FROLogic is Ownable, FROAddressesProxy, ILogic {
 
                 // your token is A
                 if (f.tokenIdA == tokenId) {
-                    IFrontier(registry.getRegistry("FROFrontier"))
-                        .clearFrontier(frontierId);
+                    IFrontier(registry.getRegistry("FROFrontier")).clearFrontier(frontierId);
+                    IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdA);
+                    IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdB);
                 } else {
                     IFrontier(registry.getRegistry("FROFrontier")).setFrontier(
                         frontierId,
                         f.tokenIdA,
                         0
                     );
+                    IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdB);
                 }
 
                 // both daed
             } else {
                 _reward(f.tokenIdA, deadBlock - f.blockNumber);
                 _reward(f.tokenIdB, deadBlock - f.blockNumber);
-                IFrontier(registry.getRegistry("FROFrontier")).clearFrontier(
-                    frontierId
-                );
+                IFrontier(registry.getRegistry("FROFrontier")).clearFrontier(frontierId);
+                IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdA);
+                IStaking(registry.getRegistry("FROStaking")).withdrawByLogic(f.tokenIdB);
             }
             IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdA, hpA);
             IHp(registry.getRegistry("FROHp")).setHp(f.tokenIdB, hpB);

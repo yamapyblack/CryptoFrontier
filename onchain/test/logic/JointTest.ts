@@ -717,15 +717,15 @@ describe("testing for JointTest", async () => {
         blockNumber: 0,
       });
       Expect.stake(await c.staking.getStake(tokenId2), {
-        frontierId: frontierId,
-        staker: addr2.address,
-        blockNumber: block3,
+        frontierId: 0,
+        staker: NilAddress,
+        blockNumber: 0,
       });
       // deadBlock - stakingBlock
       expect(await c.reward.rewards(tokenId1)).equals(Number(initConst.rewardPerBlock) * (Number(hps.deadBlock) - block2));
       expect(await c.reward.rewards(tokenId2)).equals(Number(initConst.rewardPerBlock) * (Number(hps.deadBlock) - block3));
       expect(await c.character.ownerOf(tokenId1)).equals(addr1.address)
-      expect(await c.character.ownerOf(tokenId2)).equals(c.staking.address)
+      expect(await c.character.ownerOf(tokenId2)).equals(addr2.address)
 
     });
 

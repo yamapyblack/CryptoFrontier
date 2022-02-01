@@ -81,7 +81,7 @@ export const Addresses = () => {
         FROStaking: "0x37126C46fbbEC00f18Fc1717a7D3D1d01400975E",
         FROToken: "",
         FROFrontier: "0x332f25Ac74c1ED7a524CCb5ce6BFFC8bF792784c",
-        FROLogic: "0x6B889d814AC75255714adA38527BEE9533441519",
+        FROLogic: "0x470E38A5422Add8567a64748aAA51Fa36c1d3002",
         FROTokenTest: "0xa07e1F3D92AB431F045a783865e12d12d9d56D9d",
       } as AddressesType
 

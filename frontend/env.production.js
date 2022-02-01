@@ -9,9 +9,9 @@ module.exports = {
   FROMintLogic: "0x85a54817F409Dc1B4Dc3e13474836Bc642d2E96c",
   FROReward: "0x74EAbd235A44b37a181c1C2120C26f90D1b7C1e4",
   FROStaking: "0x37126C46fbbEC00f18Fc1717a7D3D1d01400975E",
-  FROToken: "0xa07e1F3D92AB431F045a783865e12d12d9d56D9d",
+  FROToken: "0xa07e1F3D92AB431F045a783865e12d12d9d56D9d", //FROTokenTest
   FROFrontier: "0x332f25Ac74c1ED7a524CCb5ce6BFFC8bF792784c",
-  FROLogic: "0x6B889d814AC75255714adA38527BEE9533441519",
+  FROLogic: "0x470E38A5422Add8567a64748aAA51Fa36c1d3002",
 
   graphEndpoint: "https://api.thegraph.com/subgraphs/name/yamapyblack/polygon-fro-character",
   chainId: 137,
