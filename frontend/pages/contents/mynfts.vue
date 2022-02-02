@@ -12,9 +12,10 @@
       <template v-for="stakedToken in stakedTokens">
         <!-- black -->
         <div class=" m-6 bg-black/[.5] p-8">
+          <!-- TODO ownerAddr -->
           <Character
             :tokenId="stakedToken.identifier"
-            :ownerAddr="walletAddress"
+            :ownerAddr="''" 
           />
 
           <div class="mt-6">

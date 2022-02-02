@@ -69,6 +69,7 @@ export default {
   buildModules: [
     'nuxt-windicss',
     '@nuxtjs/vuetify',
+    "@nuxtjs/svg",
   ],
   modules: [
     '@nuxtjs/apollo',
@@ -79,6 +80,17 @@ export default {
       default: {
         httpEndpoint: envSet.graphEndpoint,
       }
+    }
+  },
+  svg: {
+    vueSvgLoader: {
+        // vue-svg-loader options
+    },
+    svgSpriteLoader: {
+        // svg-sprite-loader options
+    },
+    fileLoader: {
+        // file-loader options
     }
   },
   build: {
