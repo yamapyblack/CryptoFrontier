@@ -160,6 +160,7 @@ export default {
       );
       console.log("statusA", statusA);
       this.statusA = statusA;
+
     }
 
     if (this.frontier.tokenIdB > 0) {

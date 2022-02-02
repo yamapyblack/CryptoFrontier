@@ -11,7 +11,7 @@ module.exports = {
   FROStaking: "0xf7E06cfb2a8c3Fc2964824739eaAE268ba0Fbbeb",
   FROToken: "0x5b051652E81bb5383F7f0623Eff94598aE398B76",
   FROFrontier: "0xb830Dd5b0496681da4Ba46b76c0D83125aC48D5e",
-  FROLogic: "0x0378e3C956b5D7d204620F457fDD64fA657D9224",
+  FROLogic: "0xccE48261FD809717DDB1Ce03F0A6D931Ca1025f2",
 
   graphEndpoint: "https://api.thegraph.com/subgraphs/name/yamapyblack/mumbai-fro-character",
   chainId: 80001,

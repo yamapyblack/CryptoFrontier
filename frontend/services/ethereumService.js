@@ -1,3 +1,5 @@
+import { ethers } from 'ethers'
+
 const ICharacter = require('../assets/jsons/ICharacter.json')
 const IFrontier = require('../assets/jsons/IFrontier.json')
 const ILogic = require('../assets/jsons/ILogic.json')
@@ -133,7 +135,6 @@ export default class EthereumService {
   }
 
   async canRevive(_tokenId){
-
     const unixtime = Math.floor( new Date().getTime() / 1000 ) ;
 
     const contract = new this.web3.eth.Contract(ILogic.abi, process.env.FROLogic)
@@ -151,6 +152,19 @@ export default class EthereumService {
     const contract = new this.web3.eth.Contract(ILogic.abi, process.env.FROLogic)
     return await contract.methods.getBothBattleHp(_frontierId).call({})
   }
+
+  async tokenURI(_tokenId){
+    console.log('tokenURI', _tokenId)
+
+    const contract = new this.web3.eth.Contract(ICharacter.abi, process.env.FROCharacter)
+    return await contract.methods.tokenURI(_tokenId).call({})
+  }
+
+  async decode(_encodedStr){
+    return ethers.utils.toUtf8String(ethers.utils.base64.decode(_encodedStr))
+  }
+
+
 
     // async logout() {
   //   try {
