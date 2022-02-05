@@ -25,6 +25,7 @@ const verify = async (a: AddressesType): Promise<void> => {
     // await Verify(a.FROToken, [a.FROAddresses])
     await Verify(a.FROFrontier, [a.FROAddresses])
     // await Verify(a.FROLogic, [a.FROAddresses])
+    // await Verify(a.FROTokenTest, [a.FROAddresses])
 }
 
 const main = async () => {
