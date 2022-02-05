@@ -11,13 +11,13 @@ const main = async () => {
 
     // const FROReward = require("../../artifacts/contracts/registory/FROReward.sol/FROReward.json");
     // const FROStaking = require("../../artifacts/contracts/registory/FROStaking.sol/FROStaking.json");
-    // const FROLogic = require("../../artifacts/contracts/logic/FROLogic.sol/FROLogic.json");
-    const FROFrontier = require("../../artifacts/contracts/registory/FROFrontier.sol/FROFrontier.json");
+    const FROLogic = require("../../artifacts/contracts/logic/FROLogic.sol/FROLogic.json");
+    // const FROFrontier = require("../../artifacts/contracts/registory/FROFrontier.sol/FROFrontier.json");
 
     //deploy
-    const tx = await deployContract(signer, FROFrontier, [a.FROAddresses], {
-        gasPrice: 141000000000,
-        nonce: 49,
+    const tx = await deployContract(signer, FROLogic, [a.FROAddresses], {
+        gasPrice: 81000000000,
+        nonce: 55,
     });
     console.log(tx.address)
 }

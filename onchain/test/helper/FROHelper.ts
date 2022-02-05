@@ -14,7 +14,7 @@ import { FROStaking } from "typechain/FROStaking"
 import { FROToken } from "typechain/FROToken"
 import { FROLogic } from "typechain/FROLogic"
 import { FROMintLogic } from "typechain/FROMintLogic"
-import { FROSvg } from 'typechain/FROSvg';
+import { FROSvgBase } from 'typechain/FROSvgBase';
 
 export const NilAddress = "0x0000000000000000000000000000000000000000"
 
@@ -24,7 +24,7 @@ export type ContractType = {
   frontier: FROFrontier
   status: FROStatus
   hp: FROHp
-  svg: FROSvg
+  svg: FROSvgBase
   descriptor: FROTokenDescriptor
   character: FROCharacter
   reward: FROReward
@@ -71,7 +71,7 @@ export const deploy = async (): Promise<ContractType> => {
   let frontier: FROFrontier
   let status: FROStatus
   let hp: FROHp
-  let svg: FROSvg
+  let svg: FROSvgBase
   let descriptor: FROTokenDescriptor
   let character: FROCharacter
   let reward: FROReward
@@ -96,13 +96,13 @@ export const deploy = async (): Promise<ContractType> => {
   hp = (await FROHp.deploy(addresses.address)) as FROHp
   await hp.deployed()
 
-  const FROSvg = await ethers.getContractFactory("FROSvg");
-  svg = (await FROSvg.deploy()) as FROSvg
+  const FROSvgBase = await ethers.getContractFactory("FROSvgBase");
+  svg = (await FROSvgBase.deploy()) as FROSvgBase
   await svg.deployed()
 
   const FROTokenDescriptor = await ethers.getContractFactory("FROTokenDescriptor",
         { libraries: 
-          {FROSvg: svg.address}
+          {FROSvgBase: svg.address}
     }
   );
   descriptor = (await FROTokenDescriptor.deploy(addresses.address)) as FROTokenDescriptor

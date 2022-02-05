@@ -47,14 +47,13 @@ const main = async () => {
     // console.log("FROSvgBase" + ": \"" + svg.address + "\",")
 
     // await deploy("FROTokenDescriptor", {FROSvgBase: svg.address})
-
     // await deploy("FROCharacter")
     // await deploy("FROMintLogic")
     // await deploy("FROReward")
     // await deploy("FROStaking")
     // await deploy("FROToken")
-    await deploy("FROFrontier")
-    // await deploy("FROLogic")
+    // await deploy("FROFrontier")
+    await deploy("FROLogic")
 }
 
 main()

@@ -19,7 +19,7 @@ const main = async () => {
     let status: FROStatus = await ethers.getContractAt("FROStatus", a.FROStatus, signer) as FROStatus
 
     //30 tokenIds
-    const tx = await status.setStatusByOwner(tokenIds,statuses,weapons,colors, {gasLimit: 5100000})
+    const tx = await status.setStatusByOwner(tokenIds,statuses,weapons,colors, {nonce: 53, gasLimit: 5100000, gasPrice: 91000000000})
     console.log(tx)
 }
 
@@ -30,36 +30,37 @@ main()
         process.exit(1);
     });
 
-const tokenIds = [1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
+const tokenIds = [
+    61,
+62,
+63,
+64,
+65,
+66,
+67,
+68,
+69,
+70,
+71,
+72,
+73,
+74,
+75,
+76,
+77,
+78,
+79,
+80,
+81,
+82,
+83,
+84,
+85,
+86,
+87,
+88,
+89,
+90,
 ]
 
 const statuses : Status[] = [
@@ -92,7 +93,8 @@ const statuses : Status[] = [
     {hp: 100,at: 100,df: 120,it: 100,sp: 100,},
     {hp: 100,at: 100,df: 120,it: 100,sp: 100,},
     {hp: 100,at: 100,df: 120,it: 100,sp: 100,},
-    {hp: 100,at: 100,df: 120,it: 100,sp: 100,},]
+    {hp: 100,at: 100,df: 120,it: 100,sp: 100,},
+]
 
 const weapons = [1,
     1,
@@ -123,7 +125,7 @@ const weapons = [1,
     5,
     5,
     5,
-    5,   ]
+    5,]
 
 const colors = [1,
     2,
