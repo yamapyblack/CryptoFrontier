@@ -12,19 +12,19 @@ export default class EthereumService {
   constructor(web3, store, app) {
     this.web3 = web3
     this.store = store
-    this.app = app
+    // this.app = app
 
     if (process.server) return
 
-    if (window.ethereum && window.ethereum.on) {
-      try {
-        window.ethereum.on('accountsChanged', (accounts) => {
-          this.logout()
-        })
-      } catch (e) {
-        throw new Error(e)
-      }
-    }
+    // if (window.ethereum && window.ethereum.on) {
+    //   try {
+    //     window.ethereum.on('accountsChanged', (accounts) => {
+    //       this.logout()
+    //     })
+    //   } catch (e) {
+    //     throw new Error(e)
+    //   }
+    // }
   }
 
   shortenAddr(addr, len = 16) {
@@ -35,13 +35,11 @@ export default class EthereumService {
   }
 
   async changeChain() {
-    if (window.ethereum) {
-      await window.ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [process.env.chainInfo],
-      })
-      await this.setChainId()
-    }
+    await ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [process.env.chainInfo],
+    })
+    await this.setChainId()
   }
 
   async walletLogin() {
@@ -55,7 +53,9 @@ export default class EthereumService {
   
         await this.store.dispatch("setWalletAddress", account);
         await this.setChainId()
-  
+
+        this.setEthereumEvent(ethereum, accounts)
+
       }catch(e){
         console.error(e)
       }
@@ -63,6 +63,15 @@ export default class EthereumService {
       console.log("MetaMask is not installed");
       this.store.dispatch('showSnackbar', {show: true, text: "MetaMask is not installed"})
     }
+  }
+
+  setEthereumEvent(_ethereum, _accounts) {
+    _ethereum.on('accountsChanged', (_accounts) => {
+      this.walletLogin()
+    });
+    _ethereum.on('chainChanged', (_accounts) => {
+      this.walletLogin()
+    });
   }
 
   isLoginCorrectChain() {

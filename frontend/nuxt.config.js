@@ -64,6 +64,7 @@ export default {
   plugins: [
     { src: "~/plugins/env" },
     { src: "~/plugins/ethereum-client", ssr: false },
+    // { src: "~/plugins/service-client",  ssr: false },
   ],
   components: true,
   buildModules: [

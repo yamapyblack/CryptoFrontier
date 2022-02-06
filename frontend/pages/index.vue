@@ -15,6 +15,8 @@
 
 <script>
 import { mapState } from "vuex";
+import "vue-apollo";
+import query from "~/apollo/queries/erc721tokens.gql";
 
 export default {
   components: {
@@ -30,11 +32,23 @@ export default {
     ...mapState(["walletAddress"]),
   },
   // ページ読み込み時にタイル状に表示させる
-  mounted: function () {
+  mounted: async function () {
+    // const nfts = await this.getNfts(this.walletAddress)
+    // console.log('nfts',nfts)
   },
   created() {
   },
   methods: {
+    // async getNfts(_account){
+    //   if(!this.$ethereumService.isLoginCorrectChain()){return}
+    //   const res = await this.$apollo.query({
+    //     query: query,
+    //     variables: {
+    //       account: _account,
+    //     }
+    //   })
+    //   return res.data
+    // },
     classFrontier: function(i) {
       const top = 't-' + this.topPos[i-1]
       const left = 'l-'  + this.leftPos[i-1]
