@@ -169,11 +169,16 @@ export default class EthereumService {
     return await contract.methods.tokenURI(_tokenId).call({})
   }
 
+  async getFrontier(_frontierId){
+    console.log('getFrontier', _frontierId)
+
+    const contract = new this.web3.eth.Contract(IFrontier.abi, process.env.FROFrontier)
+    return await contract.methods.getFrontier(_frontierId).call({})
+  }
+
   async decode(_encodedStr){
     return ethers.utils.toUtf8String(ethers.utils.base64.decode(_encodedStr))
   }
-
-
 
     // async logout() {
   //   try {
